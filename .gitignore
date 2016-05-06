@@ -1,0 +1,8 @@
+/app/cache/compiled/*
+/app/cache/logs/*
+/app/cache/data/*
+.idea/*
+/.settings/
+/.buildpath
+/.project
+/nbproject/private/
