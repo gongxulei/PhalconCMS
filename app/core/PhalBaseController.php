@@ -2,6 +2,11 @@
 
 /**
  * Phalcon控制器扩展
+ * @category PhalconCMS
+ * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
+ * @license GNU General Public License 2.0
+ * @link www.marser.cn
+ * @author Marser
  *
  */
 
@@ -9,4 +14,23 @@ namespace marser\app\core;
 
 class PhalBaseController extends \Phalcon\Mvc\Controller {
 
+    public function initialize(){
+
+    }
+
+    /**
+     * exception日志记录
+     * @param \Exception $e
+     * @author Marser
+     */
+    protected function write_exception_log(\Exception $e){
+        $logArray = array(
+            'file' => $e -> getFile(),
+            'line' => $e -> getLine(),
+            'code' => $e -> getCode(),
+            'message' => $e -> getMessage(),
+            'trace' => $e -> getTraceAsString(),
+        );
+        $this -> logger -> write_log($logArray);
+    }
 }
