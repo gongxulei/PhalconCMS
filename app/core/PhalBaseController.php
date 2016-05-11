@@ -19,6 +19,23 @@ class PhalBaseController extends \Phalcon\Mvc\Controller {
     }
 
     /**
+     * ajax输出
+     * @param $message
+     * @param int $code
+     * @param array $data
+     * @author Marser
+     */
+    protected function ajax_return($message, $code=1, array $data=array()){
+        $result = array(
+            'code' => $code,
+            'message' => $message,
+            'data' => $data,
+        );
+        $this -> response -> setContent(json_encode($result));
+        $this -> response -> send();
+    }
+
+    /**
      * exception日志记录
      * @param \Exception $e
      * @author Marser

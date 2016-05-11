@@ -10,7 +10,8 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Mvc\View,
     Phalcon\Mvc\Url as UrlResolver,
     Phalcon\Db\Profiler as DbProfiler,
-    Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+    Phalcon\Mvc\View\Engine\Volt as VoltEngine,
+    Phalcon\Session\Adapter\Files as Session;
 
 $di = new FactoryDefault();
 
@@ -27,6 +28,15 @@ $di->set('router', function(){
     }
 
     return $router;
+});
+
+/**
+ * DI注册session服务
+ */
+$di->setShared('session', function(){
+    $session = new Session();
+    $session -> start();
+    return $session;
 });
 
 /**
@@ -74,7 +84,7 @@ $di->set('db', function () use($config) {
                 $executeTime = $profile->getTotalElapsedSeconds();
                 //日志记录
                 $logger = \marser\app\core\PhalBaseLogger::getInstance();
-                $logger -> debug_log("{$sql} {$executeTime}");
+                $logger -> write_log("{$sql} {$executeTime}", 'debug');
             }
         });
     }

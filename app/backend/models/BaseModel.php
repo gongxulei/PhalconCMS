@@ -1,19 +1,19 @@
 <?php
 
 /**
- * 后台基类控制器
+ * 基类model
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\controllers;
-use \marser\app\core\PhalBaseController;
+namespace marser\app\backend\models;
+use \marser\app\core\PhalBaseModel;
 
-class BaseController extends PhalBaseController{
+class BaseModel extends PhalBaseModel{
 
     public function initialize(){
-        parent::initialize();
+
     }
 }
