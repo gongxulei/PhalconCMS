@@ -70,4 +70,12 @@ class PassportController extends BaseController{
             $this -> ajax_return($e -> getMessage(), $code);
         }
     }
+
+    /**
+     * 注销登录
+     * @author Marser
+     */
+    public function logoutAction(){
+        $this -> session -> destroy();
+    }
 }
