@@ -12,7 +12,13 @@ namespace marser\app\backend\controllers;
 class IndexController extends \Phalcon\Mvc\Controller{
 
     public function testAction(){
+        $this -> view -> title = 'index/test';
         $this -> view -> pick('index/test');
+    }
+
+    public function aAction(){
+        $this -> view -> title = 'aaaa';
+        $this -> view -> pick('index/a');
     }
 
     public function notfoundAction(){
