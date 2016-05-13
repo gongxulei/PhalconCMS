@@ -2,8 +2,7 @@
 
 try {
 
-    $runtime = get_cfg_var('marser.runtime');
-    empty($runtime) && $runtime = 'dev';
+    $runtime = 'dev';
     define('RUNTIME', $runtime);
     define('ROOT_PATH', dirname(__DIR__));
 
