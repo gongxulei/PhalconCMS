@@ -10,7 +10,7 @@
 
 namespace marser\app\libs;
 
-class Validator{
+class Validator extends \Phalcon\Di\Injectable{
 
     /**
      * 内部数据
@@ -247,6 +247,15 @@ class Validator{
      */
     public static function alpha_dash($str){
         return preg_match("/^([_a-z0-9-])+$/i", $str) ? true : false;
+    }
+
+    /**
+     * 中英文字符、数据、中下划线
+     * @param $str
+     * @return int
+     */
+    public function chinese_alpha_numeric_dash($str){
+        return preg_match('/^[a-zA-Z0-9_\-\x{4e00}-\x{9fa5}]+$/u', $str);
     }
 
     /**

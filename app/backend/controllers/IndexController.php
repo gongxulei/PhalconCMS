@@ -14,6 +14,7 @@ class IndexController extends \Phalcon\Mvc\Controller{
     public function testAction(){
         $this -> view -> title = 'index/test';
         $this -> view -> pick('index/test');
+        $this -> view -> setMainView('main');
     }
 
     public function aAction(){

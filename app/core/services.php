@@ -18,7 +18,7 @@ $di = new FactoryDefault();
 /**
  * 设置路由
  */
-$di->set('router', function(){
+$di -> set('router', function(){
     $router = new \Phalcon\Mvc\Router();
     $router -> setDefaultModule('frontend');
 
@@ -33,23 +33,23 @@ $di->set('router', function(){
 /**
  * DI注册session服务
  */
-$di->setShared('session', function(){
+$di -> setShared('session', function(){
     $session = new Session();
     $session -> start();
     return $session;
 });
 
 /**
- * DI注入cookies服务
+ * DI注册cookies服务
  */
-$di->set('cookies', function() {
+$di -> set('cookies', function() {
     $cookies = new \Phalcon\Http\Response\Cookies();
     $cookies -> useEncryption(false);
     return $cookies;
 });
 
 /**
- * DI注入url服务
+ * DI注册url服务
  */
 $di -> set('url', function(){
     $url = new \Phalcon\Mvc\Url();
@@ -57,9 +57,9 @@ $di -> set('url', function(){
 });
 
 /**
- * DI注入DB配置
+ * DI注册DB配置
  */
-$di->set('db', function () use($config) {
+$di -> set('db', function () use($config) {
     $dbconfig = $config -> database -> db;
     $dbconfig = $dbconfig -> toArray();
     if (!is_array($dbconfig) || count($dbconfig)==0) {
@@ -107,7 +107,7 @@ $di->set('db', function () use($config) {
 });
 
 /**
- * DI注入日志服务
+ * DI注册日志服务
  */
 $di -> setShared('logger', function() use($di){
     $logger = \marser\app\core\PhalBaseLogger::getInstance();
@@ -115,7 +115,7 @@ $di -> setShared('logger', function() use($di){
 });
 
 /**
- * DI注入api配置
+ * DI注册api配置
  */
 $di -> setShared('apiConfig', function() use($di){
     $config = \marser\app\core\Config::getInstance('api');
@@ -123,9 +123,18 @@ $di -> setShared('apiConfig', function() use($di){
 });
 
 /**
- * DI注入system配置
+ * DI注册system配置
  */
 $di -> setShared('systemConfig', function() use($di){
     $config = \marser\app\core\Config::getInstance('system');
     return $config;
 });
+
+/**
+ * DI注册自定义验证器
+ */
+$di -> setShared('validator', function() use($di){
+    $validator = new \marser\app\libs\Validator();
+    return $validator;
+});
+

@@ -10,7 +10,6 @@
 
 namespace marser\app\backend\controllers;
 use \marser\app\backend\controllers\BaseController,
-    \marser\app\libs\Validator,
     \marser\app\backend\models\UsersModel;
 
 class PassportController extends BaseController{
@@ -33,16 +32,15 @@ class PassportController extends BaseController{
             $password = $this->request->get('password', 'trim');
 
             /** 添加验证规则 */
-            $validator = new Validator();
-            $validator -> add_rule('username', 'required', '请输入用户名');
-            $validator -> add_rule('username', 'alpha_dash', '用户名由4-20个英文字符、数字、中下划线组成');
-            $validator -> add_rule('username', 'min_length', '用户名由4-20个英文字符、数字、中下划线组成', 4);
-            $validator -> add_rule('username', 'max_length', '用户名由4-20个英文字符、数字、中下划线组成', 20);
-            $validator -> add_rule('password', 'required', '请输入密码');
-            $validator -> add_rule('password', 'min_length', '密码由6-20个字符组成', 6);
-            $validator -> add_rule('password', 'max_length', '密码由6-20个字符组成', 20);
+            $this -> validator -> add_rule('username', 'required', '请输入用户名')
+                -> add_rule('username', 'alpha_dash', '用户名由4-20个英文字符、数字、中下划线组成')
+                -> add_rule('username', 'min_length', '用户名由4-20个英文字符、数字、中下划线组成', 4)
+                -> add_rule('username', 'max_length', '用户名由4-20个英文字符、数字、中下划线组成', 20);
+            $this -> validator -> add_rule('password', 'required', '请输入密码')
+                -> add_rule('password', 'min_length', '密码由6-20个字符组成', 6)
+                -> add_rule('password', 'max_length', '密码由6-20个字符组成', 20);
             /** 截获验证异常 */
-            if ($error = $validator -> run(array('username'=>$username, 'password'=>$password))) {
+            if ($error = $this -> validator -> run(array('username'=>$username, 'password'=>$password))) {
                 $error = array_values($error);
                 $error = $error[0];
                 throw new \Exception($error['message'], $error['code']);
@@ -62,13 +60,14 @@ class PassportController extends BaseController{
             unset($userinfo['password']);
             $this -> session -> set('user', $userinfo);
 
-            $this->ajax_return('success', 1);
+            $this -> ajax_return('success', 1);
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
             $this -> ajax_return($e -> getMessage(), $code);
         }
+        $this -> view -> disable();
     }
 
     /**
