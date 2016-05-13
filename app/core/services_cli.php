@@ -65,7 +65,7 @@ $di->setShared('db', function () use ($config) {
  * DI注入日志服务
  */
 $di->setShared('logger', function () use ($di) {
-    $logger = \marser\app\core\PhalBaseLogger::getInstance();
+    $logger = \Marser\App\Core\PhalBaseLogger::getInstance();
     return $logger;
 });
 
@@ -73,7 +73,7 @@ $di->setShared('logger', function () use ($di) {
  * DI注入api配置
  */
 $di->setShared('apiConfig', function () use ($di) {
-    $config = \marser\app\core\Config::getInstance('api');
+    $config = \Marser\App\Core\Config::getInstance('api');
     $config -> set_run_time(RUNTIME);
     return $config;
 });
@@ -82,7 +82,7 @@ $di->setShared('apiConfig', function () use ($di) {
  * DI注入system配置
  */
 $di->setShared('systemConfig', function () use ($di) {
-    $config = \marser\app\core\Config::getInstance('system');
+    $config = \Marser\App\Core\Config::getInstance('system');
     $config -> set_run_time(RUNTIME);
     return $config;
 });

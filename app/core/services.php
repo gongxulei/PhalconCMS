@@ -83,7 +83,7 @@ $di -> set('db', function () use($config) {
                 $sql = $profile->getSQLStatement();
                 $executeTime = $profile->getTotalElapsedSeconds();
                 //日志记录
-                $logger = \marser\app\core\PhalBaseLogger::getInstance();
+                $logger = \Marser\App\Core\PhalBaseLogger::getInstance();
                 $logger -> write_log("{$sql} {$executeTime}", 'debug');
             }
         });
@@ -110,7 +110,7 @@ $di -> set('db', function () use($config) {
  * DI注册日志服务
  */
 $di -> setShared('logger', function() use($di){
-    $logger = \marser\app\core\PhalBaseLogger::getInstance();
+    $logger = \Marser\App\Core\PhalBaseLogger::getInstance();
     return $logger;
 });
 
@@ -118,7 +118,7 @@ $di -> setShared('logger', function() use($di){
  * DI注册api配置
  */
 $di -> setShared('apiConfig', function() use($di){
-    $config = \marser\app\core\Config::getInstance('api');
+    $config = \Marser\App\Core\Config::getInstance('api');
     return $config;
 });
 
@@ -126,7 +126,7 @@ $di -> setShared('apiConfig', function() use($di){
  * DI注册system配置
  */
 $di -> setShared('systemConfig', function() use($di){
-    $config = \marser\app\core\Config::getInstance('system');
+    $config = \Marser\App\Core\Config::getInstance('system');
     return $config;
 });
 
@@ -134,7 +134,7 @@ $di -> setShared('systemConfig', function() use($di){
  * DI注册自定义验证器
  */
 $di -> setShared('validator', function() use($di){
-    $validator = new \marser\app\libs\Validator();
+    $validator = new \Marser\App\Libs\Validator();
     return $validator;
 });
 

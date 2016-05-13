@@ -7,7 +7,7 @@
  *
  */
 
-namespace marser\app\core;
+namespace Marser\App\Core;
 
 class Config{
 

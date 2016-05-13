@@ -1,6 +1,6 @@
 <?php
 
-namespace marser\app\frontend;
+namespace Marser\App\Frontend;
 
 use \Phalcon\Loader,
     \Phalcon\Mvc\View,

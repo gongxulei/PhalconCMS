@@ -1,6 +1,6 @@
 <?php
 
-namespace marser\app\frontend\controllers;
+namespace Marser\App\Frontend\Controllers;
 
 class IndexController extends \Phalcon\Mvc\Controller{
 

@@ -8,9 +8,9 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\controllers;
-use \marser\app\backend\controllers\BaseController,
-    \marser\app\backend\models\UsersModel;
+namespace Marser\App\Backend\Controllers;
+use \Marser\App\Backend\Controllers\BaseController,
+    \Marser\App\Backend\Models\UsersModel;
 
 class PassportController extends BaseController{
 

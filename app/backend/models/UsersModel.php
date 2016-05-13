@@ -8,8 +8,8 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\models;
-use \marser\app\backend\models\BaseModel;
+namespace Marser\App\Backend\Models;
+use \Marser\App\Backend\Models\BaseModel;
 
 class UsersModel extends BaseModel{
 

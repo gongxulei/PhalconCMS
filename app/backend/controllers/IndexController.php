@@ -7,7 +7,7 @@
  * @license GNU General Public License 2.0
  * @link www.marser.cn
  */
-namespace marser\app\backend\controllers;
+namespace Marser\App\Backend\Controllers;
 
 class IndexController extends \Phalcon\Mvc\Controller{
 

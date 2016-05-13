@@ -8,8 +8,8 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\controllers;
-use \marser\app\core\PhalBaseController;
+namespace Marser\App\Backend\Controllers;
+use \Marser\App\Core\PhalBaseController;
 
 class BaseController extends PhalBaseController{
 

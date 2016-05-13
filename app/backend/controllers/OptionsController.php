@@ -8,8 +8,8 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\controllers;
-use \marser\app\backend\controllers\BaseController;
+namespace Marser\App\Backend\Controllers;
+use \Marser\App\Backend\Controllers\BaseController;
 
 class OptionsController extends BaseController{
 

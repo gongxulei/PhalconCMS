@@ -8,7 +8,7 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\libs;
+namespace Marser\App\Libs;
 
 class Validator extends \Phalcon\Di\Injectable{
 

@@ -4,7 +4,7 @@
  * Phalcon CLI扩展
  */
 
-namespace marser\app\core;
+namespace Marser\App\Core;
 
 class PhalBaseTask extends \Phalcon\CLI\Task{
 

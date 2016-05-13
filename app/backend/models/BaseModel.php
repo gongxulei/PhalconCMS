@@ -8,8 +8,8 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\models;
-use \marser\app\core\PhalBaseModel;
+namespace Marser\App\Backend\Models;
+use \Marser\App\Core\PhalBaseModel;
 
 class BaseModel extends PhalBaseModel{
 

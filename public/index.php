@@ -26,11 +26,11 @@ try {
 
     $application -> registerModules(array(
         'frontend' => array(
-            'className' => 'marser\app\frontend\FrontendModule',
+            'className' => 'Marser\App\Frontend\FrontendModule',
             'path' => ROOT_PATH . '/app/frontend/FrontendModule.php',
         ),
         'backend' => array(
-            'className' => 'marser\app\backend\BackendModule',
+            'className' => 'Marser\App\Backend\BackendModule',
             'path' => ROOT_PATH . '/app/backend/BackendModule.php',
         ),
     ));

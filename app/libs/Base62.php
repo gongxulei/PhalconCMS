@@ -4,7 +4,7 @@
  * base62编码/解码
  */
 
-namespace marser\app\libs;
+namespace Marser\App\Libs;
 
 class Base62{
 

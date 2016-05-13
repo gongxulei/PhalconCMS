@@ -8,9 +8,9 @@
  * @link www.marser.cn
  */
 
-namespace marser\app\backend\models;
+namespace Marser\App\Backend\Models;
 
-use \marser\app\backend\models\BaseModel;
+use \Marser\App\Backend\Models\BaseModel;
 
 class OptionsModel extends BaseModel{
 

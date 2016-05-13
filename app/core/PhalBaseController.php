@@ -10,7 +10,7 @@
  *
  */
 
-namespace marser\app\core;
+namespace Marser\App\Core;
 
 class PhalBaseController extends \Phalcon\Mvc\Controller {
 
