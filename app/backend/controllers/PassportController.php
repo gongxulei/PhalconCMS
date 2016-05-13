@@ -28,8 +28,8 @@ class PassportController extends BaseController{
      */
     public function loginAction(){
         try {
-            $username = $this->request->get('username', 'trim');
-            $password = $this->request->get('password', 'trim');
+            $username = $this->request->getPost('username', 'trim');
+            $password = $this->request->getPost('password', 'trim');
 
             /** 添加验证规则 */
             $this -> validator -> add_rule('username', 'required', '请输入用户名')
