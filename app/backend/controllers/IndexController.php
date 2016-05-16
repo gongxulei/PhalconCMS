@@ -13,8 +13,15 @@ class IndexController extends \Phalcon\Mvc\Controller{
 
     public function testAction(){
         $this -> view -> title = 'index/test';
+        $this -> view -> setVars(
+            array(
+                'menu' =>  array(
+                    'title' =>  'fuck fuck fuck',
+                    'addLink'   =>  'www.baidu.com',
+                ),
+            )
+        );
         $this -> view -> pick('index/test');
-        $this -> view -> setMainView('main');
     }
 
     public function aAction(){
