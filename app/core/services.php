@@ -12,6 +12,7 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Mvc\View,
     Phalcon\Mvc\Url as UrlResolver,
     Phalcon\Db\Profiler as DbProfiler,
+    Phalcon\Mvc\Model\Manager as ModelsManager,
     Phalcon\Mvc\View\Engine\Volt as VoltEngine,
     Phalcon\Session\Adapter\Files as Session;
 
@@ -106,6 +107,13 @@ $di -> set('db', function () use($config) {
     }
 
     return $connection;
+});
+
+/**
+ * DI注册modelsManager服务
+ */
+$di -> setShared('modelsManager', function() use($di){
+    return new ModelsManager();
 });
 
 /**

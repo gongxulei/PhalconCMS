@@ -9,7 +9,8 @@
  */
 
 namespace Marser\App\Backend\Controllers;
-use \Marser\App\Backend\Controllers\BaseController;
+use \Marser\App\Backend\Controllers\BaseController,
+    \Marser\App\Backend\Models\OptionsModel;
 
 class OptionsController extends BaseController{
 
@@ -37,22 +38,39 @@ class OptionsController extends BaseController{
                 -> add_rule('siteUrl', 'url', '站点网址格式错误');
             $this -> validator -> add_rule('description', 'xss_check', '请不要在站点描述中使用特殊字符');
             $this -> validator -> add_rule('keywords', 'xss_check', '请不要在关键词中使用特殊字符');
-
+            /** 截获验证异常 */
+            if ($error = $this -> validator -> run(array(
+                'siteName' => $siteName,
+                'siteUrl' => $siteUrl,
+                'description' => $description,
+                'keywords' => $keywords,
+            ))) {
+                $error = array_values($error);
+                $error = $error[0];
+                throw new \Exception($error['message'], $error['code']);
+            }
+            /** 更新配置项 */
             $data = array(
                 'site_name' => $siteName,
                 'site_url' => $siteUrl,
-                'site_description' => $description,
-                'site_keywords' => $keywords,
-                'site_timezone' => $timezone
             );
-            foreach($data as $k=>$v){
+            !empty($description) && $data['site_description'] = $description;
+            !empty($keywords) && $data['site_keywords'] = $keywords;
+            !empty($timezone) && $data['site_timezone'] = $timezone;
 
+            $optionsModel = new OptionsModel();
+            foreach($data as $k=>$v){
+                $optionsModel -> update_options(array(
+                    "op_value" => $v
+                ), "{$k}");
             }
+            $this -> ajax_return('更新成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
             $this -> ajax_return($e -> getMessage(), $code);
         }
+        $this -> view -> disable();
     }
 }
