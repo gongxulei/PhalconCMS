@@ -31,7 +31,8 @@ class PhalBaseController extends \Phalcon\Mvc\Controller {
             'message' => $message,
             'data' => $data,
         );
-        $this -> response -> setContent(json_encode($result));
+        //$this -> response -> setContent(json_encode($result));
+        $this -> response -> setJsonContent($result);
         $this -> response -> send();
     }
 
