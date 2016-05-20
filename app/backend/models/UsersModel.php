@@ -44,4 +44,36 @@ class UsersModel extends BaseModel{
         return $result;
     }
 
+    /**
+     * 更新个人设置数据
+     * @param array $data
+     * @param $username
+     * @return int
+     * @throws \Exception
+     */
+    public function update_user(array $data, $username){
+        $data = array_filter($data);
+        $data = array_unique($data);
+        if(!is_array($data) || count($data) == 0){
+            throw new \Exception('参数错误');
+        }
+        $keys = array_keys($data);
+        $values = array_values($data);
+        $result = $this -> db -> update(
+            $this->getSource(),
+            $keys,
+            $values,
+            array(
+                'conditions' => 'username = ?',
+                'bind' => array($username)
+                //'bindTypes' => array(\PDO::PARAM_STR)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
+    }
+
 }

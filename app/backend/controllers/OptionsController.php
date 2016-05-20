@@ -26,11 +26,14 @@ class OptionsController extends BaseController{
      */
     public function updatebaseAction(){
         try{
-            $siteName = $this -> request -> get('siteName', 'trim');
-            $siteUrl = $this -> request -> get('siteUrl', 'trim');
-            $description = $this -> request -> get('description', 'trim');
-            $keywords = $this -> request -> get('keywords', 'trim');
-            $timezone = $this -> request -> get('timezone', 'trim');
+            if(!$this -> request -> isPost()){
+                throw new \Exception('请求错误');
+            }
+            $siteName = $this -> request -> getPost('siteName', 'trim');
+            $siteUrl = $this -> request -> getPost('siteUrl', 'trim');
+            $description = $this -> request -> getPost('description', 'trim');
+            $keywords = $this -> request -> getPost('keywords', 'trim');
+            $timezone = $this -> request -> getPost('timezone', 'trim');
             /** 添加验证规则 */
             $this -> validator -> add_rule('siteName', 'required', '请填写站点名称')
                 -> add_rule('siteName', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');

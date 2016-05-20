@@ -36,7 +36,7 @@ class OptionsModel extends BaseModel{
         }
         $keys = array_keys($data);
         $values = array_values($data);
-        $result = $this->db->update(
+        $result = $this -> db -> update(
             $this->getSource(),
             $keys,
             $values,
