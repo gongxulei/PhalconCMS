@@ -12,16 +12,20 @@ namespace Marser\App\Backend\Controllers;
 class IndexController extends \Phalcon\Mvc\Controller{
 
     public function testAction(){
-        $this -> view -> title = 'index/test';
         $this -> view -> setVars(
             array(
+                'title' => 'index/test',
                 'menu' =>  array(
-                    'title' =>  'fuck fuck fuck',
-                    'addLink'   =>  'www.baidu.com',
+                    'menu_1' => array(
+                        'title'     =>  'fuck fuck fuck',
+                        'addLink'   =>  'www.baidu.com',
+                    ),
                 ),
             )
         );
-        $this -> view -> pick('index/test');
+//        $this -> view -> pick('index/test');
+//        $this -> view -> pick('user/login');
+        $this-> view-> setMainView('user/login');
     }
 
     public function aAction(){

@@ -1,10 +1,16 @@
 <div class="typecho-head-nav clearfix" role="navigation">
     <nav id="typecho-nav-list">
-<!--        --><?php //$menu->output(); ?>
-        abc
+    <ul class = "root focus">
+        <?php
+            foreach($menu as $item){
+                echo "<li class='parent'><a href='{$item['addLink']}'>{$item['title']}</a></li>";
+            }
+        ?>
+    </ul>
     </nav>
     <div class="operate">
-        <a t href="#" class="author">abc</a><a class="exit" href="#">登出</a>
+        <a href="#" class="author">UserName</a>
+        <a href="#" class="exit" >登出</a>
         <a href="#">网站</a>
     </div>
 </div>
