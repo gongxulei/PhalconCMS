@@ -18,7 +18,13 @@ class PassportController extends BaseController{
      * 登录页
      */
     public function indexAction(){
-        $this -> view -> pick();
+
+        $this -> view ->setVars(
+            array(
+                'title' => 'Admin/Login',
+            )
+        );
+        $this -> view -> setMainView('passport/login');
     }
 
     /**
