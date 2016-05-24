@@ -18,6 +18,11 @@ class OptionsController extends BaseController{
      * 站点基础配置
      */
     public function baseAction(){
+        $this -> view -> setVars(
+            array(
+                'title' =>  'Options/Base'
+            )
+        );
         $this -> view -> pick('options/base');
     }
 
