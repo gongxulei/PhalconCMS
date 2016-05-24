@@ -1,0 +1,69 @@
+<div class="main">
+	<div class="body container">
+		<div class="typecho-page-title">
+			<h2>管理分类<a href="#">新增</a></h2>
+		</div>
+		<div class="row typecho-page-main manage-metas">
+			<div class="col-mb-12" role="main">
+				<form method="post" name="manage_categories" class="operate-form">
+					<div class="typecho-list-operate clearfix">
+						<div class="operate">
+							<label><i class="sr-only">全选</i><input type="checkbox" class="typecho-table-select-all" /></label>
+							<div class="btn-group btn-drop">
+								<button class="btn dropdown-toggle btn-s" type="button">
+									<i class="sr-only">操作</i>选中项 <i class="i-caret-down"></i>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a lang="此分类下的所有内容将被删除, 你确认要删除这些分类吗?" href="#">删除</a></li>
+									<li><a lang="刷新分类可能需要等待较长时间, 你确认要刷新这些分类吗?" href="#">刷新</a></li>
+									<li class="multiline">
+										<button type="button" class="btn merge btn-s" rel="#">合并到</button>
+										<select name="merge">
+											<option value="1">默认分类</option>
+										</select>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="search" role="search">
+						</div>
+					</div>
+
+					<div class="typecho-table-wrap">
+						<table class="typecho-list-table">
+							<colgroup>
+								<col width="20"/>
+								<col width="30%"/>
+								<col width="15%"/>
+								<col width="25%"/>
+								<col width=""/>
+								<col width="10%"/>
+							</colgroup>
+							<thead>
+							<tr class="nodrag">
+								<th> </th>
+								<th>名称</th>
+								<th>子分类</th>
+								<th>缩略名</th>
+								<th> </th>
+								<th>文章数</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr id="mid-category-1">
+								<td><input type="checkbox" value="1" name="mid[]"/></td>
+								<td><a href="#">默认分类</a><a href="#" title="浏览 默认分类"><i class="i-exlink"></i></a>
+								</td>
+								<td><a href="#">新增</a></td>
+								<td>default</td>
+								<td>默认</td>
+								<td><a class="balloon-button left size-10" href="#">1</a></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
