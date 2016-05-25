@@ -62,12 +62,12 @@ class PassportController extends BaseController{
             unset($userinfo['password']);
             $this -> session -> set('user', $userinfo);
 
-            $this -> response -> redirect('admin/index/test');
+            $this -> response -> redirect($this -> get_module_uri('index/test'));
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $this -> flashSession -> error($e -> getMessage());
-            $this -> response -> redirect('admin/passport/index');
+            $this -> response -> redirect($this -> get_module_uri('passport/index'));
         }
     }
 
