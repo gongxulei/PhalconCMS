@@ -23,9 +23,7 @@ class IndexController extends \Phalcon\Mvc\Controller{
                 ),
             )
         );
-//        $this -> view -> pick('index/test');
-//        $this -> view -> pick('user/login');
-        $this-> view-> setMainView('user/login');
+        $this -> view -> pick('index/test');
     }
 
     public function aAction(){
