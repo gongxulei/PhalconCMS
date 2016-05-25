@@ -55,7 +55,8 @@ $di -> set('cookies', function() {
  * DI注册url服务
  */
 $di -> set('url', function(){
-    $url = new \Phalcon\Mvc\Url();
+    //$url = new \Phalcon\Mvc\Url();
+    $url = new \Marser\App\Core\PhalBaseUrl();
     return $url;
 });
 

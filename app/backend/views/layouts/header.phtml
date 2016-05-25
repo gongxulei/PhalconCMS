@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{title}}</title>
     <meta name="robots" content="noindex, nofollow">
-    <?php echo $this->tag->stylesheetLink("admin/css/normalize.css");?>
-    <?php echo $this->tag->stylesheetLink("admin/css/grid.css");?>
-    <?php echo $this->tag->stylesheetLink("admin/css/style.css");?>
-    <?php echo $this->tag->stylesheetLink("admin/css/admin.css");?>
+    <link rel="stylesheet" href="{{ assetsUrl }}/css/normalize.css?v={{ assetsVersion }}" />
+    <link rel="stylesheet" href="{{ assetsUrl }}/css/grid.css?v={{ assetsVersion }}" />
+    <link rel="stylesheet" href="{{ assetsUrl }}/css/style.css?v={{ assetsVersion }}" />
+    <link rel="stylesheet" href="{{ assetsUrl }}/css/admin.css?v={{ assetsVersion }}" />
     <!--[if lt IE 9]>
-    <?php echo $this->tag->javascriptInclude("admin/js/html5shiv.js");?>
-    <?php echo $this->tag->javascriptInclude("admin/js/respond.js");?>
+    <script type="text/javascript" src="{{ assetsUrl }}/js/html5shiv.js?v={{ assetsVersion }}"></script>
+    <script type="text/javascript" src="{{ assetsUrl }}/js/respond.js?v={{ assetsVersion }}"></script>
     <![endif]-->
 </head>
 <body>

@@ -18,23 +18,16 @@ class PassportController extends BaseController{
      * 登录页
      */
     public function indexAction(){
-
-        $this -> view ->setVars(
-            array(
-                'title' => 'Admin/Login',
-            )
-        );
         $this -> view -> setMainView('passport/login');
     }
 
     /**
      * 登录处理
      * @throws \Exception
-     * @author Marser
      */
     public function loginAction(){
         try {
-            if(!$this -> request -> isPost()){
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('请求错误');
             }
             $username = $this -> request -> getPost('username', 'trim');
@@ -69,21 +62,22 @@ class PassportController extends BaseController{
             unset($userinfo['password']);
             $this -> session -> set('user', $userinfo);
 
-            $this -> ajax_return('success', 1);
+            $this -> response -> redirect('admin/index/test');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
-            $this -> ajax_return($e -> getMessage(), $code);
+            $this -> flashSession -> error($e -> getMessage());
+            $this -> response -> redirect('admin/passport/index');
         }
-        $this -> view -> disable();
     }
 
     /**
      * 注销登录
-     * @author Marser
      */
     public function logoutAction(){
-        $this -> session -> destroy();
+        if($this -> session -> destroy()){
+            $url = $this -> get_module_uri('passport/index');
+            $this -> response -> redirect($url);
+        }
     }
 }

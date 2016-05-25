@@ -15,6 +15,9 @@ return array(
 
         //前台配置
         'frontend' => array(
+            //模块在URL中的pathinfo路径名
+            'module_pathinfo' => '',
+
             //控制器路径
             'controllers' => ROOT_PATH . '/app/frontend/controllers/',
 
@@ -29,10 +32,16 @@ return array(
 
             //模板路径
             'compiled_path' => ROOT_PATH . '/app/cache/compiled/frontend/',
+
+            //前台静态资源URL
+            'assets_url' => '/home',
         ),
 
         //后台配置
         'backend' => array(
+            //模块在URL中的pathinfo路径名
+            'module_pathinfo' => 'admin',
+
             //控制器路径
             'controllers' => ROOT_PATH . '/app/backend/controllers/',
 
@@ -47,6 +56,9 @@ return array(
 
             //模板路径
             'compiled_path' => ROOT_PATH . '/app/cache/compiled/backend/',
+
+            //后台静态资源URL
+            'assets_url' => '/admin',
         ),
 
         //类库路径

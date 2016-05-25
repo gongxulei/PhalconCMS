@@ -1,0 +1,17 @@
+<div class="message popup success" id="message_tips_box">
+    <ul>
+        <li id="message_tips"><?php $this -> flashSession -> output(); ?></li>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        (function () {
+            var message = $.trim($('#message_tips').html());
+            if(typeof message != 'undefined' && message){
+                $('#message_tips_box').slideDown('fast').delay(5000).slideUp('fast', function(){
+                    $('#message_tips').html('');
+                });
+            }
+        })();
+    });
+</script>
