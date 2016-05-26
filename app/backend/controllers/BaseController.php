@@ -39,4 +39,17 @@ class BaseController extends PhalBaseController{
         $modulePathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
         return $this -> url -> get_module_uri($modulePathinfo, $uri);
     }
+
+    /**
+     * 登录检测
+     * @return bool
+     */
+    public function login_check(){
+        if($this -> session -> has('user')){
+            if(!empty($this -> session -> get('user')['uid'])){
+                return true;
+            }
+        }
+        return false;
+    }
 }
