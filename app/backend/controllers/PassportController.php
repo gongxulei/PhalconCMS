@@ -9,19 +9,33 @@
  */
 
 namespace Marser\App\Backend\Controllers;
-use \Marser\App\Backend\Controllers\BaseController,
+use \Marser\App\Core\PhalBaseController,
     \Marser\App\Backend\Models\UsersModel;
 
-class PassportController extends BaseController{
+class PassportController extends PhalBaseController{
+
+    /**
+     * 模块在URL中的pathinfo路径名
+     * @var
+     */
+    private $_module_pathinfo;
+
+    public function initialize(){
+        parent::initialize();
+        $this -> _module_pathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
+    }
 
     /**
      * 登录页
      */
     public function indexAction(){
-        if($this -> login_check()){
-            $url = $this -> get_module_uri('index/test');
-            return $this -> response -> redirect($url);
-        }
+        $this -> login_check();
+        $this -> view -> setVars(array(
+            'title' => $this -> systemConfig -> get('app', 'app_name'),
+            'assetsUrl' => $this -> systemConfig -> get('app', 'backend', 'assets_url'),
+            'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
+            'modulePathinfo' => $this -> _module_pathinfo,
+        ));
         $this -> view -> setMainView('passport/login');
     }
 
@@ -30,10 +44,7 @@ class PassportController extends BaseController{
      * @throws \Exception
      */
     public function loginAction(){
-        if($this -> login_check()){
-            $url = $this -> get_module_uri('index/test');
-            return $this -> response -> redirect($url);
-        }
+        $this -> login_check();
         try {
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
@@ -70,12 +81,15 @@ class PassportController extends BaseController{
             unset($userinfo['password']);
             $this -> session -> set('user', $userinfo);
 
-            $this -> response -> redirect($this -> get_module_uri('index/test'));
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
+            $this -> response -> redirect($url);
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $this -> flashSession -> error($e -> getMessage());
-            $this -> response -> redirect($this -> get_module_uri('passport/index'));
+
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
+            $this -> response -> redirect($url);
         }
     }
 
@@ -84,8 +98,22 @@ class PassportController extends BaseController{
      */
     public function logoutAction(){
         if($this -> session -> destroy()){
-            $url = $this -> get_module_uri('passport/index');
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
             $this -> response -> redirect($url);
         }
+    }
+
+    /**
+     * 是否已登录
+     * @return bool
+     */
+    protected function login_check(){
+        if($this -> session -> has('user')){
+            if(!empty($this -> session -> get('user')['uid'])){
+                $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
+                return $this -> response -> redirect($url);
+            }
+        }
+        return false;
     }
 }

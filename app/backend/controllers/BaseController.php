@@ -15,6 +15,7 @@ class BaseController extends PhalBaseController{
 
     public function initialize(){
         parent::initialize();
+        $this -> login_check();
         $this -> set_common_vars();
     }
 
@@ -51,6 +52,6 @@ class BaseController extends PhalBaseController{
                 return true;
             }
         }
-        return false;
+        return $this -> response -> redirect($this -> get_module_uri('passport/index'));
     }
 }

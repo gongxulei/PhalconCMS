@@ -12,7 +12,11 @@ namespace Marser\App\Backend\Controllers;
 use \Marser\App\Backend\Controllers\BaseController,
     \Marser\App\Backend\Models\OptionsModel;
 
-class OptionsController extends BaseController{  
+class OptionsController extends BaseController{
+
+    public function initialize(){
+        parent::initialize();
+    }
 
     /**
      * 站点基础配置
