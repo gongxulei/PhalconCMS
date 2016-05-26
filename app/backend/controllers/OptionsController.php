@@ -18,11 +18,27 @@ class OptionsController extends BaseController{
      * 站点基础配置
      */
     public function baseAction(){
-        $this -> view -> setVars(
-            array(
-                'title' =>  'Options/Base'
-            )
-        );
+        try {
+            $key = "'site_name', 'site_url', 'site_description', 'site_keywords'";
+            $optionsModel = new OptionsModel();
+            $options = $optionsModel->options_list($key, array(
+                'columns' => 'op_key, op_value',
+            ));
+            if(is_array($options) && count($options) > 0){
+                foreach($options as $ok=>$ov){
+                    $options[$ov['op_key']] = $ov;
+                    unset($options[$ok]);
+                }
+            }
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        $this -> view -> setVars(array(
+            'options' => $options,
+        ));
+
         $this -> view -> pick('options/base');
     }
 
@@ -31,8 +47,8 @@ class OptionsController extends BaseController{
      */
     public function updatebaseAction(){
         try{
-            if(!$this -> request -> isPost()){
-                throw new \Exception('请求错误');
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
+                throw new \Exception('非法请求');
             }
             $siteName = $this -> request -> getPost('siteName', 'trim');
             $siteUrl = $this -> request -> getPost('siteUrl', 'trim');
@@ -73,12 +89,14 @@ class OptionsController extends BaseController{
                 ), "{$k}");
             }
             $this -> ajax_return('更新成功');
+
+            $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
-            $this -> ajax_return($e -> getMessage(), $code);
+            $this -> flashSession -> error($e -> getMessage());
         }
-        $this -> view -> disable();
+        $url = $this -> get_module_uri('options/base');
+        $this -> response -> redirect($url);
     }
 }

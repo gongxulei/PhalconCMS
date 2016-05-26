@@ -9,12 +9,13 @@
  */
 namespace Marser\App\Backend\Controllers;
 
-class IndexController extends \Phalcon\Mvc\Controller{
+use \Marser\App\Backend\Controllers\BaseController;
+
+class IndexController extends BaseController{
 
     public function testAction(){
         $this -> view -> setVars(
             array(
-                'title' => 'index/test',
                 'menu' =>  array(
                     'menu_1' => array(
                         'title'     =>  'fuck fuck fuck',

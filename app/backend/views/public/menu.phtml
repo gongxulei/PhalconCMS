@@ -1,17 +1,12 @@
 <div class="typecho-head-nav clearfix" role="navigation">
     <nav id="typecho-nav-list">
     <ul class = "root focus">
-<!--        --><?php
-//            foreach($menu as $item){
-//                echo "<li class='parent'><a href='{$item['addLink']}'>{$item['title']}</a></li>";
-//            }
-//        ?>
     </ul>
     </nav>
     <div class="operate">
-        <a href="#" class="author">UserName</a>
-        <a href="#" class="exit" >登出</a>
-        <a href="#">网站</a>
+        <a href="{{url(modulePathinfo~"/account/profile")}}" class="author">{{username}}</a>
+        <a href="{{url(modulePathinfo~"/passport/logout")}}" class="exit" >登出</a>
+        <a href="/">网站</a>
     </div>
 </div>
 

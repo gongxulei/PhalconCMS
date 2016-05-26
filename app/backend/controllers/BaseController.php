@@ -24,6 +24,7 @@ class BaseController extends PhalBaseController{
     public function set_common_vars(){
         $this -> view -> setVars(array(
             'title' => $this -> systemConfig -> get('app', 'app_name'),
+            'username' => $this -> session -> get('user')['username'],
             'assetsUrl' => $this -> systemConfig -> get('app', 'backend', 'assets_url'),
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
             'modulePathinfo' => $this -> systemConfig -> get('app', 'backend', 'module_pathinfo'),

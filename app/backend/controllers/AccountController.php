@@ -19,7 +19,7 @@ class AccountController extends BaseController{
      * 个人设置页
      */
     public function profileAction(){
-        $this -> view -> pick('settings/profile');
+        $this -> view -> pick('account/profile');
     }
 
     /**
@@ -28,7 +28,7 @@ class AccountController extends BaseController{
     public function setprofileAction(){
         try{
             if(!$this -> request -> isPost()){
-                throw new \Exception('请求错误');
+                throw new \Exception('非法请求');
             }
             $nickname = $this -> request -> getPost('nickname', 'trim');
             $email = $this -> request -> getPost('email', 'trim');

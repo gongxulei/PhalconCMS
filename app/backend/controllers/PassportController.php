@@ -36,7 +36,7 @@ class PassportController extends BaseController{
         }
         try {
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
-                throw new \Exception('请求错误');
+                throw new \Exception('非法请求');
             }
             $username = $this -> request -> getPost('username', 'trim');
             $password = $this -> request -> getPost('password', 'trim');
