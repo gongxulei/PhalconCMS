@@ -18,6 +18,10 @@ class PassportController extends BaseController{
      * 登录页
      */
     public function indexAction(){
+        if($this -> login_check()){
+            $url = $this -> get_module_uri('index/test');
+            return $this -> response -> redirect($url);
+        }
         $this -> view -> setMainView('passport/login');
     }
 
@@ -26,6 +30,10 @@ class PassportController extends BaseController{
      * @throws \Exception
      */
     public function loginAction(){
+        if($this -> login_check()){
+            $url = $this -> get_module_uri('index/test');
+            return $this -> response -> redirect($url);
+        }
         try {
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('请求错误');
