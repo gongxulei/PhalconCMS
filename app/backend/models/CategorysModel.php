@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * 分类Model
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -27,7 +27,7 @@ class CategorysModel extends BaseModel{
      * @return array
      * @throws \Exception
      */
-    public function category_detail($cid){
+    public function detail($cid){
         $category = array();
         $cid = intval($cid);
         if($cid < 0){
@@ -69,29 +69,13 @@ class CategorysModel extends BaseModel{
         return $categoryList;
     }
 
-    public function category_tree(array $categoryArray){
-        $tree = array();
-        $a = array();
-        foreach($categoryArray as $k=>$v){
-            $a[$v['cid']] = $v;
-        }
-        foreach($a as $ck=>&$cv){
-            if(isset($a[$cv['parent_cid']])){
-                $a[$cv['parent_cid']]['son'][$cv['cid']] = &$cv;
-            }else{
-                $tree[$cv['cid']] = &$cv;
-            }
-        }
-        return $tree;
-    }
-
     /**
      * 分类数据入库
      * @param array $data
      * @return bool|int
      * @throws \Exception
      */
-    public function add_category(array $data){
+    public function add(array $data){
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
@@ -105,6 +89,38 @@ class CategorysModel extends BaseModel{
         }
         $cid = $this -> db -> lastInsertId();
         return $cid;
+    }
+
+    /**
+     * 更新分类数据
+     * @param array $data
+     * @param $cid
+     * @return int
+     * @throws \Exception
+     */
+    public function update_category(array $data, $cid){
+        $data = array_filter($data);
+        $data = array_unique($data);
+        $cid = intval($cid);
+        if(!is_array($data) || count($data) == 0 || $cid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $keys = array_keys($data);
+        $values = array_values($data);
+        $result = $this -> db -> update(
+            $this->getSource(),
+            $keys,
+            $values,
+            array(
+                'conditions' => 'cid = ?',
+                'bind' => array($cid)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
     }
 
 

@@ -27,6 +27,5 @@ $loader -> registerNamespaces(array(
 
     'Marser\App\Backend\Controllers' => ROOT_PATH . '/app/backend/controllers',
     'Marser\App\Backend\Models' => ROOT_PATH . '/app/backend/models',
-    'Marser\App\Backend\Models\Repositories' => ROOT_PATH . '/app/backend/models/repositories',
-    'Marser\App\Backend\Models\Services' => ROOT_PATH . '/app/backend/models/services',
+    'Marser\App\Backend\Repositories' => ROOT_PATH . '/app/backend/repositories',
 )) -> register();
