@@ -27,9 +27,8 @@ class PhalBaseModel extends \Phalcon\Mvc\Model{
      * @param string $tableName
      * @author Marser
      */
-    public function set_table_source($tableName){
+    protected function set_table_source($tableName){
         $prefix = $this -> getDI() -> get('systemConfig') -> get('database', 'prefix');
         $this -> setSource($prefix.$tableName);
     }
-
 }

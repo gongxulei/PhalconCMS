@@ -15,13 +15,18 @@ $loader = new \Phalcon\Loader();
  */
 $loader -> registerNamespaces(array(
     'Marser' => ROOT_PATH,
-    'Marser\App\Backend\Controllers' => ROOT_PATH . '/app/backend/controllers',
-    'Marser\App\Backend\Models' => ROOT_PATH . '/app/backend/models',
+
     'Marser\App\Core' => ROOT_PATH . '/app/core',
-    'Marser\App\Frontend\Controllers' => ROOT_PATH . '/app/frontend/controllers',
-    'Marser\App\Frontend\Models' => ROOT_PATH . '/app/frontend/models',
     'Marser\App\Helpers' => ROOT_PATH . '/app/helpers',
     'Marser\App\Libs' => ROOT_PATH . '/app/libs',
     'Marser\App\Service' => ROOT_PATH . '/app/service',
     'Marser\App\Tasks' => ROOT_PATH . '/app/tasks',
+
+    'Marser\App\Frontend\Controllers' => ROOT_PATH . '/app/frontend/controllers',
+    'Marser\App\Frontend\Models' => ROOT_PATH . '/app/frontend/models',
+
+    'Marser\App\Backend\Controllers' => ROOT_PATH . '/app/backend/controllers',
+    'Marser\App\Backend\Models' => ROOT_PATH . '/app/backend/models',
+    'Marser\App\Backend\Models\Repositories' => ROOT_PATH . '/app/backend/models/repositories',
+    'Marser\App\Backend\Models\Services' => ROOT_PATH . '/app/backend/models/services',
 )) -> register();
