@@ -1,7 +1,46 @@
 <div class="typecho-head-nav clearfix" role="navigation">
     <nav id="typecho-nav-list">
-    <ul class = "root focus">
-    </ul>
+        <ul class = "root focus">
+            <li class="parent">
+                <a href="#">控制台</a></dt>
+            </li>
+            <ul class="child">
+                <li><a href="#">概要</a></li>
+                <li><a href="#">个人设置</a></li>
+                <li><a href="#">插件</a></li>
+                <li class="last"><a href="#">外观</a></li>
+            </ul>
+        </ul>
+        <ul class="root focus">
+            <li class="parent"><a href="#">撰写</a></dt></li>
+            <ul class="child">
+                <li><a href="#">撰写文章</a></li>
+                <!-- focus 样式选中-->
+                <li class="focus last"><a href="#">创建页面</a></li>
+            </ul>
+        </ul>
+        <ul class="root">
+            <li class="parent"><a href="#">管理</a></dt></li>
+            <ul class="child">
+                <li><a href="#">文章</a></li>
+                <li><a href="#">独立页面</a></li>
+                <li><a href="#">评论</a></li>
+                <li><a href="#">分类</a></li>
+                <li><a href="#">标签</a></li>
+                <li><a href="#">文件</a></li>
+                <li class="last"><a href="#">用户</a></li>
+            </ul>
+        </ul>
+        <ul class="root">
+            <li class="parent">
+                <a href="#">设置</a></dt></li>
+            <ul class="child">
+                <li><a href="#">基本</a></li>
+                <li><a href="#">评论</a></li>
+                <li><a href="#">阅读</a></li>
+                <li class="last"><a href="#">永久链接</a></li>
+            </ul>
+        </ul>
     </nav>
     <div class="operate">
         <a href="{{url(modulePathinfo~"/account/profile")}}" class="author">{{username}}</a>
