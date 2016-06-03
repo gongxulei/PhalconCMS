@@ -27,6 +27,16 @@ class Categorys extends BaseRepository{
     }
 
     /**
+     * 分类列表
+     * @return array
+     * @throws \Exception
+     */
+    public function get_list(){
+        $categoryList = $this -> model -> get_list();
+        return $categoryList;
+    }
+
+    /**
      * 获取分类树
      * @return array
      * @throws \Exception

@@ -11,6 +11,7 @@
 namespace Marser\App\Backend\Models;
 
 use \Marser\App\Backend\Models\BaseModel;
+use Sabre\DAVACL\Exception\AceConflict;
 
 class CategorysModel extends BaseModel{
 
@@ -19,6 +20,27 @@ class CategorysModel extends BaseModel{
     public function initialize(){
         parent::initialize();
         $this -> set_table_source(self::TABLE_NAME);
+    }
+
+    /**
+     * 分类列表
+     * @param int $status
+     * @return array
+     * @throws \Exception
+     */
+    public function get_list($status=1){
+        $status = intval($status);
+        $params = array(
+            'conditions' => 'status = :status:',
+            'bind' => array(
+                'status' => $status,
+            ),
+        );
+        $result = $this -> find($params);
+        if(!$result){
+            throw new \Exception('查询数据失败');
+        }
+        return $result -> toArray();
     }
 
     /**

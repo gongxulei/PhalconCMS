@@ -27,6 +27,18 @@ class CategoryController extends BaseController{
     }
 
     /**
+     * 分类列表
+     */
+    public function listAction(){
+        $categoryList = $this -> repository -> get_list();
+
+        $this -> view -> setVars(array(
+            'categoryList' => $categoryList
+        ));
+        $this -> view -> pick('category');
+    }
+
+    /**
      * 新增分类页面
      */
     public function writeAction(){
