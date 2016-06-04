@@ -17,7 +17,7 @@ class Categorys extends BaseRepository{
 
     /**
      * model对象
-     * @var \Marser\App\Backend\Models\CategorysModel
+     * @var CategorysModel
      */
     protected $model;
 

@@ -35,7 +35,7 @@ class CategoryController extends BaseController{
         $this -> view -> setVars(array(
             'categoryList' => $categoryList
         ));
-        $this -> view -> pick('category');
+        $this -> view -> pick('category/list');
     }
 
     /**

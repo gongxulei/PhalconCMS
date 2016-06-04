@@ -11,9 +11,20 @@
 namespace Marser\App\Backend\Controllers;
 
 use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Backend\Models\UsersModel;
+    \Marser\App\Backend\Repositories\Repository;
 
 class AccountController extends BaseController{
+
+    /**
+     * 用户数据仓库
+     * @var \Marser\App\Backend\Repositories\Users
+     */
+    protected $repository;
+
+    public function initialize(){
+        parent::initialize();
+        $this -> repository = Repository::get_repository('Users');
+    }
 
     /**
      * 个人设置页
@@ -27,7 +38,7 @@ class AccountController extends BaseController{
      */
     public function setprofileAction(){
         try{
-            if(!$this -> request -> isPost()){
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
             }
             $nickname = $this -> request -> getPost('nickname', 'trim');
@@ -53,19 +64,19 @@ class AccountController extends BaseController{
                 'nickname' => $nickname,
                 'email' => $email,
             );
-            $usersModel = new UsersModel();
-            $affectedRows = $usersModel -> update_user($data, $this -> session -> get('user')['username']);
+            $affectedRows = $this -> repository -> update($data, $this -> session -> get('user')['uid']);
             if(!$affectedRows){
                 throw new \Exception('修改个人设置失败');
             }
-            $this -> ajax_return('更新成功');
+
+            $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
-            $this -> ajax_return($e -> getMessage(), $code);
+            $this -> flashSession -> error($e -> getMessage());
         }
-        $this -> view -> disable();
+        $url = $this -> get_module_uri('account/profile');
+        $this -> response -> redirect($url);
     }
 
     /**
@@ -73,8 +84,8 @@ class AccountController extends BaseController{
      */
     public function setpwdAction(){
         try{
-            if(!$this -> request -> isPost()){
-                throw new \Exception('请求错误');
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
+                throw new \Exception('非法请求');
             }
             $oldpwd = $this -> request -> getPost('oldpwd', 'trim');
             $newpwd = $this -> request -> getPost('newpwd', 'trim');
@@ -98,8 +109,7 @@ class AccountController extends BaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 校验旧密码是否正确 */
-            $usersModel = new UsersModel();
-            $user = $usersModel -> user_detail($this -> session -> get('user')['username']);
+            $user = $this -> repository -> detail($this -> session -> get('user')['username']);
             if(!$user){
                 throw new \Exception('密码错误');
             }
@@ -109,21 +119,20 @@ class AccountController extends BaseController{
             }
             /** 密码更新 */
             $password = $this -> security -> hash($newpwd);
-            $affectedRows = $usersModel -> update_user(array(
+            $affectedRows = $this -> repository -> update(array(
                 'password' => $password,
-            ), $this -> session -> get('user')['username']);
+            ), $this -> session -> get('user')['uid']);
             if(!$affectedRows){
                 throw new \Exception('修改密码失败，请重试');
             }
-            $this -> ajax_return('修改密码成功');
+            $this -> flashSession -> success('修改密码成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = !empty($e -> getCode()) ? $e -> getCode() : 500;
-            $this -> ajax_return($e -> getMessage(), $code);
+            $this -> flashSession -> error($e -> getMessage());
         }
-        $this -> view -> disable();
+        $url = $this -> get_module_uri('passport/logout');
+        $this -> response -> redirect($url);
     }
 
 }
-

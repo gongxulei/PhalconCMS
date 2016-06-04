@@ -28,7 +28,7 @@ class OptionsModel extends BaseModel{
      * @return mixed
      * @throws \Exception
      */
-    public function options_list($opkey, array $ext=array()){
+    public function get_list($opkey, array $ext=array()){
         $builder = $this -> getModelsManager() -> createBuilder();
         $builder -> from(__CLASS__);
         if(isset($ext['columns']) && !empty($ext['columns'])){
@@ -64,8 +64,7 @@ class OptionsModel extends BaseModel{
             $values,
             array(
                 'conditions' => 'op_key = ?',
-                'bind' => array($opkey)
-                //'bindTypes' => array(\PDO::PARAM_STR)
+                'bind' => [$opkey]
             )
         );
         if(!$result){

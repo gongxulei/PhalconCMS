@@ -10,9 +10,15 @@
 
 namespace Marser\App\Backend\Controllers;
 use \Marser\App\Core\PhalBaseController,
-    \Marser\App\Backend\Models\UsersModel;
+    \Marser\App\Backend\Repositories\Repository;
 
 class PassportController extends PhalBaseController{
+
+    /**
+     * 用户数据仓库
+     * @var \Marser\App\Backend\Repositories\Users
+     */
+    protected $repository;
 
     /**
      * 模块在URL中的pathinfo路径名
@@ -22,6 +28,7 @@ class PassportController extends PhalBaseController{
 
     public function initialize(){
         parent::initialize();
+        $this -> repository = Repository::get_repository('Users');
         $this -> _module_pathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
     }
 
@@ -67,8 +74,7 @@ class PassportController extends PhalBaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 获取用户信息 */
-            $usersModel = new UsersModel();
-            $user = $usersModel -> user_detail($username);
+            $user = $this -> repository -> detail($username);
             if(!$user){
                 throw new \Exception('用户名或密码错误');
             }

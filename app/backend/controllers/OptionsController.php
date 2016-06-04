@@ -10,12 +10,19 @@
 
 namespace Marser\App\Backend\Controllers;
 use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Backend\Models\OptionsModel;
+    \Marser\App\Backend\Repositories\Repository;
 
 class OptionsController extends BaseController{
 
+    /**
+     * 配置数据仓库
+     * @var \Marser\App\Backend\Repositories\Options
+     */
+    protected $repository;
+
     public function initialize(){
         parent::initialize();
+        $this -> repository = Repository::get_repository('Options');
     }
 
     /**
@@ -24,8 +31,7 @@ class OptionsController extends BaseController{
     public function baseAction(){
         try {
             $key = "'site_name', 'site_url', 'site_description', 'site_keywords'";
-            $optionsModel = new OptionsModel();
-            $options = $optionsModel->options_list($key, array(
+            $options = $this -> repository -> get_list($key, array(
                 'columns' => 'op_key, op_value',
             ));
             if(is_array($options) && count($options) > 0){
@@ -86,13 +92,11 @@ class OptionsController extends BaseController{
             !empty($keywords) && $data['site_keywords'] = $keywords;
             !empty($timezone) && $data['site_timezone'] = $timezone;
 
-            $optionsModel = new OptionsModel();
             foreach($data as $k=>$v){
-                $optionsModel -> update_options(array(
+                $this -> repository -> update(array(
                     "op_value" => $v
                 ), "{$k}");
             }
-            $this -> ajax_return('更新成功');
 
             $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){

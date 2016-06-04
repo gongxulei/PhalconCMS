@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * 用户model
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -21,18 +21,18 @@ class UsersModel extends BaseModel{
     }
 
     /**
-     * 获取用户详细数据
+     * 获取用户数据
      * @param $username
      * @param array $ext
      * @return \Phalcon\Mvc\Model
      * @throws \Exception
      */
-    public function user_detail($username, array $ext=array()){
+    public function detail($username, array $ext=array()){
         if(empty($username)){
             throw new \Exception('参数错误');
         }
         $params = array(
-            'conditions' => 'username=:username:',
+            'conditions' => 'username = :username:',
             'bind' => [
                 'username' => $username,
             ],
@@ -45,16 +45,17 @@ class UsersModel extends BaseModel{
     }
 
     /**
-     * 更新个人设置数据
+     * 更新用户数据
      * @param array $data
-     * @param $username
+     * @param int $uid
      * @return int
      * @throws \Exception
      */
-    public function update_user(array $data, $username){
+    public function update_user(array $data, $uid){
+        $uid = intval($uid);
         $data = array_filter($data);
         $data = array_unique($data);
-        if(!is_array($data) || count($data) == 0){
+        if(!is_array($data) || count($data) == 0 || $uid <= 0){
             throw new \Exception('参数错误');
         }
         $keys = array_keys($data);
@@ -64,9 +65,8 @@ class UsersModel extends BaseModel{
             $keys,
             $values,
             array(
-                'conditions' => 'username = ?',
-                'bind' => array($username)
-                //'bindTypes' => array(\PDO::PARAM_STR)
+                'conditions' => 'uid = ?',
+                'bind' => array($uid)
             )
         );
         if(!$result){
