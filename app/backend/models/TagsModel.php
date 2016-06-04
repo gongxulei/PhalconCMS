@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 分类Model
+ * 标签model
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -11,11 +11,10 @@
 namespace Marser\App\Backend\Models;
 
 use \Marser\App\Backend\Models\BaseModel;
-use Sabre\DAVACL\Exception\AceConflict;
 
-class CategorysModel extends BaseModel{
+class TagsModel extends BaseModel{
 
-    const TABLE_NAME = 'categorys';
+    const TABLE_NAME = 'tags';
 
     public function initialize(){
         parent::initialize();
@@ -23,12 +22,13 @@ class CategorysModel extends BaseModel{
     }
 
     /**
-     * 分类列表
+     * 标签列表
      * @param int $status
+     * @param array $ext
      * @return array
      * @throws \Exception
      */
-    public function get_list($status=1){
+    public function get_list($status=1, array $ext=array()){
         $status = intval($status);
         $params = array(
             'conditions' => 'status = :status:',
@@ -40,59 +40,12 @@ class CategorysModel extends BaseModel{
         if(!$result){
             throw new \Exception('查询数据失败');
         }
-        return $result -> toArray();
+        $tagsList = $result -> toArray();
+        return $tagsList;
     }
 
     /**
-     * 获取分类数据
-     * @param $cid
-     * @return array
-     * @throws \Exception
-     */
-    public function detail($cid){
-        $category = array();
-        $cid = intval($cid);
-        if($cid < 0){
-            throw new \Exception('参数错误');
-        }
-
-        $params = array(
-            'conditions' => 'cid = :cid:',
-            'bind' => array(
-                'cid' => $cid
-            )
-        );
-        $result = $this -> findFirst($params);
-        if($result){
-            $category = $result -> toArray();
-        }
-        return $category;
-    }
-
-    /**
-     * 获取分类树
-     * @param int $status
-     * @return array
-     */
-    public function get_category_for_tree($status=1){
-        $categoryList = array();
-        $status = intval($status);
-        $result = $this -> find(array(
-            'columns' => 'cid, category_name, slug, root_cid, parent_cid',
-            'conditions' => 'status = :status:',
-            'bind' => array(
-                'status' => $status,
-            ),
-            'order' => 'parent_cid DESC,  root_cid DESC',
-        ));
-        if($result){
-            $categoryList = $result -> toArray();
-        }
-        return $categoryList;
-    }
-
-    /**
-     * 分类数据入库
+     * 标签数据入库
      * @param array $data
      * @return bool|int
      * @throws \Exception
@@ -109,21 +62,21 @@ class CategorysModel extends BaseModel{
         if(!$result){
             throw new \Exception('数据入库失败');
         }
-        $cid = $this -> db -> lastInsertId();
-        return $cid;
+        $tid = $this -> db -> lastInsertId();
+        return $tid;
     }
 
     /**
-     * 更新分类数据
+     * 标签更新
      * @param array $data
-     * @param $cid
+     * @param $tid
      * @return int
      * @throws \Exception
      */
-    public function update_category(array $data, $cid){
+    public function update_tag(array $data, $tid){
         $data = array_filter($data);
-        $cid = intval($cid);
-        if(!is_array($data) || count($data) == 0 || $cid <= 0){
+        $cid = intval($tid);
+        if(!is_array($data) || count($data) == 0 || $tid <= 0){
             throw new \Exception('参数错误');
         }
         $keys = array_keys($data);
@@ -133,8 +86,8 @@ class CategorysModel extends BaseModel{
             $keys,
             $values,
             array(
-                'conditions' => 'cid = ?',
-                'bind' => array($cid)
+                'conditions' => 'tid = ?',
+                'bind' => array($tid)
             )
         );
         if(!$result){
@@ -143,6 +96,4 @@ class CategorysModel extends BaseModel{
         $affectedRows = $this -> db -> affectedRows();
         return $affectedRows;
     }
-
-
 }

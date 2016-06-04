@@ -76,7 +76,7 @@ class AccountController extends BaseController{
             $this -> flashSession -> error($e -> getMessage());
         }
         $url = $this -> get_module_uri('account/profile');
-        $this -> response -> redirect($url);
+        return $this -> response -> redirect($url);
     }
 
     /**
@@ -132,7 +132,7 @@ class AccountController extends BaseController{
             $this -> flashSession -> error($e -> getMessage());
         }
         $url = $this -> get_module_uri('passport/logout');
-        $this -> response -> redirect($url);
+        return $this -> response -> redirect($url);
     }
 
 }

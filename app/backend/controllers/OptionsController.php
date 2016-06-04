@@ -105,6 +105,6 @@ class OptionsController extends BaseController{
             $this -> flashSession -> error($e -> getMessage());
         }
         $url = $this -> get_module_uri('options/base');
-        $this -> response -> redirect($url);
+        return $this -> response -> redirect($url);
     }
 }

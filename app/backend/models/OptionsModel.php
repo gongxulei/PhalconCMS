@@ -52,7 +52,6 @@ class OptionsModel extends BaseModel{
      */
     public function update_options(array $data, $opkey){
         $data = array_filter($data);
-        $data = array_unique($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }

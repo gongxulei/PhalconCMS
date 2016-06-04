@@ -88,14 +88,14 @@ class PassportController extends PhalBaseController{
             $this -> session -> set('user', $userinfo);
 
             $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
-            $this -> response -> redirect($url);
+            return $this -> response -> redirect($url);
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $this -> flashSession -> error($e -> getMessage());
 
             $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
-            $this -> response -> redirect($url);
+            return $this -> response -> redirect($url);
         }
     }
 
@@ -105,7 +105,7 @@ class PassportController extends PhalBaseController{
     public function logoutAction(){
         if($this -> session -> destroy()){
             $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
-            $this -> response -> redirect($url);
+            return $this -> response -> redirect($url);
         }
     }
 

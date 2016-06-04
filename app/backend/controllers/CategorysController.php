@@ -13,7 +13,7 @@ namespace Marser\App\Backend\Controllers;
 use \Marser\App\Backend\Controllers\BaseController,
     \Marser\App\Backend\Repositories\Repository;
 
-class CategoryController extends BaseController{
+class CategorysController extends BaseController{
 
     /**
      * 分类数据仓库
@@ -29,13 +29,13 @@ class CategoryController extends BaseController{
     /**
      * 分类列表
      */
-    public function listAction(){
+    public function indexAction(){
         $categoryList = $this -> repository -> get_list();
 
         $this -> view -> setVars(array(
             'categoryList' => $categoryList
         ));
-        $this -> view -> pick('category/list');
+        $this -> view -> pick('categorys/list');
     }
 
     /**
@@ -57,7 +57,7 @@ class CategoryController extends BaseController{
             'category' => $category,
             'categoryTree' => $categoryTree,
         ));
-        $this -> view -> pick('category/write');
+        $this -> view -> pick('categorys/write');
     }
 
     /**
@@ -116,8 +116,8 @@ class CategoryController extends BaseController{
             }
             $this -> flashSession -> error($message);
         }
-        $url = $this -> get_module_uri('category/write');
-        $this -> response -> redirect($url);
+        $url = $this -> get_module_uri('categorys/write');
+        return $this -> response -> redirect($url);
     }
 
     /**
@@ -164,8 +164,9 @@ class CategoryController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('category/write');
-        $this -> response -> redirect($url);
+
+        $url = $this -> get_module_uri('categorys/write');
+        return $this -> response -> redirect($url);
     }
 
 }

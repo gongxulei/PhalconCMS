@@ -54,7 +54,6 @@ class UsersModel extends BaseModel{
     public function update_user(array $data, $uid){
         $uid = intval($uid);
         $data = array_filter($data);
-        $data = array_unique($data);
         if(!is_array($data) || count($data) == 0 || $uid <= 0){
             throw new \Exception('参数错误');
         }
