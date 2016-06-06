@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * 校验器
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -171,6 +171,15 @@ class Validator extends \Phalcon\Di\Injectable{
     }
 
     /**
+     * 检测时间格式是否正确
+     * @param $str
+     * @return bool
+     */
+    public function check_time($str){
+        return strtotime($str) ? true : false;
+    }
+
+    /**
      * 枚举类型判断
      *
      * @access public
@@ -312,7 +321,7 @@ class Validator extends \Phalcon\Di\Injectable{
      * @return boolean
      */
     public static function is_float($str){
-        return preg_match("/^[0-9\.]+$/", $str);
+        return is_float($str);
     }
 
     /**
