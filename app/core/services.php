@@ -63,7 +63,7 @@ $di -> set('url', function(){
 /**
  * DI注册DB配置
  */
-$di -> set('db', function () use($config) {
+$di -> setShared('db', function () use($config) {
     $dbconfig = $config -> database -> db;
     $dbconfig = $dbconfig -> toArray();
     if (!is_array($dbconfig) || count($dbconfig)==0) {

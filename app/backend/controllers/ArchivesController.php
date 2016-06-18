@@ -34,11 +34,14 @@ class ArchivesController extends BaseController{
 
     public function addAction(){
         try{
-            $title = $this -> request -> get('title', 'trim');
-            $content = $this -> request -> get('content', 'trim');
-            $modifyTime = $this -> request -> get('modifyTime', 'trim');
-            $cid = $this -> request -> get('cid', 'trim');
-            $tagName = $this -> request -> get('tagName', 'trim');
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
+                throw new \Exception('非法请求');
+            }
+            $title = $this -> request -> getPost('title', 'trim');
+            $content = $this -> request -> getPost('content', 'trim');
+            $modifyTime = $this -> request -> getPost('modifyTime', 'trim');
+            $cid = $this -> request -> getPost('cid', 'trim');
+            $tagName = $this -> request -> getPost('tagName', 'trim');
             /** 添加验证规则 */
             $this -> validator -> add_rule('title', 'required', '请填写标题');
             $this -> validator -> add_rule('content', 'required', '请填写文章内容');
@@ -48,6 +51,7 @@ class ArchivesController extends BaseController{
             if ($error = $this -> validator -> run(array(
                 'title' => $title,
                 'content' => $content,
+                'modifyTime' => $modifyTime,
                 'cid' => $cid,
             ))) {
                 $error = array_values($error);
@@ -58,9 +62,10 @@ class ArchivesController extends BaseController{
             $this -> repository -> add(array(
                 'title' => $title,
                 'content' => $content,
-                'modify_time' => $modifyTime,
+                'modify_time' => strtotime($modifyTime),
                 'cid' => $cid,
                 'tag_name' => $tagName,
+                'introduce' => $content,
             ));
 
             $this -> flashSession -> success('发布文章成功');

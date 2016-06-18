@@ -96,4 +96,32 @@ class TagsModel extends BaseModel{
         $affectedRows = $this -> db -> affectedRows();
         return $affectedRows;
     }
+
+    /**
+     * 根据tagname获取tid
+     * @param $tagname
+     * @return int
+     * @throws \Exception
+     */
+    public function get_tid_by_tagname($tagname){
+        if(empty($tagname)){
+            throw new \Exception('参数错误');
+        }
+        $params = array(
+            'columns' => 'tid',
+            'conditions' => 'tag_name = :tagname:',
+            'bind' => array(
+                'tagname' => "{$tagname}",
+            ),
+        );
+        $result = $this -> findFirst($params);
+        if($result){
+            $tid = $result -> tid;
+            $tid = intval($tid);
+            if($tid > 0){
+                return $tid;
+            }
+        }
+        return false;
+    }
 }

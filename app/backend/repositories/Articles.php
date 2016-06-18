@@ -11,19 +11,16 @@
 namespace Marser\App\Backend\Repositories;
 
 use \Marser\App\Backend\Repositories\BaseRepository,
-    \Marser\App\Backend\Models\ArticlesModel;
+    \Marser\App\Backend\Models\ArticlesModel,
+    \Marser\App\Backend\Models\ContentsModel,
+    \Marser\App\Backend\Models\ArticlesCategorysModel,
+    \Marser\App\Backend\Models\TagsModel,
+    \Marser\App\Backend\Models\ArticlesTagsModel;
 
 class Articles extends BaseRepository{
 
-    /**
-     * model对象
-     * @var ArticlesModel
-     */
-    protected $model;
-
     public function __construct(){
         parent::__construct();
-        $this -> model = new ArticlesModel();
     }
 
     /**
@@ -44,12 +41,159 @@ class Articles extends BaseRepository{
         if(!isset($data['modify_time']) || empty($data['modify_time'])){
             $data['modify_time'] = time();
         }
-        /** 文章数据入库 */
-        /** 分类数据入库 */
-        /** 标签数据入库 */
+        try {
+            $db = $this -> _di -> get('db');
+            $db -> begin();
+            /** 文章基本数据入库 */
+            $aid = $this->add_article($data);
+            /** 文章内容数据入库 */
+            $cid = $this->add_article_content($aid, $data['content']);
+            /** 关联分类数据入库 */
+            $this->add_article_categorys($aid, $data['cid']);
+            /** 标签数据入库 */
+            $tagidArray = $this->get_tagid_list($data['tag_name'], $data);
+            $this->add_article_tags($aid, $tagidArray);
+            $db -> commit();
+        }catch(\Exception $e){
+            $db -> rollback();
 
-        $aid = $this -> add($data);
+            echo '<pre>';
+            print_r($e);exit;
+
+            $message = $e -> getMessage();
+            $code = intval($e -> getCode());
+            throw new \Exception($message, $code);
+        }
+    }
+
+    /**
+     * 文章数据入库
+     * @param array $data
+     * @return bool|int
+     * @throws \Exception
+     */
+    protected function add_article(array $data){
+        $articlesModel = new ArticlesModel();
+        $aid = $articlesModel -> add(array(
+            'title' => $data['title'],
+            'head_image' => $data['head_image'],
+            'introduce' => $data['introduce'],
+            'status' => $data['status'],
+            'create_by' => $data['create_by'],
+            'create_time' => $data['create_time'],
+            'modify_by' => $data['modify_by'],
+            'modify_time' => $data['modify_time'],
+        ));
         return $aid;
+    }
+
+    /**
+     * 文章内容数据入库
+     * @param $aid
+     * @param string $content
+     * @return bool|int
+     * @throws \Exception
+     */
+    protected function add_article_content($aid, $content){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $contentsModel = new ContentsModel();
+        $cid = $contentsModel -> add(array(
+            'relateid' => $aid,
+            'content' => $content,
+        ));
+        return $cid;
+    }
+
+    /**
+     * 文章所属分类数据入库
+     * @param $aid
+     * @param string $cid
+     * @throws \Exception
+     */
+    protected function add_article_categorys($aid, $cid){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $articlesCategorysModel = new ArticlesCategorysModel();
+        $cidArray = explode(',', $cid);
+        $cidArray = array_map('trim', $cidArray);
+        $cidArray = array_map('intval', $cidArray);
+        $cidArray = array_filter($cidArray);
+        $cidArray = array_unique($cidArray);
+        if(!is_array($cidArray) || count($cidArray) == 0){
+            throw new \Exception('请选择文章所属分类');
+        }
+        foreach($cidArray as $ck=>$cv){
+            $articlesCategorysModel -> add(array(
+                'aid' => $aid,
+                'cid' => $cv
+            ));
+        }
+        return true;
+    }
+
+    /**
+     * 根据tagname获取tagid列表
+     * @param $tagName 多个标签名以“,”分隔
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
+    protected function get_tagid_list($tagName, array $data=array()){
+        $tagidArray = array();
+        $tagNameArray = explode(',', $tagName);
+        $tagNameArray = array_map('trim', $tagNameArray);
+        $tagNameArray = array_filter($tagNameArray);
+        $tagNameArray = array_unique($tagNameArray);
+        if(is_array($tagNameArray) && count($tagNameArray) > 0){
+            $tagsModel = new TagsModel();
+            $tagidArray = array();
+            foreach($tagNameArray as $tk=>$tv){
+                $tid = $tagsModel -> get_tid_by_tagname($tv);
+                if($tid){//标签存在
+                    $tagidArray[] = $tid;
+                }else{//标签不存在
+                    $tid = $tagsModel -> add(array(
+                        'tag_name' => $tv,
+                        'create_by' => $data['create_by'],
+                        'create_time' => $data['create_time'],
+                        'modify_by' => $data['modify_by'],
+                        'modify_time' => $data['modify_time'],
+                    ));
+                    $tagidArray[] = $tid;
+                }
+            }
+            return $tagidArray;
+
+            $tagidArray = $tagsModel -> scan_tags($tagNameArray);
+        }
+        return $tagidArray;
+    }
+
+    /**
+     * 文章关联的标签数据入库
+     * @param $aid
+     * @param array $tagidArray
+     * @return bool
+     * @throws \Exception
+     */
+    protected function add_article_tags($aid, array $tagidArray){
+        $aid = intval($aid);
+        if($aid <= 0 || !is_array($tagidArray) || count($tagidArray) == 0){
+            return false;
+        }
+        $articlesTagsModel = new ArticlesTagsModel();
+        foreach($tagidArray as $tk=>$tv){
+            $articlesTagsModel -> add(array(
+                'aid' => $aid,
+                'tid' => $tv,
+            ));
+        }
+        return true;
     }
 
 }

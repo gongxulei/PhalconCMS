@@ -42,8 +42,8 @@ class TagsController extends BaseController{
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
             }
-            $tagName = $this -> request -> get('name', 'trim');
-            $slug = $this -> request -> get('slug', 'trim');
+            $tagName = $this -> request -> getPost('name', 'trim');
+            $slug = $this -> request -> getPost('slug', 'trim');
             /** 添加验证规则 */
             $this -> validator -> add_rule('name', 'required', '请填写标签名称')
                 -> add_rule('name', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');
@@ -86,9 +86,9 @@ class TagsController extends BaseController{
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
             }
-            $tid = intval($this -> request -> get('tid', 'trim'));
-            $tagName = $this -> request -> get('name', 'trim');
-            $slug = $this -> request -> get('slug', 'trim');
+            $tid = intval($this -> request -> getPost('tid', 'trim'));
+            $tagName = $this -> request -> getPost('name', 'trim');
+            $slug = $this -> request -> getPost('slug', 'trim');
             /** 添加验证规则 */
             $this -> validator -> add_rule('tid', 'required', '系统错误，请刷新页面后重试');
             $this -> validator -> add_rule('name', 'required', '请填写标签名称')
