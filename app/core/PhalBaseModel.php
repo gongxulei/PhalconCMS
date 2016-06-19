@@ -21,7 +21,7 @@ class PhalBaseModel extends \Phalcon\Mvc\Model{
     public function initialize(){
         $this -> db = $this -> getDI() -> get('db');
     }
-    
+
     /**
      * 设置表（补上表前缀）
      * @param string $tableName

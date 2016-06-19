@@ -44,7 +44,6 @@ class ArchivesController extends BaseController{
      */
     public function addAction(){
         try{
-            //$this -> dispatcher -> $this->getNamespaceName()
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
             }
