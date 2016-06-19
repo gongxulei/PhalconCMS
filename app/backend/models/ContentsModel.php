@@ -42,4 +42,37 @@ class ContentsModel extends BaseModel{
         $cid = $this -> db -> lastInsertId();
         return $cid;
     }
+
+    /**
+     * 更新
+     * @param array $data
+     * @param $relateid
+     * @return int
+     * @throws \Exception
+     */
+    public function update_record(array $data, $relateid){
+        $relateid = intval($relateid);
+        $data = array_filter($data);
+        if($relateid <= 0 || !is_array($data) || count($data) == 0){
+            throw new \Exception('参数错误');
+        }
+        $keys = array_keys($data);
+        $values = array_values($data);
+        $result = $this -> db -> update(
+            $this->getSource(),
+            $keys,
+            $values,
+            array(
+                'conditions' => 'relateid = ?',
+                'bind' => array($relateid)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
+    }
+
+
 }

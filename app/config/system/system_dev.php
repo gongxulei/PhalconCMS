@@ -13,6 +13,9 @@ return array(
         //项目名称
         'app_name' => 'PhalconCMS',
 
+        //根命名空间
+        'namespace' => 'Marser',
+
         //前台配置
         'frontend' => array(
             //模块在URL中的pathinfo路径名
@@ -20,9 +23,6 @@ return array(
 
             //控制器路径
             'controllers' => ROOT_PATH . '/app/frontend/controllers/',
-
-            //控制器路径
-            'controllers_namespace' => 'Marser\App\Frontend\Controllers',
 
             //视图路径
             'views' => ROOT_PATH . '/app/frontend/views/',
@@ -44,9 +44,6 @@ return array(
 
             //控制器路径
             'controllers' => ROOT_PATH . '/app/backend/controllers/',
-
-            //控制器路径
-            'controllers_namespace' => 'Marser\App\Backend\Controllers',
 
             //视图路径
             'views' => ROOT_PATH . '/app/backend/views/',

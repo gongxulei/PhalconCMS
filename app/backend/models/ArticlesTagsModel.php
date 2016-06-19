@@ -42,4 +42,19 @@ class ArticlesTagsModel extends BaseModel{
         $tid = $this -> db -> lastInsertId();
         return $tid;
     }
+
+    /**
+     * 删除标签关联关系（物理删除）
+     * @param $aid
+     * @return bool
+     * @throws \Exception
+     */
+    public function delete_record($aid){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $result = $this -> db -> delete($this -> getSource(), "aid = ?", array($aid));
+        return $result;
+    }
 }

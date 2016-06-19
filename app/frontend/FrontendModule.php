@@ -49,7 +49,7 @@ class FrontendModule implements ModuleDefinitionInterface{
             });
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher->setEventsManager($eventsManager);
-            $dispatcher->setDefaultNamespace($systemConfig -> get('app', 'frontend', 'controllers_namespace'));
+            $dispatcher->setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Frontend\\Controllers');
             return $dispatcher;
         }, true);
 

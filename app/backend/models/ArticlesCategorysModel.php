@@ -34,12 +34,27 @@ class ArticlesCategorysModel extends BaseModel{
         }
         $fields = array_keys($data);
         $values = array_values($data);
-
         $result = $this -> db -> insert($this -> getSource(), $values, $fields);
         if(!$result){
             throw new \Exception('数据入库失败');
         }
         $aid = $this -> db -> lastInsertId();
         return $aid;
+    }
+
+    /**
+     * 删除文章和分类的关联记录（物理删除）
+     * @param $aid
+     * @return bool
+     * @throws \Exception
+     */
+    public function delete_record($aid){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new \Exception('参数错误');
+        }
+
+        $result = $this -> db -> delete($this -> getSource(), "aid = ?", array($aid));
+        return $result;
     }
 }

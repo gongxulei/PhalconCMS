@@ -15,8 +15,7 @@ use \Phalcon\Loader,
     \Phalcon\Mvc\Dispatcher,
     \Phalcon\Mvc\ModuleDefinitionInterface;
 
-class BackendModule implements ModuleDefinitionInterface
-{
+class BackendModule implements ModuleDefinitionInterface{
 
     public function registerAutoloaders(DiInterface $di=null){
 
@@ -51,7 +50,7 @@ class BackendModule implements ModuleDefinitionInterface
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher -> setEventsManager($eventsManager);
             //默认设置为前台的调度器
-            $dispatcher -> setDefaultNamespace($systemConfig -> get('app', 'backend', 'controllers_namespace'));
+            $dispatcher -> setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Backend\\Controllers');
             return $dispatcher;
         }, true);
 

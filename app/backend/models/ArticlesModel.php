@@ -42,4 +42,35 @@ class ArticlesModel extends BaseModel{
         $aid = $this -> db -> lastInsertId();
         return $aid;
     }
+
+    /**
+     * 更新记录
+     * @param array $data
+     * @param $aid
+     * @return int
+     * @throws \Exception
+     */
+    public function update_record(array $data, $aid){
+        $aid = intval($aid);
+        $data = array_filter($data);
+        if($aid <= 0 || !is_array($data) || count($data) == 0){
+            throw new \Exception('参数错误');
+        }
+        $keys = array_keys($data);
+        $values = array_values($data);
+        $result = $this -> db -> update(
+            $this->getSource(),
+            $keys,
+            $values,
+            array(
+                'conditions' => 'aid = ?',
+                'bind' => array($aid)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
+    }
 }
