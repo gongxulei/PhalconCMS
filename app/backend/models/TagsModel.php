@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 标签model
+ * 标签模型
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -50,7 +50,7 @@ class TagsModel extends BaseModel{
      * @return bool|int
      * @throws \Exception
      */
-    public function add(array $data){
+    public function insert_record(array $data){
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
@@ -73,7 +73,7 @@ class TagsModel extends BaseModel{
      * @return int
      * @throws \Exception
      */
-    public function update_tag(array $data, $tid){
+    public function update_record(array $data, $tid){
         $data = array_filter($data);
         $cid = intval($tid);
         if(!is_array($data) || count($data) == 0 || $tid <= 0){

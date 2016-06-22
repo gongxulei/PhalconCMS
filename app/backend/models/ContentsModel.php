@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * 内容模型
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -27,7 +27,7 @@ class ContentsModel extends BaseModel{
      * @return bool|int
      * @throws \Exception
      */
-    public function add(array $data){
+    public function insert_record(array $data){
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');

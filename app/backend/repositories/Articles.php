@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * 文章业务仓库
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -43,36 +43,46 @@ class Articles extends BaseRepository{
     }
 
     /**
-     * 添加文章数据
+     * 保存文章
      * @param array $data
-     * @return mixed
+     * @param null $aid
+     * @throws \Exception
      */
-    public function add(array $data){
-        if(!isset($data['create_by']) || empty($data['create_by'])){
-            $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+    public function save(array $data, $aid = null){
+        empty($data['create_by']) && $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+        empty($data['create_time']) && $data['create_time'] = time();
+        empty($data['modify_by']) && $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+        empty($data['modify_time']) && $data['modify_time'] = time();
+
+        $aid = intval($aid);
+        if(empty($aid)){
+            /** 新增文章 */
+            $this -> create($data);
+        }else{
+            /** 更新文章 */
+            $this -> update($data, $aid);
         }
-        if(!isset($data['create_time']) || empty($data['create_time'])){
-            $data['create_time'] = time();
-        }
-        if(!isset($data['modify_by']) || empty($data['modify_by'])){
-            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
+    }
+
+    /**
+     * 新增文章
+     * @param array $data
+     * @throws \Exception
+     */
+    protected function create(array $data){
         try {
             $db = $this -> _di -> get('db');
             /** 事务开始 */
             $db -> begin();
             /** 文章基本数据入库 */
-            $aid = $this -> add_article($data);
+            $aid = $this -> create_article($data);
             /** 文章内容数据入库 */
-            $cid = $this -> add_article_content($aid, $data['content']);
+            $cid = $this -> create_article_content($aid, $data['content']);
             /** 关联分类数据入库 */
-            $this -> add_article_categorys($aid, $data['cid']);
+            $this -> create_article_categorys($aid, $data['cid']);
             /** 标签数据入库 */
             $tagidArray = $this -> get_tagid_list($data['tag_name'], $data);
-            $this -> add_article_tags($aid, $tagidArray);
+            $this -> create_article_tags($aid, $tagidArray);
             /** 提交事务 */
             $db -> commit();
         }catch(\Exception $e){
@@ -84,24 +94,12 @@ class Articles extends BaseRepository{
     }
 
     /**
-     * 更新文章数据
+     * 更新文章
      * @param array $data
      * @param $aid
      * @throws \Exception
      */
-    public function edit(array $data, $aid){
-        if(!isset($data['create_by']) || empty($data['create_by'])){
-            $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['create_time']) || empty($data['create_time'])){
-            $data['create_time'] = time();
-        }
-        if(!isset($data['modify_by']) || empty($data['modify_by'])){
-            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
+    protected function update(array $data, $aid){
         try{
             $db = $this -> _di -> get('db');
             /** 事务开始 */
@@ -112,11 +110,11 @@ class Articles extends BaseRepository{
             $this -> update_article_content($data['content'], $aid);
             /** 更新文章关联的分类数据 */
             $this -> delete_article_categorys($aid);
-            $this -> add_article_categorys($aid, $data['cid']);
+            $this -> create_article_categorys($aid, $data['cid']);
             /** 更新文章关联的标签数据 */
             $this -> delete_article_tags($aid);
             $tagidArray = $this -> get_tagid_list($data['tag_name'], $data);
-            $this -> add_article_tags($aid, $tagidArray);
+            $this -> create_article_tags($aid, $tagidArray);
             /** 提交事务 */
             $db -> commit();
         }catch(\Exception $e){
@@ -133,8 +131,8 @@ class Articles extends BaseRepository{
      * @return bool|int
      * @throws \Exception
      */
-    protected function add_article(array $data){
-        $aid = $this -> articlesModel -> add(array(
+    protected function create_article(array $data){
+        $aid = $this -> articlesModel -> insert_record(array(
             'title' => $data['title'],
             'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
@@ -176,12 +174,12 @@ class Articles extends BaseRepository{
      * @return bool|int
      * @throws \Exception
      */
-    protected function add_article_content($aid, $content){
+    protected function create_article_content($aid, $content){
         $aid = intval($aid);
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $cid = $this -> contentsModel -> add(array(
+        $cid = $this -> contentsModel -> insert_record(array(
             'relateid' => $aid,
             'content' => $content,
         ));
@@ -212,7 +210,7 @@ class Articles extends BaseRepository{
      * @param string $cid
      * @throws \Exception
      */
-    protected function add_article_categorys($aid, $cid){
+    protected function create_article_categorys($aid, $cid){
         $aid = intval($aid);
         if($aid <= 0){
             throw new \Exception('参数错误');
@@ -226,7 +224,7 @@ class Articles extends BaseRepository{
             throw new \Exception('请选择文章所属分类');
         }
         foreach($cidArray as $ck=>$cv){
-            $this -> articlesCategorysModel -> add(array(
+            $this -> articlesCategorysModel -> insert_record(array(
                 'aid' => $aid,
                 'cid' => $cv
             ));
@@ -267,7 +265,7 @@ class Articles extends BaseRepository{
                 if($tid){//标签存在
                     $tagidArray[] = $tid;
                 }else{//标签不存在，则添加标签
-                    $tid = $this -> tagsModel -> add(array(
+                    $tid = $this -> tagsModel -> insert_record(array(
                         'tag_name' => $tv,
                         'create_by' => $data['create_by'],
                         'create_time' => $data['create_time'],
@@ -288,13 +286,13 @@ class Articles extends BaseRepository{
      * @return bool
      * @throws \Exception
      */
-    protected function add_article_tags($aid, array $tagidArray){
+    protected function create_article_tags($aid, array $tagidArray){
         $aid = intval($aid);
         if($aid <= 0 || !is_array($tagidArray) || count($tagidArray) == 0){
             return false;
         }
         foreach($tagidArray as $tk=>$tv){
-            $this -> articlesTagsModel -> add(array(
+            $this -> articlesTagsModel -> insert_record(array(
                 'aid' => $aid,
                 'tid' => $tv,
             ));

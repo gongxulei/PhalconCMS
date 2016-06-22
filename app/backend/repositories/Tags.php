@@ -56,7 +56,7 @@ class Tags extends BaseRepository{
         if(!isset($data['modify_time']) || empty($data['modify_time'])){
             $data['modify_time'] = time();
         }
-        $tid = $this -> model -> add($data);
+        $tid = $this -> model -> insert_record($data);
         return $tid;
     }
 
@@ -74,7 +74,7 @@ class Tags extends BaseRepository{
         if(!isset($data['modify_time']) || empty($data['modify_time'])){
             $data['modify_time'] = time();
         }
-        $affectedRows = $this -> model -> update_tag($data, $tid);
+        $affectedRows = $this -> model -> update_record($data, $tid);
         return $affectedRows;
     }
 
