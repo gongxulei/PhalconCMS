@@ -43,19 +43,20 @@ class Tags extends BaseRepository{
      * @return bool|int
      * @throws \Exception
      */
-    public function add(array $data){
+    public function insert_record(array $data){
         if(!isset($data['create_by']) || empty($data['create_by'])){
-            $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+            //$data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+            $data['create_by'] = '';
         }
-        if(!isset($data['create_time']) || empty($data['create_time'])){
-            $data['create_time'] = time();
-        }
-        if(!isset($data['modify_by']) || empty($data['modify_by'])){
-            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
+//        if(!isset($data['create_time']) || empty($data['create_time'])){
+//            $data['create_time'] = time();
+//        }
+//        if(!isset($data['modify_by']) || empty($data['modify_by'])){
+//            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+//        }
+//        if(!isset($data['modify_time']) || empty($data['modify_time'])){
+//            $data['modify_time'] = time();
+//        }
         $tid = $this -> model -> insert_record($data);
         return $tid;
     }
