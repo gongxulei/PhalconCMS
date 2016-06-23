@@ -58,13 +58,6 @@ class TagsModel extends BaseModel{
         $fields = array_keys($data);
         $values = array_values($data);
 
-        echo '<pre>';
-        print_r($data);
-        $temp = $this -> assign($data);
-        var_dump($temp -> tag_name);
-        var_dump($temp -> create_by);
-        exit;
-
         $result = $this -> db -> insert($this -> getSource(), $values, $fields);
         if(!$result){
             throw new \Exception('数据入库失败');

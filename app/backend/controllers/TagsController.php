@@ -58,7 +58,7 @@ class TagsController extends BaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 标签数据入库 */
-            $tid = $this -> repository -> insert_record(array(
+            $tid = $this -> repository -> add(array(
                 'tag_name' => $tagName,
                 'slug' => $slug,
             ));
