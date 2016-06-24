@@ -9,16 +9,11 @@
  */
 
 namespace Marser\App\Backend\Controllers;
+
 use \Marser\App\Core\PhalBaseController,
-    \Marser\App\Backend\Repositories\Repository;
+    \Marser\App\Backend\Repositories\RepositoryFactory;
 
 class PassportController extends PhalBaseController{
-
-    /**
-     * 用户数据仓库
-     * @var \Marser\App\Backend\Repositories\Users
-     */
-    protected $repository;
 
     /**
      * 模块在URL中的pathinfo路径名
@@ -28,7 +23,6 @@ class PassportController extends PhalBaseController{
 
     public function initialize(){
         parent::initialize();
-        $this -> repository = Repository::get_repository('Users');
         $this -> _module_pathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
     }
 
@@ -73,19 +67,8 @@ class PassportController extends PhalBaseController{
                 $error = $error[0];
                 throw new \Exception($error['message'], $error['code']);
             }
-            /** 获取用户信息 */
-            $user = $this -> repository -> detail($username);
-            if(!$user){
-                throw new \Exception('用户名或密码错误');
-            }
-            $userinfo = $user -> toArray();
-            /** 校验密码 */
-            if(!$this -> security -> checkHash($password, $userinfo['password'])){
-                throw new \Exception('密码错误，请重新输入');
-            }
-            /** 设置session */
-            unset($userinfo['password']);
-            $this -> session -> set('user', $userinfo);
+            /** 登录处理 */
+            RepositoryFactory::get_repository('Users') -> login($username, $password);
 
             $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
             return $this -> response -> redirect($url);
@@ -110,15 +93,13 @@ class PassportController extends PhalBaseController{
     }
 
     /**
-     * 是否已登录
+     * 登录检测处理
      * @return bool
      */
     protected function login_check(){
-        if($this -> session -> has('user')){
-            if(!empty($this -> session -> get('user')['uid'])){
-                $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
-                return $this -> response -> redirect($url);
-            }
+        if(RepositoryFactory::get_repository('Users') -> login_check()){
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
+            return $this -> response -> redirect($url);
         }
         return false;
     }

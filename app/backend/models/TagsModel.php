@@ -45,6 +45,30 @@ class TagsModel extends BaseModel{
     }
 
     /**
+     * 获取标签数据
+     * @param $tid
+     * @return array
+     * @throws \Exception
+     */
+    public function detail($tid){
+        $tag = array();
+        $tid = intval($tid);
+        if($tid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $result = $this -> findFirst(array(
+            'conditions' => 'tid = :tid:',
+            'bind' => array(
+                'tid' => $tid,
+            ),
+        ));
+        if($result){
+            $tag = $result -> toArray();
+        }
+        return $tag;
+    }
+
+    /**
      * 标签数据入库
      * @param array $data
      * @return bool|int
@@ -57,7 +81,6 @@ class TagsModel extends BaseModel{
         }
         $fields = array_keys($data);
         $values = array_values($data);
-
         $result = $this -> db -> insert($this -> getSource(), $values, $fields);
         if(!$result){
             throw new \Exception('数据入库失败');

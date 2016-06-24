@@ -51,7 +51,7 @@ class UsersModel extends BaseModel{
      * @return int
      * @throws \Exception
      */
-    public function update_user(array $data, $uid){
+    public function update_record(array $data, $uid){
         $uid = intval($uid);
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0 || $uid <= 0){

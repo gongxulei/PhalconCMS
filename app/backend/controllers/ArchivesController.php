@@ -10,19 +10,12 @@
 
 namespace Marser\App\Backend\Controllers;
 
-use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Backend\Repositories\Repository;
+use \Marser\App\Backend\Controllers\BaseController;
 
 class ArchivesController extends BaseController{
 
-    /**
-     * @var \Marser\App\Backend\Repositories\Articles
-     */
-    protected $repository;
-
     public function initialize(){
         parent::initialize();
-        $this -> repository = Repository::get_repository('Articles');
     }
 
     /**
@@ -72,7 +65,7 @@ class ArchivesController extends BaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 发布文章 */
-            $this -> repository -> save(array(
+            $this -> get_repository('Articles') -> save(array(
                 'title' => $title,
                 'content' => $content,
                 'modify_time' => strtotime($modifyTime),

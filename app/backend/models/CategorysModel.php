@@ -11,7 +11,6 @@
 namespace Marser\App\Backend\Models;
 
 use \Marser\App\Backend\Models\BaseModel;
-use Sabre\DAVACL\Exception\AceConflict;
 
 class CategorysModel extends BaseModel{
 
@@ -97,7 +96,7 @@ class CategorysModel extends BaseModel{
      * @return bool|int
      * @throws \Exception
      */
-    public function add(array $data){
+    public function insert_record(array $data){
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
@@ -120,7 +119,7 @@ class CategorysModel extends BaseModel{
      * @return int
      * @throws \Exception
      */
-    public function update_category(array $data, $cid){
+    public function update_record(array $data, $cid){
         $data = array_filter($data);
         $cid = intval($cid);
         if(!is_array($data) || count($data) == 0 || $cid <= 0){

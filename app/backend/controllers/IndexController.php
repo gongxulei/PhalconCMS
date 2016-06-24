@@ -18,7 +18,7 @@ class IndexController extends BaseController{
             array(
                 'menu' =>  array(
                     'menu_1' => array(
-                        'title'     =>  'fuck fuck fuck',
+                        'title'     =>  'bb',
                         'addLink'   =>  'www.baidu.com',
                     ),
                 ),

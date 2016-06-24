@@ -9,20 +9,12 @@
  */
 
 namespace Marser\App\Backend\Controllers;
-use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Backend\Repositories\Repository;
+use \Marser\App\Backend\Controllers\BaseController;
 
 class OptionsController extends BaseController{
 
-    /**
-     * 配置数据仓库
-     * @var \Marser\App\Backend\Repositories\Options
-     */
-    protected $repository;
-
     public function initialize(){
         parent::initialize();
-        $this -> repository = Repository::get_repository('Options');
     }
 
     /**
@@ -31,7 +23,7 @@ class OptionsController extends BaseController{
     public function baseAction(){
         try {
             $key = "'site_name', 'site_url', 'site_description', 'site_keywords'";
-            $options = $this -> repository -> get_list($key, array(
+            $options = $this -> get_repository('Options') -> get_list($key, array(
                 'columns' => 'op_key, op_value',
             ));
             if(is_array($options) && count($options) > 0){
@@ -55,7 +47,7 @@ class OptionsController extends BaseController{
     /**
      * 站点基础配置变更
      */
-    public function updatebaseAction(){
+    public function savebaseAction(){
         try{
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
@@ -83,20 +75,15 @@ class OptionsController extends BaseController{
                 $error = $error[0];
                 throw new \Exception($error['message'], $error['code']);
             }
-            /** 更新配置项 */
+            /** 保存配置项 */
             $data = array(
                 'site_name' => $siteName,
                 'site_url' => $siteUrl,
+                'site_description' => $description,
+                'site_keywords' => $keywords,
             );
-            !empty($description) && $data['site_description'] = $description;
-            !empty($keywords) && $data['site_keywords'] = $keywords;
             !empty($timezone) && $data['site_timezone'] = $timezone;
-
-            foreach($data as $k=>$v){
-                $this -> repository -> update(array(
-                    "op_value" => $v
-                ), "{$k}");
-            }
+            $this -> get_repository('Options') -> save($data);
 
             $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){

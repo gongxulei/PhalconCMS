@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 分类数据仓库
+ * 分类业务仓库
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -10,20 +10,12 @@
 
 namespace Marser\App\Backend\Repositories;
 
-use \Marser\App\Backend\Repositories\BaseRepository,
-    \Marser\App\Backend\Models\CategorysModel;
+use \Marser\App\Backend\Repositories\BaseRepository;
 
 class Categorys extends BaseRepository{
 
-    /**
-     * model对象
-     * @var CategorysModel
-     */
-    protected $model;
-
     public function __construct(){
         parent::__construct();
-        $this -> model = new CategorysModel();
     }
 
     /**
@@ -32,7 +24,7 @@ class Categorys extends BaseRepository{
      * @throws \Exception
      */
     public function get_list(){
-        $categoryList = $this -> model -> get_list();
+        $categoryList = $this -> get_model('CategorysModel') -> get_list();
         return $categoryList;
     }
 
@@ -42,7 +34,7 @@ class Categorys extends BaseRepository{
      * @throws \Exception
      */
     public function get_category_tree(){
-        $categoryList = $this -> model -> get_category_for_tree();
+        $categoryList = $this -> get_model('CategorysModel') -> get_category_for_tree();
         if(!is_array($categoryList) || count($categoryList) == 0){
             return $categoryList;
         }
@@ -68,8 +60,62 @@ class Categorys extends BaseRepository{
      * @throws \Exception
      */
     public function detail($cid){
-        $category = $this -> model -> detail($cid);
+        $category = $this -> get_model('CategorysModel') -> detail($cid);
         return $category;
+    }
+
+    /**
+     * 保存分类数据
+     * @param array $data
+     * @param $cid
+     * @return int|mixed
+     * @throws \Exception
+     */
+    public function save(array $data, $cid){
+        $cid = intval($cid);
+        if($cid <= 0){
+            /** 添加分类 */
+            $cid = $this -> insert_record($data);
+            return $cid;
+        }else{
+            /** 更新分类 */
+            $affectedRows = $this -> update_record($data, $cid);
+            if(!$affectedRows){
+                throw new \Exception('保存分类失败');
+            }
+            return $affectedRows;
+        }
+    }
+
+    /**
+     * 根据parent_cid获取root_cid
+     * @param $parentcid
+     * @return int
+     * @throws \Exception
+     */
+    protected function get_rootcid_by_parentcid($parentcid){
+        $parentcid = intval($parentcid);
+        $rootcid = 0;
+        if($parentcid > 0) {
+            $category = $this->detail($parentcid);
+            if (!is_array($category) || count($category) == 0) {
+                throw new \Exception('获取父分类失败');
+            }
+            $rootcid = !empty($category['root_cid']) ? $category['root_cid'] : $parentcid;
+        }
+        return $rootcid;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function before_insert(array $data){
+        empty($data['create_by']) && $data['create_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
+        empty($data['create_time']) && $data['create_time'] = time();
+        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
+        empty($data['modify_time']) && $data['modify_time'] = time();
+        return $data;
     }
 
     /**
@@ -77,21 +123,21 @@ class Categorys extends BaseRepository{
      * @param array $data
      * @return mixed
      */
-    public function add(array $data){
-        if(!isset($data['create_by']) || empty($data['create_by'])){
-            $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['create_time']) || empty($data['create_time'])){
-            $data['create_time'] = time();
-        }
-        if(!isset($data['modify_by']) || empty($data['modify_by'])){
-            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
-        $cid = $this -> model -> add($data);
+    public function insert_record(array $data){
+        $data['root_cid'] = $this -> get_rootcid_by_parentcid($data['parent_cid']);
+        $data = $this -> before_insert($data);
+        $cid = $this -> get_model('CategorysModel') -> insert_record($data);
         return $cid;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function before_update(array $data){
+        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
+        empty($data['modify_time']) && $data['modify_time'] = time();
+        return $data;
     }
 
     /**
@@ -101,28 +147,14 @@ class Categorys extends BaseRepository{
      * @return int
      * @throws \Exception
      */
-    public function update(array $data, $cid){
+    public function update_record(array $data, $cid){
         if(isset($data['parent_cid']) && ($data['parent_cid'] == $cid)){
             throw new \Exception('不能选择本分类为父分类');
         }
-        /** 根据parent_cid获取root_cid */
-        $rootcid = 0;
-        if(isset($data['parent_cid']) && ($data['parent_cid'] > 0)) {
-            $category = $this -> detail($data['parent_cid']);
-            if (!is_array($category) || count($category) == 0) {
-                throw new \Exception('获取父分类失败');
-            }
-            $rootcid = !empty($category['root_cid']) ? $category['root_cid'] : $data['parent_cid'];
-        }
-        $data['root_cid'] = $rootcid;
+        $data['root_cid'] = $this -> get_rootcid_by_parentcid($data['parent_cid']);
 
-        if(!isset($data['modify_by']) || empty($data['modify_by'])){
-            $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
-        $affectedRows = $this -> model -> update_category($data, $cid);
+        $data = $this -> before_update($data);
+        $affectedRows = $this -> get_model('CategorysModel') -> update_record($data, $cid);
         return $affectedRows;
     }
 }

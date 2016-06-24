@@ -14,32 +14,8 @@ use \Marser\App\Backend\Repositories\BaseRepository;
 
 class Articles extends BaseRepository{
 
-    /**
-     * 模型对象容器
-     * @var array
-     */
-    protected $_models = array();
-
     public function __construct(){
         parent::__construct();
-    }
-
-    /**
-     * 自动实例化依赖模型
-     * @param $modelName
-     * @return mixed
-     */
-    public function __get($modelName){
-        $modelName = ucfirst($modelName);
-        $namespace = $this -> _di -> get('systemConfig') -> get('app', 'namespace');
-        $modelName = "\\{$namespace}\\App\\Backend\\Models\\{$modelName}";
-        if(!class_exists($modelName)){
-            throw new \Exception("{$modelName}不存在");
-        }
-        if(!isset($this -> _models[$modelName])){
-            $this -> _models[$modelName] = new $modelName();
-        }
-        return $this -> _models[$modelName];
     }
 
     /**
@@ -49,9 +25,9 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     public function save(array $data, $aid = null){
-        empty($data['create_by']) && $data['create_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+        empty($data['create_by']) && $data['create_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
         empty($data['create_time']) && $data['create_time'] = time();
-        empty($data['modify_by']) && $data['modify_by'] = $this -> _di -> get('session') -> get('user')['uid'];
+        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
         empty($data['modify_time']) && $data['modify_time'] = time();
 
         $aid = intval($aid);
@@ -71,7 +47,7 @@ class Articles extends BaseRepository{
      */
     protected function create(array $data){
         try {
-            $db = $this -> _di -> get('db');
+            $db = $this -> getDI() -> get('db');
             /** 事务开始 */
             $db -> begin();
             /** 文章基本数据入库 */
@@ -101,7 +77,7 @@ class Articles extends BaseRepository{
      */
     protected function update(array $data, $aid){
         try{
-            $db = $this -> _di -> get('db');
+            $db = $this -> getDI() -> get('db');
             /** 事务开始 */
             $db -> begin();
             /** 更新文章基本数据 */
@@ -132,7 +108,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function create_article(array $data){
-        $aid = $this -> articlesModel -> insert_record(array(
+        $aid = $this -> get_model('articlesModel') -> insert_record(array(
             'title' => $data['title'],
             'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
@@ -153,7 +129,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function update_article(array $data, $aid){
-        $affectedRows = $this -> articlesModel -> update_record(array(
+        $affectedRows = $this -> get_model('articlesModel') -> update_record(array(
             'title' => $data['title'],
             'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
@@ -161,9 +137,6 @@ class Articles extends BaseRepository{
             'modify_by' => $data['modify_by'],
             'modify_time' => $data['modify_time'],
         ), $aid);
-        if($affectedRows == 0){
-            throw new \Exception('更新失败');
-        }
         return $affectedRows;
     }
 
@@ -179,7 +152,7 @@ class Articles extends BaseRepository{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $cid = $this -> contentsModel -> insert_record(array(
+        $cid = $this -> get_model('contentsModel') -> insert_record(array(
             'relateid' => $aid,
             'content' => $content,
         ));
@@ -198,7 +171,7 @@ class Articles extends BaseRepository{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $affectedRows = $this -> contentsModel -> update_record(array(
+        $affectedRows = $this -> get_model('contentsModel') -> update_record(array(
             'content' => $content,
         ), $aid);
         return $affectedRows;
@@ -223,8 +196,9 @@ class Articles extends BaseRepository{
         if(!is_array($cidArray) || count($cidArray) == 0){
             throw new \Exception('请选择文章所属分类');
         }
+        $articlesCategorysModel = $this -> get_model('articlesCategorysModel');
         foreach($cidArray as $ck=>$cv){
-            $this -> articlesCategorysModel -> insert_record(array(
+            $articlesCategorysModel -> insert_record(array(
                 'aid' => $aid,
                 'cid' => $cv
             ));
@@ -239,11 +213,11 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function delete_article_categorys($aid){
-        $success = $this -> articlesCategorysModel -> delete_record($aid);
-        if(!$success){
+        $result = $this -> get_model('articlesCategorysModel') -> delete_record($aid);
+        if(!$result){
             throw new \Exception('更新文章关联的分类数据失败');
         }
-        return $success;
+        return $result;
     }
 
     /**
@@ -260,12 +234,13 @@ class Articles extends BaseRepository{
         $tagNameArray = array_filter($tagNameArray);
         $tagNameArray = array_unique($tagNameArray);
         if(is_array($tagNameArray) && count($tagNameArray) > 0){
+            $tagsModel = $this -> get_model('tagsModel');
             foreach($tagNameArray as $tk=>$tv){
-                $tid = $this -> tagsModel -> get_tid_by_tagname($tv);
+                $tid = $tagsModel -> get_tid_by_tagname($tv);
                 if($tid){//标签存在
                     $tagidArray[] = $tid;
                 }else{//标签不存在，则添加标签
-                    $tid = $this -> tagsModel -> insert_record(array(
+                    $tid = $tagsModel -> insert_record(array(
                         'tag_name' => $tv,
                         'create_by' => $data['create_by'],
                         'create_time' => $data['create_time'],
@@ -291,8 +266,9 @@ class Articles extends BaseRepository{
         if($aid <= 0 || !is_array($tagidArray) || count($tagidArray) == 0){
             return false;
         }
+        $articlesTagsModel = $this -> get_model('articlesTagsModel');
         foreach($tagidArray as $tk=>$tv){
-            $this -> articlesTagsModel -> insert_record(array(
+            $articlesTagsModel -> insert_record(array(
                 'aid' => $aid,
                 'tid' => $tv,
             ));
@@ -307,11 +283,11 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function delete_article_tags($aid){
-        $success = $this -> articlesTagsModel -> delete_record($aid);
-        if(!$success){
+        $result = $this -> get_model('articlesTagsModel') -> delete_record($aid);
+        if(!$result){
             throw new \Exception('更新文章关联的标签数据失败');
         }
-        return $success;
+        return $result;
     }
 
 }

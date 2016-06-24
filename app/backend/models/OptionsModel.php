@@ -50,7 +50,7 @@ class OptionsModel extends BaseModel{
      * @return int
      * @throws \Exception
      */
-    public function update_options(array $data, $opkey){
+    public function update_record(array $data, $opkey){
         $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');

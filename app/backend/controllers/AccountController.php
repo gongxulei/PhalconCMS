@@ -10,20 +10,12 @@
 
 namespace Marser\App\Backend\Controllers;
 
-use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Backend\Repositories\Repository;
+use \Marser\App\Backend\Controllers\BaseController;
 
 class AccountController extends BaseController{
 
-    /**
-     * 用户数据仓库
-     * @var \Marser\App\Backend\Repositories\Users
-     */
-    protected $repository;
-
     public function initialize(){
         parent::initialize();
-        $this -> repository = Repository::get_repository('Users');
     }
 
     /**
@@ -59,15 +51,12 @@ class AccountController extends BaseController{
                 $error = $error[0];
                 throw new \Exception($error['message'], $error['code']);
             }
-            /** 更新个人设置数据 */
+            /** 变更个人配置 */
             $data = array(
                 'nickname' => $nickname,
                 'email' => $email,
             );
-            $affectedRows = $this -> repository -> update($data, $this -> session -> get('user')['uid']);
-            if(!$affectedRows){
-                throw new \Exception('修改个人设置失败');
-            }
+            $this -> get_repository('Users') -> set_profile($data);
 
             $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){
@@ -108,23 +97,9 @@ class AccountController extends BaseController{
                 $error = $error[0];
                 throw new \Exception($error['message'], $error['code']);
             }
-            /** 校验旧密码是否正确 */
-            $user = $this -> repository -> detail($this -> session -> get('user')['username']);
-            if(!$user){
-                throw new \Exception('密码错误');
-            }
-            $userinfo = $user -> toArray();
-            if(!$this -> security -> checkHash($oldpwd, $userinfo['password'])){
-                throw new \Exception('密码错误，请重新输入');
-            }
-            /** 密码更新 */
-            $password = $this -> security -> hash($newpwd);
-            $affectedRows = $this -> repository -> update(array(
-                'password' => $password,
-            ), $this -> session -> get('user')['uid']);
-            if(!$affectedRows){
-                throw new \Exception('修改密码失败，请重试');
-            }
+            /** 重置密码 */
+            $this -> get_repository('Users') -> set_pwd($oldpwd, $newpwd);
+
             $this -> flashSession -> success('修改密码成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);

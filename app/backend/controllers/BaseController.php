@@ -9,7 +9,9 @@
  */
 
 namespace Marser\App\Backend\Controllers;
-use \Marser\App\Core\PhalBaseController;
+
+use \Marser\App\Core\PhalBaseController,
+    \Marser\App\Backend\Repositories\RepositoryFactory;
 
 class BaseController extends PhalBaseController{
 
@@ -43,15 +45,23 @@ class BaseController extends PhalBaseController{
     }
 
     /**
-     * 登录检测
+     * 登录检测处理
      * @return bool
      */
     public function login_check(){
-        if($this -> session -> has('user')){
-            if(!empty($this -> session -> get('user')['uid'])){
-                return true;
-            }
+        if(!$this -> get_repository('Users') -> login_check()){
+            return $this -> response -> redirect($this -> get_module_uri('passport/index'));
         }
-        return $this -> response -> redirect($this -> get_module_uri('passport/index'));
+        return true;
+    }
+
+    /**
+     * 获取业务对象
+     * @param $repositoryName
+     * @return object
+     * @throws \Exception
+     */
+    protected function get_repository($repositoryName){
+        return RepositoryFactory::get_repository($repositoryName);
     }
 }
