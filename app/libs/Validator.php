@@ -10,7 +10,15 @@
 
 namespace Marser\App\Libs;
 
-class Validator extends \Phalcon\Di\Injectable{
+use \Phalcon\DiInterface;
+
+class Validator {
+
+    /**
+     * DI对象
+     * @var \Phalcon|DI
+     */
+    private $_di;
 
     /**
      * 内部数据
@@ -44,8 +52,24 @@ class Validator extends \Phalcon\Di\Injectable{
      */
     private $_break = true;
 
-    public function __construct(){
+    public function __construct(DiInterface $di){
+        $this -> setDI($di);
+    }
 
+    /**
+     * DI对象赋值
+     * @param DiInterface $di
+     */
+    public function setDI(DiInterface $di){
+        $this -> _di = $di;
+    }
+
+    /**
+     * 获取DI对象
+     * @return DI|\Phalcon
+     */
+    public function getDI(){
+        return $this -> _di;
     }
 
     /**

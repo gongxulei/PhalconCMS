@@ -49,7 +49,7 @@ class BackendModule implements ModuleDefinitionInterface{
             });
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher -> setEventsManager($eventsManager);
-            //默认设置为前台的调度器
+            //默认设置为后台的调度器
             $dispatcher -> setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Backend\\Controllers');
             return $dispatcher;
         }, true);

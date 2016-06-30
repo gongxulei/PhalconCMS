@@ -49,6 +49,7 @@ class FrontendModule implements ModuleDefinitionInterface{
             });
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher->setEventsManager($eventsManager);
+            //默认设置为前台的调度器
             $dispatcher->setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Frontend\\Controllers');
             return $dispatcher;
         }, true);

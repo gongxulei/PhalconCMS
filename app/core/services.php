@@ -145,7 +145,7 @@ $di -> setShared('systemConfig', function() use($di){
  * DI注册自定义验证器
  */
 $di -> setShared('validator', function() use($di){
-    $validator = new \Marser\App\Libs\Validator();
+    $validator = new \Marser\App\Libs\Validator($di);
     return $validator;
 });
 

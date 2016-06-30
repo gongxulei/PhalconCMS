@@ -1,4 +1,13 @@
-{{ partial('public/header') }}
-{{ partial('public/menu') }}
-<?php echo $this->getContent();?>
-{{ partial('public/footer') }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {{ partial('public/header') }}
+</head>
+<body>
+    {{ partial('public/top_sidebar') }}
+    {{ partial('public/left_sidebar') }}
+    <?php echo $this -> getContent(); ?>
+    {{ partial('public/footer') }}
+</body>
+</html>
+

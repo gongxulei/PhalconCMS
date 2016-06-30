@@ -59,8 +59,8 @@ class PassportController extends PhalBaseController{
                 -> add_rule('username', 'min_length', '用户名由4-20个英文字符、数字、中下划线组成', 4)
                 -> add_rule('username', 'max_length', '用户名由4-20个英文字符、数字、中下划线组成', 20);
             $this -> validator -> add_rule('password', 'required', '请输入密码')
-                -> add_rule('password', 'min_length', '密码由6-20个字符组成', 6)
-                -> add_rule('password', 'max_length', '密码由6-20个字符组成', 20);
+                -> add_rule('password', 'min_length', '密码由6-32个字符组成', 6)
+                -> add_rule('password', 'max_length', '密码由6-32个字符组成', 32);
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array('username'=>$username, 'password'=>$password))) {
                 $error = array_values($error);
