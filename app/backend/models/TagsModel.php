@@ -45,6 +45,22 @@ class TagsModel extends BaseModel{
     }
 
     /**
+     * 统计数量
+     * @param int $status
+     * @return mixed
+     */
+    public function get_count($status=1){
+        $status = intval($status);
+        $count = $this -> count(array(
+            'conditions' => 'status = :status:',
+            'bind' => array(
+                'status' => $status,
+            ),
+        ));
+        return $count;
+    }
+
+    /**
      * 获取标签数据
      * @param $tid
      * @return array

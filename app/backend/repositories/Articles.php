@@ -102,6 +102,15 @@ class Articles extends BaseRepository{
     }
 
     /**
+     * 统计数量
+     * @return mixed
+     */
+    public function get_count(){
+        $count = $this -> get_model('ArticlesModel') -> get_count();
+        return $count;
+    }
+
+    /**
      * 文章数据入库
      * @param array $data
      * @return bool|int

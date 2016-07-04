@@ -31,6 +31,15 @@ class Tags extends BaseRepository{
     }
 
     /**
+     * 统计数量
+     * @return mixed
+     */
+    public function get_count(){
+        $count = $this -> get_model('TagsModel') -> get_count();
+        return $count;
+    }
+
+    /**
      * 获取标签数据
      * @param $tid
      * @return array

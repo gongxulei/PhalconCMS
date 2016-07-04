@@ -1,0 +1,59 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
+        </li>
+        <li>
+            <a href="{{ url(modulePathinfo~'/categorys/index') }}">分类管理</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">分类列表</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>分类名称</th>
+                            <th>缩略名</th>
+                            <th>根分类</th>
+                            <th>父分类</th>
+                            <th>排序</th>
+                            <th>状态</th>
+                            <th>更新时间</th>
+                        </tr>
+                    </thead>
+                    {% if categoryList is not empty %}
+                        <tbody>
+                            {% for category in categoryList %}
+                                <tr>
+                                    <td>{{ category['category_name'] }}</td>
+                                    <td>{{ category['slug'] }}</td>
+                                    <td>{{ category['root_cid'] }}</td>
+                                    <td>{{ category['parent_cid'] }}</td>
+                                    <td>{{ category['sort'] }}</td>
+                                    <td>{{ category['status'] }}</td>
+                                    <td>{{ date('Y-m-d H:i:s', category['modify_time']) }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                            <tr>
+                                <td colspan="7">暂无数据</td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+                {% if categoryList is not empty %}
+                    {{ partial('public/paginator') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

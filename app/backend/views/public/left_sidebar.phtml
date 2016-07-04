@@ -1,104 +1,103 @@
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-            <button class="btn btn-success">
-                <i class="icon-signal"></i>
-            </button>
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <button class="btn btn-success">
+            <i class="icon-signal"></i>
+        </button>
 
-            <button class="btn btn-info">
-                <i class="icon-pencil"></i>
-            </button>
+        <button class="btn btn-info">
+            <i class="icon-pencil"></i>
+        </button>
 
-            <button class="btn btn-warning">
-                <i class="icon-group"></i>
-            </button>
+        <button class="btn btn-warning">
+            <i class="icon-group"></i>
+        </button>
 
-            <button class="btn btn-danger">
-                <i class="icon-cogs"></i>
-            </button>
-        </div>
-
-        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-            <span class="btn btn-success"></span>
-
-            <span class="btn btn-info"></span>
-
-            <span class="btn btn-warning"></span>
-
-            <span class="btn btn-danger"></span>
-        </div>
+        <button class="btn btn-danger">
+            <i class="icon-cogs"></i>
+        </button>
     </div>
 
-    <ul class="nav nav-list">
-        <li class="active">
-            <a href="{{ url(modulePathinfo~'/index/index') }}">
-                <i class="icon-dashboard"></i>
-                <span class="menu-text"> 控制面板 </span>
-            </a>
-        </li>
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
 
-        <li>
-            <a href="javascript:void(0);" class="dropdown-toggle">
-                <i class="icon-text-width"></i>
-                <span class="menu-text"> 内容管理 </span>
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            <ul class="submenu">
-                <li>
-                    <a href="elements.html">
-                        <i class="icon-double-angle-right"></i>
-                        文章管理
-                    </a>
-                </li>
+        <span class="btn btn-info"></span>
 
-                <li>
-                    <a href="buttons.html">
-                        <i class="icon-double-angle-right"></i>
-                        分类管理
-                    </a>
-                </li>
+        <span class="btn btn-warning"></span>
 
-                <li>
-                    <a href="treeview.html">
-                        <i class="icon-double-angle-right"></i>
-                        标签管理
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <span class="btn btn-danger"></span>
+    </div>
+</div>
 
-        <li>
-            <a href="javascript:void(0);" class="dropdown-toggle">
-                <i class="icon-cogs"></i>
-                <span class="menu-text"> 站点设置 </span>
-                <b class="arrow icon-angle-down"></b>
-            </a>
+<ul class="nav nav-list">
+    <li class="active">
+        <a href="{{ url(modulePathinfo~'/dashboard/index') }}">
+            <i class="icon-dashboard"></i>
+            <span class="menu-text"> 控制面板 </span>
+        </a>
+    </li>
 
-            <ul class="submenu">
-                <li>
-                    <a href="elements.html">
-                        <i class="icon-double-angle-right"></i>
-                        基本设置
-                    </a>
-                </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="icon-text-width"></i>
+            <span class="menu-text"> 内容管理 </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="elements.html">
+                    <i class="icon-double-angle-right"></i>
+                    文章管理
+                </a>
+            </li>
 
-                <li>
-                    <a href="buttons.html">
-                        <i class="icon-double-angle-right"></i>
-                        阅读设置
-                    </a>
-                </li>
-            </ul>
-        </li>
+            <li>
+                <a href="{{ url(modulePathinfo~'/categorys/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    分类管理
+                </a>
+            </li>
 
-        <li>
-            <a href="#" class="dropdown-toggle">
-                <i class="icon-user"></i>
-                <span class="menu-text"> 用户管理 </span>
+            <li>
+                <a href="{{ url(modulePathinfo~'/tags/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    标签管理
+                </a>
+            </li>
+        </ul>
+    </li>
 
-                <b class="arrow icon-angle-down"></b>
-            </a>
-        </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="icon-cogs"></i>
+            <span class="menu-text"> 站点设置 </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+
+        <ul class="submenu">
+            <li>
+                <a href="elements.html">
+                    <i class="icon-double-angle-right"></i>
+                    基本设置
+                </a>
+            </li>
+
+            <li>
+                <a href="buttons.html">
+                    <i class="icon-double-angle-right"></i>
+                    阅读设置
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-user"></i>
+            <span class="menu-text"> 用户管理 </span>
+
+            <b class="arrow icon-angle-down"></b>
+        </a>
+    </li>
 
 <!--        <li>-->
 <!--            <a href="#" class="dropdown-toggle">-->
@@ -268,10 +267,8 @@
 <!--                </li>-->
 <!--            </ul>-->
 <!--        </li>-->
-    </ul>
+</ul>
 
-    <div class="sidebar-collapse" id="sidebar-collapse">
-        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
-    </div>
-
+<div class="sidebar-collapse" id="sidebar-collapse">
+    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
 </div>

@@ -13,6 +13,9 @@ return array(
         //项目名称
         'app_name' => 'PhalconCMS',
 
+        //版本号
+        'version' => '1.0',
+
         //根命名空间
         'namespace' => 'Marser',
 

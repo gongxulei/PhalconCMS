@@ -10,7 +10,8 @@
 
 namespace Marser\App\Backend\Controllers;
 
-use \Marser\App\Backend\Controllers\BaseController;
+use \Marser\App\Backend\Controllers\BaseController,
+    \Marser\App\Helpers\PaginatorHelper;
 
 class CategorysController extends BaseController{
 
@@ -22,12 +23,22 @@ class CategorysController extends BaseController{
      * 分类列表
      */
     public function indexAction(){
-        $categoryList = $this -> get_repository('Categorys') -> get_list();
+        $page = intval($this -> request -> get('page', 'trim'));
+        $page <= 0 && $page = 1;
+        $pagesize = 20;
+
+        $paginator = $this -> get_repository('Categorys') -> get_list($page, $pagesize);
+        $categoryList = $paginator -> items -> toArray();
+        $pageNum = PaginatorHelper::get_paginator($paginator -> total_items, $page, $pagesize);
+
+
 
         $this -> view -> setVars(array(
-            'categoryList' => $categoryList
+            'categoryList' => $categoryList,
+            'paginator' => $paginator,
+            'pageNum' => $pageNum,
         ));
-        $this -> view -> pick('categorys/list');
+        $this -> view -> pick('categorys/index');
     }
 
     /**

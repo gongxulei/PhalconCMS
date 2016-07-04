@@ -23,5 +23,4 @@ class PhalBaseUrl extends \Phalcon\Mvc\Url{
         $url = $this -> get($uri);
         return $url;
     }
-
 }

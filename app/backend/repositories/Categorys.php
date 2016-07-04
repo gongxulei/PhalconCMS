@@ -20,12 +20,32 @@ class Categorys extends BaseRepository{
 
     /**
      * 分类列表
-     * @return array
-     * @throws \Exception
+     * @param int $page
+     * @param int $pagesize
+     * @return mixed
      */
-    public function get_list(){
-        $categoryList = $this -> get_model('CategorysModel') -> get_list();
-        return $categoryList;
+    public function get_list($page = 1, $pagesize = 20){
+        $page = intval($page);
+        $page <= 0 && $page = 1;
+        $pagesize = intval($pagesize);
+        $pagesize <= 0 && $pagesize = 20;
+
+        $paginator = $this -> get_model('CategorysModel') -> get_list(1, array(
+            'limit' => array(
+                'page' => $page,
+                'number' => $pagesize
+            )
+        ));
+        return $paginator;
+    }
+
+    /**
+     * 统计数量
+     * @return mixed
+     */
+    public function get_count(){
+        $count = $this -> get_model('CategorysModel') -> get_count();
+        return $count;
     }
 
     /**

@@ -62,11 +62,13 @@ class BackendModule implements ModuleDefinitionInterface{
             $view -> setViewsDir($systemConfig -> get('app', 'backend', 'views'));
             $view -> registerEngines(array(
                 '.phtml' => function($view, $di) use($systemConfig) {
-                    $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+                    //$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+                    $volt = new \Marser\App\Core\PhalBaseVolt($view, $di);
                     $volt -> setOptions(array(
                         'compileAlways' => $systemConfig -> get('app', 'backend', 'is_compiled'),
                         'compiledPath'  =>  $systemConfig -> get('app', 'backend', 'compiled_path')
                     ));
+                    $volt -> initFunction();
                     return $volt;
                 },
             ));

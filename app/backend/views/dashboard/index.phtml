@@ -1,0 +1,125 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="quick-action-box">
+        <ul>
+            <li class="info">
+                <a href="{{ url(modulePathinfo~'/archives/index') }}">
+                    <i class="icon-text-width"></i>
+                    <span>文章数</span>
+                    <strong>{{articlesCount}}</strong>
+                </a>
+            </li>
+            <li class="success">
+                <a href="{{ url(modulePathinfo~'/categorys/index') }}">
+                    <i class="icon-folder-open"></i>
+                    <span>分类数</span><strong>{{categorysCount}}</strong>
+                </a>
+            </li>
+            <li class="warning">
+                <a href="{{ url(modulePathinfo~'/tags/index') }}">
+                    <i class="icon-bookmark"></i>
+                    <span>标签数</span><strong>{{tagsCount}}</strong>
+                </a>
+            </li>
+            <li class="danger">
+                <a href="">
+                    <i class="icon-group"></i>
+                    <span>用户数</span><strong>1</strong>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">系统信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <td>域名/IP地址</td>
+                        <td>{{systemInfo['serverName']}}({{systemInfo['serverIp']}})</td>
+                    </tr>
+                    <tr>
+                        <td>服务器操作系统</td>
+                        <td>{{systemInfo['osName']}} 内核版本：{{systemInfo['osVersion']}}</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP服务器</td>
+                        <td>{{systemInfo['serverSoftware']}}</td>
+                    </tr>
+                    <tr>
+                        <td>服务器语言</td>
+                        <td>{{systemInfo['serverLanguage']}}</td>
+                    </tr>
+                    <tr>
+                        <td>服务器端口</td>
+                        <td>{{systemInfo['serverPort']}}</td>
+                    </tr>
+                    <tr>
+                        <td>PhalconCMS版本</td>
+                        <td>{{appVersion}}</td>
+                    </tr>
+                    <tr>
+                        <td>PHP版本</td>
+                        <td>{{systemInfo['phpVersion']}}</td>
+                    </tr>
+                    <tr>
+                        <td>PHP运行方式</td>
+                        <td>{{systemInfo['phpSapi']}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">团队信息</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <td>团队成员</td>
+                        <td>
+                            <a href="http://www.marser.cn" target="_blank">Marser</a> 阿忠
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PhalconCMS项目</td>
+                        <td>
+                            <a href="http://git.oschina.net/KevinJay/PhalconCMS" target="_blank">http://git.oschina.net/KevinJay/PhalconCMS</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phalcon中文社区</td>
+                        <td>
+                            <a href="http://www.iphalcon.cn" target="_blank">
+                                www.iphalcon.cn
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>博客</td>
+                        <td>
+                            <a href="http://www.marser.cn" target="_blank">
+                                www.marser.cn
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

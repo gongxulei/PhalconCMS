@@ -10,7 +10,8 @@
 
 namespace Marser\App\Backend\Models;
 
-use \Marser\App\Backend\Models\BaseModel;
+use \Marser\App\Backend\Models\BaseModel,
+    \Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 class CategorysModel extends BaseModel{
 
@@ -27,19 +28,48 @@ class CategorysModel extends BaseModel{
      * @return array
      * @throws \Exception
      */
-    public function get_list($status=1){
+    public function get_list($status=1, array $ext=array()){
         $status = intval($status);
-        $params = array(
+
+        $builder = $this -> getModelsManager() -> createBuilder();
+        $builder -> from(__CLASS__);
+        $builder -> where('status = :status:', array('status' => $status));
+        $builder -> orderBy('sort asc, modify_time desc');
+        if(isset($ext['limit']) && is_array($ext['limit']) && count($ext['limit']) > 0){
+            $limit = $ext['limit']['number'];
+            $page = $ext['limit']['page'];
+        }else{
+            $limit = 20;
+            $page = 0;
+        }
+
+        /** 分页处理 */
+        $paginator = new PaginatorQueryBuilder(array(
+            'builder' => $builder,
+            'limit' => $limit,
+            'page' => $page,
+        ));
+        $pageinfo = $paginator -> getPaginate();
+        if(!$pageinfo){
+            throw new \Exception('查询数据失败');
+        }
+        return $pageinfo;
+    }
+
+    /**
+     * 统计数量
+     * @param int $status
+     * @return mixed
+     */
+    public function get_count($status=1){
+        $status = intval($status);
+        $count = $this -> count(array(
             'conditions' => 'status = :status:',
             'bind' => array(
                 'status' => $status,
             ),
-        );
-        $result = $this -> find($params);
-        if(!$result){
-            throw new \Exception('查询数据失败');
-        }
-        return $result -> toArray();
+        ));
+        return $count;
     }
 
     /**
