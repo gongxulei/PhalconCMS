@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 分类Model
+ * 分类模型
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -10,8 +10,7 @@
 
 namespace Marser\App\Backend\Models;
 
-use \Marser\App\Backend\Models\BaseModel,
-    \Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
+use \Marser\App\Backend\Models\BaseModel;
 
 class CategorysModel extends BaseModel{
 
@@ -23,53 +22,149 @@ class CategorysModel extends BaseModel{
     }
 
     /**
-     * 分类列表
-     * @param int $status
-     * @return array
-     * @throws \Exception
+     * 	Is executed before the fields are validated for not nulls/empty strings
+     *  or foreign keys when an insertion operation is being made
      */
-    public function get_list($status=1, array $ext=array()){
-        $status = intval($status);
-
-        $builder = $this -> getModelsManager() -> createBuilder();
-        $builder -> from(__CLASS__);
-        $builder -> where('status = :status:', array('status' => $status));
-        $builder -> orderBy('sort asc, modify_time desc');
-        if(isset($ext['limit']) && is_array($ext['limit']) && count($ext['limit']) > 0){
-            $limit = $ext['limit']['number'];
-            $page = $ext['limit']['page'];
-        }else{
-            $limit = 20;
-            $page = 0;
+    public function beforeValidationOnCreate(){
+        if($this -> sort <= 0 || $this -> sort > 999){
+            $this -> sort = 999;
         }
-
-        /** 分页处理 */
-        $paginator = new PaginatorQueryBuilder(array(
-            'builder' => $builder,
-            'limit' => $limit,
-            'page' => $page,
-        ));
-        $pageinfo = $paginator -> getPaginate();
-        if(!$pageinfo){
-            throw new \Exception('查询数据失败');
+        if(!isset($this -> create_by) || !$this -> create_by){
+            $this -> create_by = $this -> getDI() -> get('session') -> get('user')['uid'];
         }
-        return $pageinfo;
+        if(!isset($this -> create_time) || !$this -> create_time){
+            $this -> create_time = time();
+        }
+        if(!isset($this -> modify_by) || !$this -> modify_by){
+            $this -> modify_by = $this -> getDI() -> get('session') -> get('user')['uid'];
+        }
+        if(!isset($this -> modify_time) || !$this -> modify_time){
+            $this -> modify_time = time();
+        }
     }
 
     /**
-     * 统计数量
-     * @param int $status
-     * @return mixed
+     * 分类数据入库
+     * @param array $data
+     * @return bool|int
+     * @throws \Exception
      */
-    public function get_count($status=1){
-        $status = intval($status);
-        $count = $this -> count(array(
-            'conditions' => 'status = :status:',
-            'bind' => array(
-                'status' => $status,
-            ),
-        ));
-        return $count;
+    public function insert_record(array $data){
+        if(!is_array($data) || count($data) == 0){
+            throw new \Exception('参数错误');
+        }
+
+        $result = $this -> create($data);
+        if(!$result){
+            throw new \Exception(implode(',', $this -> getMessages()));
+        }
+        $cid = $this -> cid;
+        return $cid;
+    }
+
+    /**
+     * 自定义的update事件
+     * @param array $data
+     * @return array
+     */
+    protected function before_update(array $data){
+        if(isset($data['sort']) && ($data['sort'] <= 0 || $data['sort'] > 999)){
+            $data['sort'] = 999;
+        }
+        if(empty($data['modify_by'])){
+            $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
+        }
+        if(empty($data['modify_time'])){
+            $data['modify_time'] = time();
+        }
+        return $data;
+    }
+
+    /**
+     * 更新分类数据
+     * @param array $data
+     * @param $cid
+     * @return int
+     * @throws \Exception
+     */
+    public function update_record(array $data, $cid){
+        $cid = intval($cid);
+        $data = $this -> before_update($data);
+        if(!is_array($data) || count($data) == 0 || $cid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $keys = array_keys($data);
+        $values = array_values($data);
+        $result = $this -> db -> update(
+            $this->getSource(),
+            $keys,
+            $values,
+            array(
+                'conditions' => 'cid = ?',
+                'bind' => array($cid)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
+    }
+
+    /**
+     * 更新分类路径（使用的原生PDO处理，所以占位符与phalcon封装的占位符不一致，请注意）
+     * @param $newPath
+     * @param $oldPath
+     * @return int
+     */
+    public function update_path($newPath, $oldPath){
+        if(empty($newPath) || empty($oldPath)){
+            throw new \Exception('参数错误');
+        }
+        $sql = "UPDATE " . $this -> getSource() . " SET path=REPLACE(path, :oldPath, :newPath) ";
+        $sql .= ' WHERE `path` like :path AND `status` = :status ';
+        $stmt = $this -> db -> prepare($sql);
+        $bindArray = array(
+            'oldPath' => "{$oldPath}",
+            'newPath' => "{$newPath}",
+            'path' => "{$oldPath}%",
+            'status' => 1
+        );
+        $result = $stmt -> execute($bindArray);
+        if(!$result){
+            throw new \Exception('更新分类路径失败');
+        }
+        $affectedRows = $stmt -> rowCount();
+        return $affectedRows;
+    }
+
+    /**
+     * 更新parent_cid
+     * @param $newParentcid
+     * @param $oldParentcid
+     * @return int
+     * @throws \Exception
+     */
+    public function update_parentcid($newParentcid, $oldParentcid){
+        $newParentcid = intval($newParentcid);
+        $oldParentcid = intval($oldParentcid);
+        if($newParentcid <= 0 || $oldParentcid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $result = $this -> db -> update(
+            $this -> getSource(),
+            array('parent_cid'),
+            array($newParentcid),
+            array(
+                'conditions' => 'parent_cid = ? AND `status` = ? ',
+                'bind' => array($oldParentcid, 1)
+            )
+        );
+        if(!$result){
+            throw new \Exception('更新父分类ID失败');
+        }
+        $affectedRows = $this -> db -> affectedRows();
+        return $affectedRows;
     }
 
     /**
@@ -107,12 +202,12 @@ class CategorysModel extends BaseModel{
         $categoryList = array();
         $status = intval($status);
         $result = $this -> find(array(
-            'columns' => 'cid, category_name, slug, root_cid, parent_cid',
+            'columns' => 'cid, category_name, slug, parent_cid, path, sort, modify_time',
             'conditions' => 'status = :status:',
             'bind' => array(
                 'status' => $status,
             ),
-            'order' => 'parent_cid DESC,  root_cid DESC',
+            'order' => 'LENGTH(path) DESC, parent_cid DESC, sort asc',
         ));
         if($result){
             $categoryList = $result -> toArray();
@@ -121,57 +216,34 @@ class CategorysModel extends BaseModel{
     }
 
     /**
-     * 分类数据入库
-     * @param array $data
-     * @return bool|int
+     * 根据category_name或slug判断分类是否存在
+     * @param null $categoryName ($categoryName与$slug两者传一即可)
+     * @param null $slug
+     * @param null $cid
+     * @return \Phalcon\Mvc\Model
      * @throws \Exception
      */
-    public function insert_record(array $data){
-        $data = array_filter($data);
-        if(!is_array($data) || count($data) == 0){
+    public function category_is_exist($categoryName=null, $slug=null, $cid=null){
+        if(empty($categoryName) && empty($slug)){
             throw new \Exception('参数错误');
         }
-        $fields = array_keys($data);
-        $values = array_values($data);
-
-        $result = $this -> db -> insert($this -> getSource(), $values, $fields);
-        if(!$result){
-            throw new \Exception('数据入库失败');
+        $params = array();
+        if(!empty($categoryName) && !empty($slug)){
+            $params['conditions'] = " (category_name = :categoryName: OR slug = :slug:) AND status = 1 ";
+            $params['bind']['categoryName'] = $categoryName;
+            $params['bind']['slug'] = $slug;
+        }else if(!empty($categoryName)){
+            $params['conditions'] = " category_name = :categoryName: AND status = 1 ";
+            $params['bind']['categoryName'] = $categoryName;
+        }else if(!empty($slug)){
+            $params['conditions'] = " slug = :slug: AND status = 1 ";
+            $params['bind']['slug'] = $slug;
         }
-        $cid = $this -> db -> lastInsertId();
-        return $cid;
-    }
-
-    /**
-     * 更新分类数据
-     * @param array $data
-     * @param $cid
-     * @return int
-     * @throws \Exception
-     */
-    public function update_record(array $data, $cid){
-        $data = array_filter($data);
         $cid = intval($cid);
-        if(!is_array($data) || count($data) == 0 || $cid <= 0){
-            throw new \Exception('参数错误');
-        }
-        $keys = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> update(
-            $this->getSource(),
-            $keys,
-            $values,
-            array(
-                'conditions' => 'cid = ?',
-                'bind' => array($cid)
-            )
-        );
-        if(!$result){
-            throw new \Exception('更新失败');
-        }
-        $affectedRows = $this -> db -> affectedRows();
-        return $affectedRows;
-    }
+        $cid > 0 && $params['conditions'] .= " AND cid != {$cid} ";
 
+        $result = $this -> find($params);
+        return $result;
+    }
 
 }

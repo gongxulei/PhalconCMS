@@ -11,48 +11,56 @@
 </div>
 <div class="page-content">
     <div class="col-lg-12">
+        <div class="btn-panel">
+            <a href="{{ url(modulePathinfo~'/categorys/write') }}" class="btn btn-success btn-sm" role="button">新增分类</a>
+        </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">分类列表</h3>
             </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-hover">
+            <div class="panel-body" id="category-list-box">
+                <table class="table tree-grid table-bordered table-condensed table-hover" id="test-table">
                     <thead>
                         <tr>
                             <th>分类名称</th>
                             <th>缩略名</th>
-                            <th>根分类</th>
-                            <th>父分类</th>
                             <th>排序</th>
-                            <th>状态</th>
                             <th>更新时间</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     {% if categoryList is not empty %}
                         <tbody>
                             {% for category in categoryList %}
-                                <tr>
-                                    <td>{{ category['category_name'] }}</td>
+                                {% if category['parent_cid'] is not empty %}
+                                    <tr class="treegrid-{{category['cid']}} treegrid-parent-{{category['parent_cid']}}">
+                                {% else %}
+                                    <tr class="treegrid-{{category['cid']}}">
+                                {% endif %}
+                                    <td>
+                                        <a href="{{ url(modulePathinfo~'/categorys/write?cid='~category['cid']) }}" title="编辑分类">
+                                            {{ category['category_name'] }}
+                                        </a>
+                                    </td>
                                     <td>{{ category['slug'] }}</td>
-                                    <td>{{ category['root_cid'] }}</td>
-                                    <td>{{ category['parent_cid'] }}</td>
                                     <td>{{ category['sort'] }}</td>
-                                    <td>{{ category['status'] }}</td>
                                     <td>{{ date('Y-m-d H:i:s', category['modify_time']) }}</td>
+                                    <td>
+                                        <button class="btn btn-xs btn-danger delete-category" data-url="{{ url(modulePathinfo~'/categorys/delete?cid='~category['cid']) }}">
+                                            <i class="icon-trash bigger-120"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     {% else %}
                         <tbody>
                             <tr>
-                                <td colspan="7">暂无数据</td>
+                                <td colspan="8">暂无数据</td>
                             </tr>
                         </tbody>
                     {% endif %}
                 </table>
-                {% if categoryList is not empty %}
-                    {{ partial('public/paginator') }}
-                {% endif %}
             </div>
         </div>
     </div>

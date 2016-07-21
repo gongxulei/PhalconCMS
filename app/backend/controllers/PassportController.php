@@ -55,9 +55,9 @@ class PassportController extends PhalBaseController{
 
             /** 添加验证规则 */
             $this -> validator -> add_rule('username', 'required', '请输入用户名')
-                -> add_rule('username', 'alpha_dash', '用户名由4-20个英文字符、数字、中下划线组成')
-                -> add_rule('username', 'min_length', '用户名由4-20个英文字符、数字、中下划线组成', 4)
-                -> add_rule('username', 'max_length', '用户名由4-20个英文字符、数字、中下划线组成', 20);
+                -> add_rule('username', 'alpha_dash', '用户名由4-20个英文字符、数字、下划线和横杠组成')
+                -> add_rule('username', 'min_length', '用户名由4-20个英文字符、数字、下划线和横杠组成', 4)
+                -> add_rule('username', 'max_length', '用户名由4-20个英文字符、数字、下划线和横杠组成', 20);
             $this -> validator -> add_rule('password', 'required', '请输入密码')
                 -> add_rule('password', 'min_length', '密码由6-32个字符组成', 6)
                 -> add_rule('password', 'max_length', '密码由6-32个字符组成', 32);
@@ -70,7 +70,7 @@ class PassportController extends PhalBaseController{
             /** 登录处理 */
             RepositoryFactory::get_repository('Users') -> login($username, $password);
 
-            $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/dashboard/index");
             return $this -> response -> redirect($url);
         }catch(\Exception $e){
             $this -> write_exception_log($e);

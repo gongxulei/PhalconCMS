@@ -118,6 +118,15 @@ $di -> setShared('modelsManager', function() use($di){
 });
 
 /**
+ * DI注册缓存服务
+ */
+$di -> setShared('cache', function() use($config){
+    return new \Phalcon\Cache\Backend\File(new \Phalcon\Cache\Frontend\Output(), array(
+        'cacheDir' => $config -> app -> cache_path
+    ));
+});
+
+/**
  * DI注册日志服务
  */
 $di -> setShared('logger', function() use($di){

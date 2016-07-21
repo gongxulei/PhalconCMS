@@ -66,6 +66,9 @@ return array(
 
         //日志根目录
         'log_path' => ROOT_PATH . '/app/cache/logs/',
+
+        //缓存路径
+        'cache_path' => ROOT_PATH . '/app/cache/data/',
     ),
 
     //数据库表配置

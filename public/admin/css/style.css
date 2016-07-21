@@ -41,6 +41,7 @@
     position:absolute;
     top:0px;
     width:100%;
+    z-index:1001;
     text-align: center;
     display:none;
 }
@@ -95,4 +96,33 @@
 }
 .pagination-box ul.pagination{
     margin:0px 0px;
+}
+.btn-panel{
+    margin-bottom:15px;
+}
+.btn-panel a{
+    margin-right:15px;
+}
+.form-control{
+    display:inline-block;
+}
+.form-horizontal .form-tips{
+    font-size:13px;
+    color:#999;
+}
+.form-horizontal .form-group{
+    margin-bottom:20px;
+}
+.treegrid-indent {
+    width:16px;
+    height: 16px;
+    display: inline-block;
+    position: relative;
+}
+.treegrid-expander {
+    width:16px;
+    height: 16px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
 }

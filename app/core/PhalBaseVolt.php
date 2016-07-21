@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * phalcon模板扩展类
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -24,6 +24,12 @@ class PhalBaseVolt extends Volt{
         $compiler -> addFunction('get_page_url', function($resolvedArgs, $exprArgs) use ($compiler){
             return '\Marser\App\Helpers\PaginatorHelper::get_page_url(' . $resolvedArgs . ')';
         });
+
+        /** 添加str_repeat函数 */
+        $compiler -> addFunction('str_repeat', 'str_repeat');
+
+        /** 添加substr_count函数 */
+        $compiler -> addFunction('substr_count', 'substr_count');
     }
 
 

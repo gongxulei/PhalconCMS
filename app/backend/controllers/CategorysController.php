@@ -10,8 +10,7 @@
 
 namespace Marser\App\Backend\Controllers;
 
-use \Marser\App\Backend\Controllers\BaseController,
-    \Marser\App\Helpers\PaginatorHelper;
+use \Marser\App\Backend\Controllers\BaseController;
 
 class CategorysController extends BaseController{
 
@@ -23,20 +22,10 @@ class CategorysController extends BaseController{
      * 分类列表
      */
     public function indexAction(){
-        $page = intval($this -> request -> get('page', 'trim'));
-        $page <= 0 && $page = 1;
-        $pagesize = 20;
-
-        $paginator = $this -> get_repository('Categorys') -> get_list($page, $pagesize);
-        $categoryList = $paginator -> items -> toArray();
-        $pageNum = PaginatorHelper::get_paginator($paginator -> total_items, $page, $pagesize);
-
-
+        $categoryList = $this -> get_repository('Categorys') -> get_category_list();
 
         $this -> view -> setVars(array(
             'categoryList' => $categoryList,
-            'paginator' => $paginator,
-            'pageNum' => $pageNum,
         ));
         $this -> view -> pick('categorys/index');
     }
@@ -47,18 +36,17 @@ class CategorysController extends BaseController{
     public function writeAction(){
         $cid = intval($this -> request -> get('cid', 'trim'));
 
+        $categoryList = $this -> get_repository('Categorys') -> get_category_list();
         /** 编辑操作，获取分类数据 */
         $category = array();
         if($cid > 0){
             $category = $this -> get_repository('Categorys') -> detail($cid);
         }
-        /** 获取分类树 */
-        $categoryTree = $this -> get_repository('Categorys') -> get_category_tree();
 
         $this -> view -> setVars(array(
             'cid' => $cid,
+            'categoryList' => $categoryList,
             'category' => $category,
-            'categoryTree' => $categoryTree,
         ));
         $this -> view -> pick('categorys/write');
     }
@@ -74,19 +62,21 @@ class CategorysController extends BaseController{
             $cid = intval($this -> request -> get('cid', 'trim'));
             $name = $this -> request -> getPost('name', 'trim');
             $slug = $this -> request -> getPost('slug', 'trim');
+            $sort = intval($this -> request -> getPost('sort', 'trim'));
             $description = $this -> request -> getPost('description', 'trim');
             $parentcid = intval($this -> request -> getPost('parentcid', 'trim'));
             /** 添加验证规则 */
             !empty($cid) && $this -> validator -> add_rule('cid', 'required', '系统错误，请刷新页面后重试');
             $this -> validator -> add_rule('name', 'required', '请填写分类名称')
-                -> add_rule('name', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');
-            $this -> validator -> add_rule('slug', 'alpha_dash', '分类缩略名由英文字符、数字和中下划线组成');
+                -> add_rule('name', 'chinese_alpha_numeric_dash', '分类名称由中英文字符、数字、下划线和横杠组成');
+            !empty($slug) && $this -> validator -> add_rule('slug', 'alpha_dash', '分类缩略名由英文字符、数字、下划线和横杠组成');
             $this -> validator -> add_rule('description', 'xss_check', '请不要在分类描述中使用特殊字符');
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array(
                 'cid' => $cid,
                 'name' => $name,
                 'slug' => $slug,
+                'sort' => $sort,
                 'description' => $description,
             ))) {
                 $error = array_values($error);
@@ -97,22 +87,40 @@ class CategorysController extends BaseController{
             $result = $this -> get_repository('Categorys') -> save(array(
                 'category_name' => $name,
                 'slug' => $slug,
+                'sort' => $sort,
                 'description' => $description,
                 'parent_cid' => $parentcid,
             ), $cid);
 
             $this -> flashSession -> success('保存分类成功');
+            $url = $this -> get_module_uri('categorys/index');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = $e -> getCode();
-            $message = $e -> getMessage();
-            if($code == 23000){
-                $message = '分类已存在，请重新填写';
-            }
-            $this -> flashSession -> error($message);
+            $this -> flashSession -> error($e -> getMessage());
+
+            $url = 'categorys/write';
+            !empty($cid) && $url .= "?cid={$cid}";
+            $url = $this -> get_module_uri($url);
         }
-        $url = $this -> get_module_uri('categorys/write');
+        return $this -> response -> redirect($url);
+    }
+
+    /**
+     * 删除分类（软删除）
+     */
+    public function deleteAction(){
+        try{
+            $cid = $this -> request -> get('cid', 'trim');
+            $this -> get_repository('Categorys') -> delete($cid);
+
+            $this -> flashSession -> success('删除分类成功');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        $url = $this -> get_module_uri('categorys/index');
         return $this -> response -> redirect($url);
     }
 

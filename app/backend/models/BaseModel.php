@@ -9,6 +9,7 @@
  */
 
 namespace Marser\App\Backend\Models;
+
 use \Marser\App\Core\PhalBaseModel;
 
 class BaseModel extends PhalBaseModel{
