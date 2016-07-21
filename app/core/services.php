@@ -158,3 +158,12 @@ $di -> setShared('validator', function() use($di){
     return $validator;
 });
 
+/**
+ * DI注册过滤器
+ */
+$di -> set('filter', function() use($di){
+    $filter = new \Marser\App\Core\PhalBaseFilter($di);
+    $filter -> init();
+    return $filter;
+});
+

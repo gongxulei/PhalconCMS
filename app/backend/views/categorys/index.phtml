@@ -13,6 +13,7 @@
     <div class="col-lg-12">
         <div class="btn-panel">
             <a href="{{ url(modulePathinfo~'/categorys/write') }}" class="btn btn-success btn-sm" role="button">新增分类</a>
+            <a href="{{ url(modulePathinfo~'/categorys/refresh') }}" class="btn btn-pink btn-sm" role="button">清除分类缓存</a>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -46,6 +47,12 @@
                                     <td>{{ category['sort'] }}</td>
                                     <td>{{ date('Y-m-d H:i:s', category['modify_time']) }}</td>
                                     <td>
+                                        <a class="btn btn-xs btn-success" href="{{ url(modulePathinfo~'/categorys/write?parentcid='~category['cid']) }}">
+                                            <i class="icon-plus bigger-120"></i>
+                                        </a>
+                                        <a class="btn btn-xs btn-info" href="{{ url(modulePathinfo~'/categorys/write?cid='~category['cid']) }}">
+                                            <i class="icon-pencil bigger-120"></i>
+                                        </a>
                                         <button class="btn btn-xs btn-danger delete-category" data-url="{{ url(modulePathinfo~'/categorys/delete?cid='~category['cid']) }}">
                                             <i class="icon-trash bigger-120"></i>
                                         </button>

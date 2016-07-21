@@ -53,7 +53,6 @@ class CategorysModel extends BaseModel{
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }
-
         $result = $this -> create($data);
         if(!$result){
             throw new \Exception(implode(',', $this -> getMessages()));

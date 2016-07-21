@@ -52,6 +52,18 @@ class Categorys extends BaseRepository{
     }
 
     /**
+     * 删除分类树缓存
+     * @return array
+     */
+    public function delete_category_list_cache(){
+        $cache = $this -> getDI() -> get('cache');
+        if($cache -> exists(self::CATEGORY_TREE_CACHE_KEY, self::CATEGORY_CACHE_TTL)){
+            return $cache -> delete(self::CATEGORY_TREE_CACHE_KEY);
+        }
+        return true;
+    }
+
+    /**
      * 获取分类数据
      * @param $cid
      * @return array
@@ -151,18 +163,6 @@ class Categorys extends BaseRepository{
         /** 递归简化为二维数组 */
         $categoryArray = $this -> recursive_category_tree($categoryArray);
         return $categoryArray;
-    }
-
-    /**
-     * 删除分类树缓存
-     * @return array
-     */
-    protected function delete_category_list_cache(){
-        $cache = $this -> getDI() -> get('cache');
-        if($cache -> exists(self::CATEGORY_TREE_CACHE_KEY, self::CATEGORY_CACHE_TTL)){
-            return $cache -> delete(self::CATEGORY_TREE_CACHE_KEY);
-        }
-        return true;
     }
 
     /**

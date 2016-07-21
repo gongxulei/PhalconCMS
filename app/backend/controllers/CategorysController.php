@@ -35,6 +35,7 @@ class CategorysController extends BaseController{
      */
     public function writeAction(){
         $cid = intval($this -> request -> get('cid', 'trim'));
+        $parentcid = intval($this -> request -> get('parentcid', 'trim'));
 
         $categoryList = $this -> get_repository('Categorys') -> get_category_list();
         /** 编辑操作，获取分类数据 */
@@ -45,6 +46,7 @@ class CategorysController extends BaseController{
 
         $this -> view -> setVars(array(
             'cid' => $cid,
+            'parentcid' => $parentcid,
             'categoryList' => $categoryList,
             'category' => $category,
         ));
@@ -63,14 +65,13 @@ class CategorysController extends BaseController{
             $name = $this -> request -> getPost('name', 'trim');
             $slug = $this -> request -> getPost('slug', 'trim');
             $sort = intval($this -> request -> getPost('sort', 'trim'));
-            $description = $this -> request -> getPost('description', 'trim');
+            $description = $this -> request -> getPost('description', 'remove_xss');
             $parentcid = intval($this -> request -> getPost('parentcid', 'trim'));
             /** 添加验证规则 */
             !empty($cid) && $this -> validator -> add_rule('cid', 'required', '系统错误，请刷新页面后重试');
             $this -> validator -> add_rule('name', 'required', '请填写分类名称')
                 -> add_rule('name', 'chinese_alpha_numeric_dash', '分类名称由中英文字符、数字、下划线和横杠组成');
             !empty($slug) && $this -> validator -> add_rule('slug', 'alpha_dash', '分类缩略名由英文字符、数字、下划线和横杠组成');
-            $this -> validator -> add_rule('description', 'xss_check', '请不要在分类描述中使用特殊字符');
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array(
                 'cid' => $cid,
@@ -124,4 +125,17 @@ class CategorysController extends BaseController{
         return $this -> response -> redirect($url);
     }
 
+    /**
+     * 清除分类缓存
+     */
+    public function refreshAction(){
+        if($this -> get_repository('Categorys') -> delete_category_list_cache()){
+            $this -> flashSession -> success('清除分类缓存成功');
+        }else{
+            $this -> flashSession -> error('清除分类缓存失败');
+        }
+
+        $url = $this -> get_module_uri('categorys/index');
+        return $this -> response -> redirect($url);
+    }
 }

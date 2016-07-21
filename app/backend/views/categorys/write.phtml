@@ -40,6 +40,8 @@
                             {% for value in categoryList %}
                                 {% if category is not empty and category['parent_cid'] == value['cid'] %}
                                     <option value="{{value['cid']}}" selected="selected">
+                                {% elseif value['cid'] == parentcid %}
+                                    <option value="{{value['cid']}}" selected="selected">
                                 {% else %}
                                     <option value="{{value['cid']}}">
                                 {% endif %}
