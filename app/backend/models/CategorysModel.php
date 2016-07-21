@@ -92,19 +92,11 @@ class CategorysModel extends BaseModel{
         if(!is_array($data) || count($data) == 0 || $cid <= 0){
             throw new \Exception('参数错误');
         }
-        $keys = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> update(
-            $this->getSource(),
-            $keys,
-            $values,
-            array(
-                'conditions' => 'cid = ?',
-                'bind' => array($cid)
-            )
-        );
+
+        $this -> cid = $cid;
+        $result = $this -> iupdate($data);
         if(!$result){
-            throw new \Exception('更新失败');
+            throw new \Exception('更新分类失败');
         }
         $affectedRows = $this -> db -> affectedRows();
         return $affectedRows;

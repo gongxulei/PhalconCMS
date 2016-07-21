@@ -78,7 +78,6 @@ class CategorysController extends BaseController{
                 'name' => $name,
                 'slug' => $slug,
                 'sort' => $sort,
-                'description' => $description,
             ))) {
                 $error = array_values($error);
                 $error = $error[0];
