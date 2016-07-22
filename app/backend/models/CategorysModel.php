@@ -22,6 +22,22 @@ class CategorysModel extends BaseModel{
     }
 
     /**
+     * 统计分类总数
+     * @param int $status
+     * @return mixed
+     */
+    public function get_count($status=1){
+        $status = intval($status);
+        $count = $this -> count(array(
+             'conditions' => 'status = :status:',
+             'bind' => array(
+                 'status' => $status,
+             ),
+        ));
+        return $count;
+     }
+
+    /**
      * 	Is executed before the fields are validated for not nulls/empty strings
      *  or foreign keys when an insertion operation is being made
      */
@@ -50,7 +66,7 @@ class CategorysModel extends BaseModel{
      * @throws \Exception
      */
     public function insert_record(array $data){
-        if(!is_array($data) || count($data) == 0){
+        if(count($data) == 0){
             throw new \Exception('参数错误');
         }
         $result = $this -> create($data);
@@ -89,14 +105,14 @@ class CategorysModel extends BaseModel{
     public function update_record(array $data, $cid){
         $cid = intval($cid);
         $data = $this -> before_update($data);
-        if(!is_array($data) || count($data) == 0 || $cid <= 0){
+        if(count($data) == 0 || $cid <= 0){
             throw new \Exception('参数错误');
         }
 
         $this -> cid = $cid;
         $result = $this -> iupdate($data);
         if(!$result){
-            throw new \Exception('更新分类失败');
+            throw new \Exception(implode(',', $this -> getMessages()));
         }
         $affectedRows = $this -> db -> affectedRows();
         return $affectedRows;

@@ -86,10 +86,11 @@
     display:block;
     color:#fff;
 }
-.quick-action-box ul li i{
+.quick-action-box ul li span.glyphicon{
     font-size:35px;
     display: block;
     margin-bottom:10px;
+    text-align:center;
 }
 .pagination-box{
     text-align:right;
@@ -125,4 +126,18 @@
     display: inline-block;
     position: relative;
     cursor: pointer;
+}
+.tags-box ul{
+    list-style-type:none;
+}
+.tags-box ul li{
+    list-style-type:none;
+    display:inline-block;
+    color:#FFFFFF;
+    margin:0px 15px 15px 0px;
+}
+.tags-box ul li a{
+    color:#FFFFFF;
+    margin-left:5px;
+    cursor:pointer;
 }

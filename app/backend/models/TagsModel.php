@@ -85,24 +85,55 @@ class TagsModel extends BaseModel{
     }
 
     /**
+     * 	Is executed before the fields are validated for not nulls/empty strings
+     *  or foreign keys when an insertion operation is being made
+     */
+    public function beforeValidationOnCreate(){
+        if(!isset($this -> create_by) || !$this -> create_by){
+            $this -> create_by = $this -> getDI() -> get('session') -> get('user')['uid'];
+        }
+        if(!isset($this -> create_time) || !$this -> create_time){
+            $this -> create_time = time();
+        }
+        if(!isset($this -> modify_by) || !$this -> modify_by){
+            $this -> modify_by = $this -> getDI() -> get('session') -> get('user')['uid'];
+        }
+        if(!isset($this -> modify_time) || !$this -> modify_time){
+            $this -> modify_time = time();
+        }
+    }
+
+    /**
      * 标签数据入库
      * @param array $data
      * @return bool|int
      * @throws \Exception
      */
     public function insert_record(array $data){
-        $data = array_filter($data);
-        if(!is_array($data) || count($data) == 0){
+        if(count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $fields = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> insert($this -> getSource(), $values, $fields);
+        $result = $this -> create($data);
         if(!$result){
-            throw new \Exception('数据入库失败');
+            throw new \Exception(implode(',', $this -> getMessages()));
         }
-        $tid = $this -> db -> lastInsertId();
+        $tid = $this -> tid;
         return $tid;
+    }
+
+    /**
+     * 自定义的update事件
+     * @param array $data
+     * @return array
+     */
+    protected function before_update(array $data){
+        if(empty($data['modify_by'])){
+            $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
+        }
+        if(empty($data['modify_time'])){
+            $data['modify_time'] = time();
+        }
+        return $data;
     }
 
     /**
@@ -113,24 +144,15 @@ class TagsModel extends BaseModel{
      * @throws \Exception
      */
     public function update_record(array $data, $tid){
-        $data = array_filter($data);
-        $cid = intval($tid);
-        if(!is_array($data) || count($data) == 0 || $tid <= 0){
+        $tid = intval($tid);
+        $data = $this -> before_update($data);
+        if(count($data) == 0 || $tid <= 0){
             throw new \Exception('参数错误');
         }
-        $keys = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> update(
-            $this->getSource(),
-            $keys,
-            $values,
-            array(
-                'conditions' => 'tid = ?',
-                'bind' => array($tid)
-            )
-        );
+        $this -> tid = $tid;
+        $result = $this -> iupdate($data);
         if(!$result){
-            throw new \Exception('更新失败');
+            throw new \Exception(implode(',', $this -> getMessages()));
         }
         $affectedRows = $this -> db -> affectedRows();
         return $affectedRows;
@@ -162,5 +184,36 @@ class TagsModel extends BaseModel{
             }
         }
         return false;
+    }
+
+    /**
+     * 标签是否存在
+     * @param null $tagName
+     * @param null $slug
+     * @param null $tid
+     * @return \Phalcon\Mvc\Model\ResultsetInterface
+     * @throws \Exception
+     */
+    public function tag_is_exist($tagName=null, $slug=null, $tid=null){
+        if(empty($tagName) && empty($slug)){
+            throw new \Exception('参数错误');
+        }
+        $params = array();
+        if(!empty($tagName) && !empty($slug)){
+            $params['conditions'] = " (tag_name = :tagName: OR slug = :slug:) AND status = 1 ";
+            $params['bind']['tagName'] = $tagName;
+            $params['bind']['slug'] = $slug;
+        }else if(!empty($tagName)){
+            $params['conditions'] = " tag_name = :tagName: AND status = 1 ";
+            $params['bind']['tagName'] = $tagName;
+        }else if(!empty($slug)){
+            $params['conditions'] = " slug = :slug: AND status = 1 ";
+            $params['bind']['slug'] = $slug;
+        }
+        $tid = intval($tid);
+        $tid > 0 && $params['conditions'] .= " AND tid != {$tid} ";
+
+        $result = $this -> find($params);
+        return $result;
     }
 }

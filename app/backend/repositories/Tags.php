@@ -25,8 +25,8 @@ class Tags extends BaseRepository{
      * @return array
      * @throws \Exception
      */
-    public function get_list($status=1, array $ext=array()){
-        $tagsList = $this -> get_model('TagsModel') -> get_list($status, $ext);
+    public function get_list(){
+        $tagsList = $this -> get_model('TagsModel') -> get_list();
         return $tagsList;
     }
 
@@ -60,61 +60,72 @@ class Tags extends BaseRepository{
         $tid = intval($tid);
         if($tid <= 0){
             /** 添加标签 */
-            $tid = $this -> insert_record($data);
-            return $tid;
+            $this -> create($data);
         }else{
-            $affectedRows = $this -> update_record($data, $tid);
-            if(!$affectedRows){
-                throw new \Exception('保存标签失败');
-            }
-            return $affectedRows;
+            /** 更新标签 */
+            $this -> update($data, $tid);
         }
     }
 
     /**
-     * @param array $data
-     * @return array
+     * 删除标签（软删除）
+     * @param $tid
+     * @return mixed
+     * @throws \Exception
      */
-    protected function before_insert(array $data){
-        empty($data['create_by']) && $data['create_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['create_time']) && $data['create_time'] = time();
-        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['modify_time']) && $data['modify_time'] = time();
-        return $data;
+    public function delete($tid){
+        $tid = intval($tid);
+        if($tid <= 0){
+            throw new \Exception('请选择需要删除的标签');
+        }
+        $affectedRows = $this -> get_model('TagsModel') -> update_record(array(
+            'status' => 0
+        ), $tid);
+        if($affectedRows <= 0){
+            throw new \Exception('删除标签失败');
+        }
+        return $affectedRows;
     }
 
     /**
      * 标签数据入库
      * @param array $data
-     * @return bool|int
+     * @return int
      * @throws \Exception
      */
-    protected function insert_record(array $data){
-        $data = $this -> before_insert($data);
+    protected function create(array $data){
+        /** 判断标签是否已存在 */
+        $isExist = $this -> get_model('TagsModel') -> tag_is_exist($data['tag_name'], $data['slug']);
+        if($isExist && $isExist -> count() > 0){
+            throw new \Exception('标签名称或缩略名已存在');
+        }
+        /** 添加标签 */
         $tid = $this -> get_model('TagsModel') -> insert_record($data);
+        $tid = intval($tid);
+        if($tid <= 0){
+            throw new \Exception('标签数据入库失败');
+        }
         return $tid;
     }
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function before_update(array $data){
-        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['modify_time']) && $data['modify_time'] = time();
-        return $data;
-    }
-
-    /**
-     * 更新标签
+     * 更新标签数据
      * @param array $data
      * @param $tid
-     * @return int
+     * @return mixed
      * @throws \Exception
      */
-    protected function update_record(array $data, $tid){
-        $data = $this -> before_update($data);
+    protected function update(array $data, $tid){
+        /** 判断标签是否已存在 */
+        $isExist = $this -> get_model('TagsModel') -> tag_is_exist($data['tag_name'], $data['slug'], $tid);
+        if($isExist && $isExist -> count() > 0){
+            throw new \Exception('标签名称或缩略名已存在');
+        }
+        /** 更新标签 */
         $affectedRows = $this -> get_model('TagsModel') -> update_record($data, $tid);
+        if($affectedRows <= 0){
+            throw new \Exception('更新标签失败');
+        }
         return $affectedRows;
     }
 

@@ -75,6 +75,15 @@ class Categorys extends BaseRepository{
     }
 
     /**
+     * 统计分类总数
+     * @return mixed
+     */
+    public function get_count(){
+        $count = $this -> get_model('CategorysModel') -> get_count();
+        return $count;
+     }
+
+    /**
      * 保存分类数据
      * @param array $data
      * @param $cid

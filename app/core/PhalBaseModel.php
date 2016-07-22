@@ -20,6 +20,11 @@ class PhalBaseModel extends \Phalcon\Mvc\Model implements \Phalcon\Mvc\ModelInte
 
     public function initialize(){
         $this -> db = $this -> getDI() -> get('db');
+
+        /** 不对空字段进行validation校验 */
+        self::setup(array(
+            'notNullValidations' => false
+        ));
     }
 
     /**

@@ -22,8 +22,16 @@ class TagsController extends BaseController{
      * 标签列表页
      */
     public function indexAction(){
+        $tid = intval($this -> request -> get('tid', 'trim'));
+        if($tid > 0){
+            $taginfo = $this -> get_repository('Tags') -> detail($tid);
+        }
         $tagsList = $this -> get_repository('Tags') -> get_list();
 
+        $this -> view -> setVars(array(
+            'taginfo' => $taginfo,
+            'tagsList' => $tagsList,
+        ));
         $this -> view -> pick('tags/index');
     }
 
@@ -42,7 +50,7 @@ class TagsController extends BaseController{
             !empty($tid) && $this -> validator -> add_rule('tid', 'required', '系统错误，请刷新页面后重试');
             $this -> validator -> add_rule('name', 'required', '请填写标签名称')
                 -> add_rule('name', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');
-            $this -> validator -> add_rule('slug', 'alpha_dash', '分类缩略名由英文字符、数字和中下划线组成');
+            !empty($slug) && $this -> validator -> add_rule('slug', 'alpha_dash', '分类缩略名由英文字符、数字和中下划线组成');
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array(
                 'tid' => $tid,
@@ -59,16 +67,30 @@ class TagsController extends BaseController{
                 'slug' => $slug,
             ), $tid);
 
-            $this -> flashSession -> success('添加标签成功');
+            $this -> flashSession -> success('保存标签成功');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            $code = $e -> getCode();
-            $message = $e -> getMessage();
-            if($code == 23000){
-                $message = '标签已存在，请重新填写';
-            }
-            $this -> flashSession -> error($message);
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        $url = $this -> get_module_uri('tags/index');
+        return $this -> response -> redirect($url);
+    }
+
+    /**
+     * 删除标签
+     */
+    public function deleteAction(){
+        try{
+            $tid = intval($this -> request -> get('tid', 'trim'));
+
+            $this -> get_repository('Tags') -> delete($tid);
+
+            $this -> flashSession -> success('删除标签成功');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
         }
         $url = $this -> get_module_uri('tags/index');
         return $this -> response -> redirect($url);
