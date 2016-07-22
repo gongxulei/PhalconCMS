@@ -137,6 +137,32 @@ class Categorys extends BaseRepository{
     }
 
     /**
+     * 更新分类排序
+     * @param $sort
+     * @param $cid
+     * @return mixed
+     * @throws \Exception
+     */
+    public function update_sort($sort, $cid){
+        $sort = intval($sort);
+        $cid = intval($cid);
+        if($cid <= 0){
+            throw new \Exception('参数错误');
+        }
+        /** 更新分类排序 */
+        $affectedRows = $this -> get_model('CategorysModel') -> update_record(array(
+            'sort' => $sort
+        ), $cid);
+        if(!$affectedRows){
+            throw new \Exception('更新分类排序失败');
+        }
+        /** 清空分类缓存 */
+        $this -> delete_category_list_cache();
+
+        return $affectedRows;
+    }
+
+    /**
      * 获取分类列表
      * @return array
      */

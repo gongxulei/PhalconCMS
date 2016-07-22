@@ -78,6 +78,35 @@ $(document).ready(function(){
         window.location.href = dataUrl;
     });
 
+    $.fn.editable.defaults.mode = 'popup';
+    $('.category-sort-block').editable({
+        params:function(params){
+            params.sort = params.value;
+            params.cid = params.pk;
+            if(params.sort <= 0 || params.sort > 999){
+                params.sort = 999;
+            }
+            return params;
+        },
+        success:function(response, value){
+            if (typeof response !== 'object') response = JSON.parse(response);
+            if(response.code == 1){
+                tips_message(response.message, 'success');
+            }else{
+                tips_message(response.message, 'error');
+            }
+            return true;
+        },
+        error:function(response){
+            tips_message('网络错误，请重试');
+        },
+        display:function(value){
+            if(value <= 0 || value > 999){
+                value = 999;
+            }
+            $(this).html(value);
+        }
+    });
 });
 
 function tips_message(message, level){
@@ -100,5 +129,5 @@ function tips_message(message, level){
             break;
     }
     $('#alert-tips').html(str);
-    $('#alert-tips').slideToggle('fast').delay(3000).slideToggle(300);
+    $('#alert-tips').slideToggle('fast').delay(5000).slideToggle(300);
 }

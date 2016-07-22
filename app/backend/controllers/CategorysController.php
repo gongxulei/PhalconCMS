@@ -107,6 +107,24 @@ class CategorysController extends BaseController{
     }
 
     /**
+     * 更新分类排序
+     */
+    public function savesortAction(){
+        try {
+            $cid = intval($this->request->getPost('cid', 'trim'));
+            $sort = intval($this->request->getPost('sort', 'trim'));
+            $this -> get_repository('Categorys') -> update_sort($sort, $cid);
+
+            $this -> ajax_return('更新分类排序成功');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> ajax_return($e -> getMessage());
+        }
+        $this -> view -> disable();
+    }
+
+    /**
      * 删除分类（软删除）
      */
     public function deleteAction(){

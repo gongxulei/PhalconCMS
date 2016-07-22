@@ -44,7 +44,14 @@
                                         </a>
                                     </td>
                                     <td>{{ category['slug'] }}</td>
-                                    <td>{{ category['sort'] }}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="category-sort-block" data-name="sort"
+                                           data-url="{{ url(modulePathinfo~'/categorys/savesort') }}"
+                                           data-pk="{{category['cid']}}" data-type="text"
+                                           data-placement="top" data-title="修改分类排序">
+                                            {{ category['sort'] }}
+                                        </a>
+                                    </td>
                                     <td>{{ date('Y-m-d H:i:s', category['modify_time']) }}</td>
                                     <td>
                                         <a class="btn btn-xs btn-success" href="{{ url(modulePathinfo~'/categorys/write?parentcid='~category['cid']) }}">
