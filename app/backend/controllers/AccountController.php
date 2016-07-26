@@ -22,13 +22,28 @@ class AccountController extends BaseController{
      * 个人设置页
      */
     public function profileAction(){
-        $this -> view -> pick('account/profile');
+        try {
+            $username = $this->session->get('user')['username'];
+            $user = $this->get_repository('Users')->detail($username);
+
+            $this -> view -> setVars(array(
+                'user' => $user,
+            ));
+            $this -> view -> pick('account/profile');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+
+            $url = $this -> get_module_uri('/dashboard/index');
+            return $this -> response -> redirect($url);
+        }
     }
 
     /**
      * 更新个人设置
      */
-    public function setprofileAction(){
+    public function saveprofileAction(){
         try{
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
@@ -56,7 +71,7 @@ class AccountController extends BaseController{
                 'nickname' => $nickname,
                 'email' => $email,
             );
-            $this -> get_repository('Users') -> set_profile($data);
+            $this -> get_repository('Users') -> update($data, $this -> session -> get('user')['uid']);
 
             $this -> flashSession -> success('更新成功');
         }catch(\Exception $e){
@@ -71,7 +86,7 @@ class AccountController extends BaseController{
     /**
      * 修改密码
      */
-    public function setpwdAction(){
+    public function savepwdAction(){
         try{
             if($this -> request -> isAjax() || !$this -> request -> isPost()){
                 throw new \Exception('非法请求');
@@ -98,15 +113,15 @@ class AccountController extends BaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 重置密码 */
-            $this -> get_repository('Users') -> set_pwd($oldpwd, $newpwd);
+            $this -> get_repository('Users') -> update_password($oldpwd, $newpwd);
 
-            $this -> flashSession -> success('修改密码成功');
+            $this -> flashSession -> success('修改密码成功，下次登录时将启动新密码');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('passport/logout');
+        $url = $this -> get_module_uri('/account/profile');
         return $this -> response -> redirect($url);
     }
 

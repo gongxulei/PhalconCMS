@@ -57,10 +57,10 @@ class Users extends BaseRepository{
      * 重置密码
      * @param $oldpwd
      * @param $newpwd
-     * @return bool
+     * @return mixed
      * @throws \Exception
      */
-    public function set_pwd($oldpwd, $newpwd){
+    public function update_password($oldpwd, $newpwd){
         /** 校验旧密码是否正确 */
         $user = $this -> detail($this -> getDI() -> get('session') -> get('user')['username']);
         if(!$user){
@@ -72,26 +72,28 @@ class Users extends BaseRepository{
         }
         /** 密码更新 */
         $password = $this -> getDI() -> get('security') -> hash($newpwd);
-        $affectedRows = $this -> update_record(array(
+        $affectedRows = $this -> get_model('UsersModel') -> update_record(array(
             'password' => $password,
         ), $this -> getDI() -> get('session') -> get('user')['uid']);
         if(!$affectedRows){
             throw new \Exception('修改密码失败，请重试');
         }
-        return true;
+        return $affectedRows;
     }
 
     /**
-     * 变更个人配置
+     * 更新个人信息
      * @param array $data
      * @param null $uid
      * @return bool
      * @throws \Exception
      */
-    public function set_profile(array $data, $uid = null){
+    public function update(array $data, $uid){
         $uid = intval($uid);
-        empty($uid) && $uid = $this -> getDI() -> get('session') -> get('user')['uid'];
-        $affectedRows = $this -> update_record($data, $uid);
+        if($uid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $affectedRows = $this -> get_model('UsersModel') -> update_record($data, $uid);
         if(!$affectedRows){
             throw new \Exception('修改个人设置失败');
         }
@@ -99,29 +101,17 @@ class Users extends BaseRepository{
     }
 
     /**
-     * 用户数据
+     * 获取用户数据
      * @param string $username
      * @param array $ext
      * @return \Phalcon\Mvc\Model
      * @throws \Exception
      */
     public function detail($username, array $ext=array()){
-        $user = $this -> get_model('UsersModel') -> detail($username, $ext);
-        return $user;
-    }
-
-    /**
-     * 更新用户数据
-     * @param array $data
-     * @param $uid
-     * @return int
-     * @throws \Exception
-     */
-    public function update_record(array $data, $uid){
-        if(!isset($data['modify_time']) || empty($data['modify_time'])){
-            $data['modify_time'] = time();
+        $user = $this->get_model('UsersModel')->detail($username, $ext);
+        if (!$user->uid) {
+            throw new \Exception('获取用户信息失败');
         }
-        $affectedRows = $this -> get_model('UsersModel') -> update_record($data, $uid);
-        return $affectedRows;
+        return $user;
     }
 }

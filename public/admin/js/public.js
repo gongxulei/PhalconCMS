@@ -24,11 +24,6 @@ $(document).ready(function(){
         }
     })();
 
-    $('.tree-grid').treegrid({
-        expanderExpandedClass: 'glyphicon glyphicon-minus',
-        expanderCollapsedClass: 'glyphicon glyphicon-plus',
-    });
-
     $('#login-btn').on('click', function(){
         var username = $.trim($('#username').val());
         var usernamePattern = /^[\w-]{4,20}$/i;
@@ -133,6 +128,70 @@ $(document).ready(function(){
         }
         window.location.href = dataUrl;
     });
+
+    $('#base-options-btn').on('click', function(){
+        var siteName = $.trim($('#site-name').val());
+        var siteNamePattern = /^[\u4e00-\u9fa5\w-]+$/i;
+        if(!siteNamePattern.test(siteName)){
+            tips_message('站点名称由中英文字符、数字、下划线和横杠组成');
+            return false;
+        }
+
+        $('#base-options-form').submit();
+    });
+
+    $('#save-profile-btn').on('click', function(){
+        var nickname = $.trim($('#nickname').val());
+        var nicknamePattern = /^[\u4e00-\u9fa5\w-]{2,20}$/i;
+        if(!nicknamePattern.test(nickname)){
+            tips_message('昵称由2-20个中英文字符、数字、下划线和横杠组成');
+            return false;
+        }
+
+        var email = $.trim($('#user-email').val());
+        var emailPattern = /^[_a-z0-9-\.]+@([-a-z0-9]+\.)+[a-z]{2,}$/i;
+        if(!emailPattern.test(email)){
+            tips_message('请填写正确的邮箱地址');
+            return false;
+        }
+
+        $('#save-profile-form').submit();
+    });
+
+    $('#save-password-btn').on('click', function(){
+        var oldpwd = $.trim($('#old-password').val());
+        if(oldpwd == '' || oldpwd == false){
+            tips_message('请填写原始密码');
+            return false;
+        }
+        if(oldpwd.length < 6 || oldpwd.length > 20){
+            tips_message('密码由6-20个字符组成');
+            return false;
+        }
+
+        var newpwd = $.trim($('#new-password').val());
+        if(newpwd == '' || newpwd == false){
+            tips_message('请填写新密码');
+            return false;
+        }
+        if(newpwd.length < 6 || newpwd.length > 20){
+            tips_message('密码由6-20个字符组成');
+            return false;
+        }
+
+        var confirmpwd = $.trim($('#confirm-password').val());
+        if(newpwd != confirmpwd){
+            tips_message('两次输入的新密码不一致');
+            return false;
+        }
+
+        if(oldpwd == newpwd){
+            tips_message('新密码不能与原始密码相同');
+            return false;
+        }
+
+        $('#save-password-form').submit();
+    });
 });
 
 function tips_message(message, level){
@@ -155,5 +214,5 @@ function tips_message(message, level){
             break;
     }
     $('#alert-tips').html(str);
-    $('#alert-tips').slideToggle('fast').delay(5000).slideToggle(300);
+    $('#alert-tips').slideToggle('fast').delay(3000).slideToggle(300);
 }

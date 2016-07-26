@@ -46,7 +46,7 @@
             </div>
             <div class="panel-body" >
                 <form action="{{url(modulePathinfo~'/tags/save')}}" method="post" class="form-horizontal" id="tag-form">
-                    <div class="form-group has-feedback">
+                    <div class="form-group">
                         <label for="tag-name" class="col-sm-2 control-label">标签名称</label>
                         <div class="col-sm-10">
                             <input type="text" name="name" value="{% if taginfo is not empty %}{{taginfo['tag_name']}}{% endif %}"

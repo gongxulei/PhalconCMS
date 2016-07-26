@@ -33,15 +33,30 @@ class UsersModel extends BaseModel{
         }
         $params = array(
             'conditions' => 'username = :username:',
-            'bind' => [
+            'bind' => array(
                 'username' => $username,
-            ],
+            ),
         );
         if(isset($ext['columns']) && !empty($ext['columns'])){
             $params['columns'] = $ext['columns'];
         }
         $result = $this -> findFirst($params);
+        if(!$result){
+            throw new \Exception('获取用户信息失败');
+        }
         return $result;
+    }
+
+    /**
+     * 自定义的update事件
+     * @param array $data
+     * @return array
+     */
+    protected function before_update(array $data){
+        if(empty($data['modify_time'])){
+            $data['modify_time'] = time();
+        }
+        return $data;
     }
 
     /**
@@ -53,21 +68,13 @@ class UsersModel extends BaseModel{
      */
     public function update_record(array $data, $uid){
         $uid = intval($uid);
-        $data = array_filter($data);
-        if(!is_array($data) || count($data) == 0 || $uid <= 0){
+        if(count($data) == 0 || $uid <= 0){
             throw new \Exception('参数错误');
         }
-        $keys = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> update(
-            $this->getSource(),
-            $keys,
-            $values,
-            array(
-                'conditions' => 'uid = ?',
-                'bind' => array($uid)
-            )
-        );
+        $data = $this -> before_update($data);
+
+        $this -> uid = $uid;
+        $result = $this -> iupdate($data);
         if(!$result){
             throw new \Exception('更新失败');
         }

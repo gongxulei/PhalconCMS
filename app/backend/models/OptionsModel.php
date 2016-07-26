@@ -51,10 +51,10 @@ class OptionsModel extends BaseModel{
      * @throws \Exception
      */
     public function update_record(array $data, $opkey){
-        $data = array_filter($data);
-        if(!is_array($data) || count($data) == 0){
+        if(count($data) == 0 || empty($opkey)){
             throw new \Exception('参数错误');
         }
+
         $keys = array_keys($data);
         $values = array_values($data);
         $result = $this -> db -> update(
@@ -63,7 +63,7 @@ class OptionsModel extends BaseModel{
             $values,
             array(
                 'conditions' => 'op_key = ?',
-                'bind' => [$opkey]
+                'bind' => array($opkey)
             )
         );
         if(!$result){
