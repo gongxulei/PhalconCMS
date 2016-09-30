@@ -21,6 +21,10 @@ class ArticlesModel extends BaseModel{
         $this -> set_table_source(self::TABLE_NAME);
     }
 
+    public function get_list(array $ext=array()){
+
+    }
+
     /**
      * 插入记录
      * @param array $data

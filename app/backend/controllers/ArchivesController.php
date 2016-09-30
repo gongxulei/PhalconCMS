@@ -22,6 +22,8 @@ class ArchivesController extends BaseController{
      * 文章列表
      */
     public function indexAction(){
+
+
         $this -> view -> pick('archives/index');
     }
 
@@ -29,6 +31,11 @@ class ArchivesController extends BaseController{
      * 撰写新文章
      */
     public function writeAction(){
+        $categoryList = $this -> get_repository('Categorys') -> get_category_list();
+
+        $this -> view -> setVars(array(
+            'categoryList' => $categoryList,
+        ));
         $this -> view -> pick('archives/write');
     }
 

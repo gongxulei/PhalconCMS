@@ -189,9 +189,10 @@ $(document).ready(function(){
             tips_message('新密码不能与原始密码相同');
             return false;
         }
-
         $('#save-password-form').submit();
     });
+
+
 });
 
 function tips_message(message, level){

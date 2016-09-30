@@ -5,7 +5,10 @@
             <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
         </li>
         <li>
-            <a href="{{ url(modulePathinfo~'/account/profile') }}">个人资料</a>
+            <a href="{{ url(modulePathinfo~'/archives/index') }}">文章管理</a>
+        </li>
+        <li>
+            <a href="{{ url(modulePathinfo~'/archives/write') }}">新增文章</a>
         </li>
     </ul>
 </div>
@@ -13,36 +16,48 @@
     <div class="col-lg-12">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#profile" data-toggle="tab">个人资料</a>
+                <a href="#base" data-toggle="tab">基础</a>
             </li>
             <li>
-                <a href="#password" data-toggle="tab">修改密码</a>
+                <a href="#extension" data-toggle="tab">扩展</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane fade in active" id="profile">
-                <form action="{{url(modulePathinfo~'/account/saveprofile')}}" method="post" class="form-horizontal" id="save-profile-form">
+            <div class="tab-pane fade in active" id="base">
+                <form action="{{url(modulePathinfo~'/archives/saveprofile')}}" method="post" class="form-horizontal" id="save-archive-form">
                     <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">用户名</label>
+                        <label for="archive-title" class="col-sm-2 control-label">文章标题</label>
                         <div class="col-sm-5">
-                            <input type="text" value="{% if user is not empty %}{{user.username}}{% endif %}"
-                                   class="form-control" id="username" disabled>
+                            <input type="text" name="title" class="form-control" id="title">
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="nickname" class="col-sm-2 control-label">昵称</label>
+                        <label for="archive-category" class="col-sm-2 control-label">所属分类</label>
                         <div class="col-sm-5">
-                            <input type="text" name="nickname" value="{% if user is not empty %}{{user.nickname}}{% endif %}"
-                                   class="form-control" id="nickname" autocomplete="off">
-                            <span class="form-tips">昵称用于前台界页展示，由中英文字符、数字、下划线和横杠组成。若此项为空，将默认使用用户名</span>
+                            <select class="form-control" name="cid">
+                                <option>请选择</option>
+                                {% for value in categoryList %}
+                                    <option value="{{value['cid']}}">
+                                        {% if value['parent_cid'] > 0 %}
+                                            {{ str_repeat('&nbsp;&nbsp;', substr_count(value['path'], '/')) }}{{value['category_name']}}
+                                        {% else %}
+                                            {{value['category_name']}}
+                                        {% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="user-email" class="col-sm-2 control-label">电子邮箱地址</label>
+                        <label for="archive-content" class="col-sm-2 control-label">内容</label>
                         <div class="col-sm-5">
-                            <input type="text" name="email" value="{% if user is not empty %}{{user.email}}{% endif %}"
-                                   class="form-control" id="user-email" placeholder="请填写电子邮箱地址" autocomplete="off" />
+
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-tags" class="col-sm-2 control-label">标签</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="tags" class="form-control" id="archive-tags" placeholder="请填写电子邮箱地址" />                      </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-5">
@@ -51,7 +66,7 @@
                     </div>
                 </form>
             </div>
-            <div class="tab-pane fade" id="password">
+            <div class="tab-pane fade" id="extension">
                 <form action="{{url(modulePathinfo~'/account/savepwd')}}" method="post" class="form-horizontal" id="save-password-form">
                     <div class="form-group ">
                         <label for="old-password" class="col-sm-2 control-label">原始密码</label>

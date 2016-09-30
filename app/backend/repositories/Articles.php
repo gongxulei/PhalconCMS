@@ -18,6 +18,10 @@ class Articles extends BaseRepository{
         parent::__construct();
     }
 
+    public function get_list(){
+
+    }
+
     /**
      * 保存文章
      * @param array $data

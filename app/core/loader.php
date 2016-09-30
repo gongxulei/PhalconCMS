@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 注册路由文件
+ * 注册命文件
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
