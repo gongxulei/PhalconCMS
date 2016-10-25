@@ -89,18 +89,10 @@ class TagsModel extends BaseModel{
      *  or foreign keys when an insertion operation is being made
      */
     public function beforeValidationOnCreate(){
-        if(!isset($this -> create_by) || !$this -> create_by){
-            $this -> create_by = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($this -> create_time) || !$this -> create_time){
-            $this -> create_time = time();
-        }
-        if(!isset($this -> modify_by) || !$this -> modify_by){
-            $this -> modify_by = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($this -> modify_time) || !$this -> modify_time){
-            $this -> modify_time = time();
-        }
+        $this -> create_by = $this->_user['uid'];
+        $this -> create_time = date('Y-m-d H:i:s');
+        $this -> modify_by = $this->_user['uid'];
+        $this -> modify_time = date('Y-m-d H:i:s');
     }
 
     /**
@@ -127,12 +119,8 @@ class TagsModel extends BaseModel{
      * @return array
      */
     protected function before_update(array $data){
-        if(empty($data['modify_by'])){
-            $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
+        $data['modify_by'] = $this->_user['uid'];
+        $data['modify_time'] = date('Y-m-d H:i:s');
         return $data;
     }
 

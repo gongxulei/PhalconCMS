@@ -141,3 +141,12 @@
     margin-left:5px;
     cursor:pointer;
 }
+.archive-category-list{
+    max-height: 240px;
+    border:1px solid #d5d5d5;
+    background: #FFF;
+    overflow: auto;
+}
+.archive-category-list ul{
+    list-style-type: none;
+}

@@ -45,18 +45,10 @@ class CategorysModel extends BaseModel{
         if($this -> sort <= 0 || $this -> sort > 999){
             $this -> sort = 999;
         }
-        if(!isset($this -> create_by) || !$this -> create_by){
-            $this -> create_by = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($this -> create_time) || !$this -> create_time){
-            $this -> create_time = time();
-        }
-        if(!isset($this -> modify_by) || !$this -> modify_by){
-            $this -> modify_by = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(!isset($this -> modify_time) || !$this -> modify_time){
-            $this -> modify_time = time();
-        }
+        $this -> create_by = $this->_user['uid'];
+        $this -> create_time = date('Y-m-d H:i:s');
+        $this -> modify_by = $this->_user['uid'];
+        $this -> modify_time = date('Y-m-d H:i:s');
     }
 
     /**
@@ -86,12 +78,8 @@ class CategorysModel extends BaseModel{
         if(isset($data['sort']) && ($data['sort'] <= 0 || $data['sort'] > 999)){
             $data['sort'] = 999;
         }
-        if(empty($data['modify_by'])){
-            $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        }
-        if(empty($data['modify_time'])){
-            $data['modify_time'] = time();
-        }
+        $data['modify_by'] = $this->_user['uid'];
+        $data['modify_time'] = date('Y-m-d H:i:s');
         return $data;
     }
 
