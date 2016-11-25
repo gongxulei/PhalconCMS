@@ -10,7 +10,8 @@
 
 namespace Marser\App\Backend\Models;
 
-use \Marser\App\Backend\Models\BaseModel;
+use \Marser\App\Backend\Models\BaseModel,
+    \Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 class ArticlesModel extends BaseModel{
 
@@ -21,8 +22,71 @@ class ArticlesModel extends BaseModel{
         $this -> set_table_source(self::TABLE_NAME);
     }
 
-    public function get_list(array $ext=array()){
+    /**
+     * 获取文章列表
+     * @param int $page
+     * @param array $ext
+     * @return mixed
+     * @throws \Exception
+     */
+    public function get_list($page, $pagesize=10, array $ext=array()){
+        $page = intval($page);
+        $page <= 0 && $page = 1;
+        $pagesize = intval($pagesize);
+        ($pagesize <= 0 || $pagesize > 20) && $pagesize = 10;
 
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->from(array('a' => __CLASS__));
+        $builder->columns(array(
+            'a.aid', 'a.title', 'a.status', 'a.modify_by', 'a.modify_time'
+        ));
+        $builder->where('a.status > :status:', array('status' => 0));
+        if(isset($ext['cid']) && $ext['cid'] > 0){
+            $builder->addFrom(__NAMESPACE__ . '\\ArticlesCategorysModel', 'ac');
+            $builder->andWhere("ac.cid = :cid:", array('cid' => $ext['cid']));
+            $builder->andWhere("ac.aid = a.aid");
+        }
+        if(isset($ext['keyword']) && !empty($ext['keyword'])){
+            $builder->andWhere("a.title like :title:", array('title' => "%{$ext['keyword']}%"));
+        }
+        $builder->orderBy('a.modify_time DESC');
+
+        $paginator = new PaginatorQueryBuilder(array(
+            'builder' => $builder,
+            'limit' => $pagesize,
+            'page' => $page,
+        ));
+        $result = $paginator->getPaginate();
+        return $result;
+    }
+
+    /**
+     * 获取文章数据
+     * @param $aid
+     * @return mixed
+     * @throws Exception
+     */
+    public function detail($aid){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new Exception('参数错误');
+        }
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->from(array('a' => __CLASS__));
+        $builder->addFrom(__NAMESPACE__ . '\\ContentsModel', 'c');
+        $builder->columns(array(
+            'a.aid', 'a.title', 'a.status', 'a.modify_by', 'a.modify_time', 'c.markdown'
+        ));
+        $result = $builder->where("a.status > :status:", array('status' => 0))
+            ->andWhere("a.aid = :aid:", array('aid' => $aid))
+            ->andWhere("c.relateid = a.aid")
+            ->limit(1)
+            ->getQuery()
+            ->execute();
+        if(!$result){
+            throw new \Exception('获取文章数据失败');
+        }
+        return $result;
     }
 
     /**
@@ -56,21 +120,12 @@ class ArticlesModel extends BaseModel{
      */
     public function update_record(array $data, $aid){
         $aid = intval($aid);
-        $data = array_filter($data);
         if($aid <= 0 || !is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $keys = array_keys($data);
-        $values = array_values($data);
-        $result = $this -> db -> update(
-            $this->getSource(),
-            $keys,
-            $values,
-            array(
-                'conditions' => 'aid = ?',
-                'bind' => array($aid)
-            )
-        );
+
+        $this -> aid = $aid;
+        $result = $this -> iupdate($data);
         if(!$result){
             throw new \Exception('更新失败');
         }

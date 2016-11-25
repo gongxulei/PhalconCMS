@@ -23,20 +23,12 @@ class TagsModel extends BaseModel{
 
     /**
      * 标签列表
-     * @param int $status
      * @param array $ext
      * @return array
      * @throws \Exception
      */
-    public function get_list($status=1, array $ext=array()){
-        $status = intval($status);
-        $params = array(
-            'conditions' => 'status = :status:',
-            'bind' => array(
-                'status' => $status,
-            ),
-        );
-        $result = $this -> find($params);
+    public function get_list(array $ext=array()){
+        $result = $this -> find();
         if(!$result){
             throw new \Exception('查询数据失败');
         }
@@ -49,14 +41,8 @@ class TagsModel extends BaseModel{
      * @param int $status
      * @return mixed
      */
-    public function get_count($status=1){
-        $status = intval($status);
-        $count = $this -> count(array(
-            'conditions' => 'status = :status:',
-            'bind' => array(
-                'status' => $status,
-            ),
-        ));
+    public function get_count(){
+        $count = $this -> count();
         return $count;
     }
 
@@ -188,14 +174,14 @@ class TagsModel extends BaseModel{
         }
         $params = array();
         if(!empty($tagName) && !empty($slug)){
-            $params['conditions'] = " (tag_name = :tagName: OR slug = :slug:) AND status = 1 ";
+            $params['conditions'] = " (tag_name = :tagName: OR slug = :slug:) ";
             $params['bind']['tagName'] = $tagName;
             $params['bind']['slug'] = $slug;
         }else if(!empty($tagName)){
-            $params['conditions'] = " tag_name = :tagName: AND status = 1 ";
+            $params['conditions'] = " tag_name = :tagName: ";
             $params['bind']['tagName'] = $tagName;
         }else if(!empty($slug)){
-            $params['conditions'] = " slug = :slug: AND status = 1 ";
+            $params['conditions'] = " slug = :slug: ";
             $params['bind']['slug'] = $slug;
         }
         $tid = intval($tid);

@@ -57,4 +57,28 @@ class ArticlesCategorysModel extends BaseModel{
         $result = $this -> db -> delete($this -> getSource(), "aid = ?", array($aid));
         return $result;
     }
+
+    /**
+     * 根据aids获取cid
+     * @param array $aids
+     * @return array
+     * @throws \Exception
+     */
+    public function get_cids_by_aids(array $aids){
+        if(!is_array($aids) || count($aids) == 0){
+            throw new \Exception('参数错误');
+        }
+        $result = $this -> find(array(
+            'conditions' => 'aid IN ({aid:array})',
+            'bind' => array(
+                'aid' => $aids
+            ),
+            'order' => 'aid DESC',
+        ));
+        $cids = array();
+        if($result){
+            $cids = $result -> toArray();
+        }
+        return $cids;
+    }
 }

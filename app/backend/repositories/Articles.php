@@ -18,8 +18,38 @@ class Articles extends BaseRepository{
         parent::__construct();
     }
 
-    public function get_list(){
+    /**
+     * 获取文章列表
+     * @param int $status
+     * @param int $pagesize
+     * @param array $ext
+     * @return mixed
+     */
+    public function get_list($page, $pagesize=10, array $ext=array()){
+        $paginator = $this -> get_model('ArticlesModel') -> get_list($page, $pagesize, $ext);
+        return $paginator;
+    }
 
+    /**
+     * 获取文章数据
+     * @param $aid
+     * @return mixed
+     */
+    public function detail($aid){
+        $article = $this -> get_model('ArticlesModel') -> detail($aid);
+        $article = $article -> toArray()[0];
+        return $article;
+    }
+
+    /**
+     * 获取文章关联的标签数据
+     * @param $aid
+     * @return mixed
+     */
+    public function get_tag_name_by_aid($aid){
+        $tags = $this -> get_model('ArticlesTagsModel') -> get_tag_name_by_aid($aid);
+        $tags = $tags -> toArray();
+        return $tags;
     }
 
     /**
@@ -30,9 +60,9 @@ class Articles extends BaseRepository{
      */
     public function save(array $data, $aid = null){
         empty($data['create_by']) && $data['create_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['create_time']) && $data['create_time'] = time();
+        empty($data['create_time']) && $data['create_time'] = date('Y-m-d H:i:s');
         empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['modify_time']) && $data['modify_time'] = time();
+        $data['modify_time'] = !empty($data['modify_time']) ? $data['modify_time'] : date('Y-m-d H:i:s');
 
         $aid = intval($aid);
         if(empty($aid)){
@@ -57,7 +87,7 @@ class Articles extends BaseRepository{
             /** 文章基本数据入库 */
             $aid = $this -> create_article($data);
             /** 文章内容数据入库 */
-            $cid = $this -> create_article_content($aid, $data['content']);
+            $cid = $this -> create_article_content($aid, $data['markdown'], $data['content']);
             /** 关联分类数据入库 */
             $this -> create_article_categorys($aid, $data['cid']);
             /** 标签数据入库 */
@@ -87,7 +117,7 @@ class Articles extends BaseRepository{
             /** 更新文章基本数据 */
             $this -> update_article($data, $aid);
             /** 更新文章内容数据 */
-            $this -> update_article_content($data['content'], $aid);
+            $this -> update_article_content($data['markdown'], $data['content'], $aid);
             /** 更新文章关联的分类数据 */
             $this -> delete_article_categorys($aid);
             $this -> create_article_categorys($aid, $data['cid']);
@@ -115,6 +145,19 @@ class Articles extends BaseRepository{
     }
 
     /**
+     * 软删除文章数据
+     * @param $aid
+     * @return mixed
+     */
+    public function delete($aid){
+        $affectedRows = $this -> get_model('ArticlesModel') -> update_record(array(
+            'status' => 0
+        ), $aid);
+        $affectedRows = intval($affectedRows);
+        return $affectedRows;
+    }
+
+    /**
      * 文章数据入库
      * @param array $data
      * @return bool|int
@@ -129,7 +172,7 @@ class Articles extends BaseRepository{
             'create_by' => $data['create_by'],
             'create_time' => $data['create_time'],
             'modify_by' => $data['modify_by'],
-            'modify_time' => $data['modify_time'],
+            'modify_time' => $data['modify_time']
         ));
         return $aid;
     }
@@ -156,17 +199,19 @@ class Articles extends BaseRepository{
     /**
      * 文章内容数据入库
      * @param $aid
+     * @param string $markdown
      * @param string $content
      * @return bool|int
      * @throws \Exception
      */
-    protected function create_article_content($aid, $content){
+    protected function create_article_content($aid, $markdown, $content){
         $aid = intval($aid);
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
         $cid = $this -> get_model('contentsModel') -> insert_record(array(
             'relateid' => $aid,
+            'markdown' => $markdown,
             'content' => $content,
         ));
         return $cid;
@@ -179,12 +224,13 @@ class Articles extends BaseRepository{
      * @return int
      * @throws \Exception
      */
-    protected function update_article_content($content, $aid){
+    protected function update_article_content($markdown, $content, $aid){
         $aid = intval($aid);
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
         $affectedRows = $this -> get_model('contentsModel') -> update_record(array(
+            'markdown' => $markdown,
             'content' => $content,
         ), $aid);
         return $affectedRows;
@@ -201,16 +247,15 @@ class Articles extends BaseRepository{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $cidArray = explode(',', $cid);
-        $cidArray = array_map('trim', $cidArray);
-        $cidArray = array_map('intval', $cidArray);
-        $cidArray = array_filter($cidArray);
-        $cidArray = array_unique($cidArray);
-        if(!is_array($cidArray) || count($cidArray) == 0){
+        $cid = array_map('trim', $cid);
+        $cid = array_map('intval', $cid);
+        $cid = array_filter($cid);
+        $cid = array_unique($cid);
+        if(!is_array($cid) || count($cid) == 0){
             throw new \Exception('请选择文章所属分类');
         }
         $articlesCategorysModel = $this -> get_model('articlesCategorysModel');
-        foreach($cidArray as $ck=>$cv){
+        foreach($cid as $ck=>$cv){
             $articlesCategorysModel -> insert_record(array(
                 'aid' => $aid,
                 'cid' => $cv

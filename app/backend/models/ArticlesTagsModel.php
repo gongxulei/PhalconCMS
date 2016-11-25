@@ -10,7 +10,8 @@
 
 namespace Marser\App\Backend\Models;
 
-use \Marser\App\Backend\Models\BaseModel;
+use \Marser\App\Backend\Models\BaseModel,
+    \Phalcon\Paginator\Adapter\QueryBuilder as PaginatorQueryBuilder;
 
 class ArticlesTagsModel extends BaseModel{
 
@@ -55,6 +56,33 @@ class ArticlesTagsModel extends BaseModel{
             throw new \Exception('参数错误');
         }
         $result = $this -> db -> delete($this -> getSource(), "aid = ?", array($aid));
+        return $result;
+    }
+
+    /**
+     * 根据文章ID获取标签数据
+     * @param $aid
+     * @return mixed
+     * @throws \Exception
+     */
+    public function get_tag_name_by_aid($aid){
+        $aid = intval($aid);
+        if($aid <= 0){
+            throw new \Exception('参数错误');
+        }
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->columns(array(
+            'atags.aid', 't.tid', 't.tag_name'
+        ));
+        $builder->from(array('atags' => __CLASS__));
+        $builder->addFrom(__NAMESPACE__ . '\\TagsModel', 't');
+        $result = $builder->where("atags.aid = :aid:", array('aid' => $aid))
+            ->andWhere("atags.tid = t.tid")
+            ->getQuery()
+            ->execute();
+        if(!$result){
+            throw new \Exception('获取标签数据失败');
+        }
         return $result;
     }
 }

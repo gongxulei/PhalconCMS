@@ -19,7 +19,7 @@ class PaginatorHelper {
      * @param $pagesize  每页条数
      * @param int $num  分页页码数，默认显示5个页码
      */
-    public static function get_paginator($totalRows, $page, $pagesize, $num=5){
+    public static function get_paginator($totalRows, $page, $pagesize=10, $num=5){
         $page = intval($page);
         $page <= 0 && $page = 1;
         //总页码
