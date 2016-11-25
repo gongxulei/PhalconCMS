@@ -7,18 +7,28 @@
         <li>
             <a href="{{ url(modulePathinfo~'/categorys/index') }}">分类管理</a>
         </li>
-        <li>
-            <a href="javascript:void(0);">保存分类</a>
-        </li>
     </ul>
 </div>
 <div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url(modulePathinfo~'/categorys/index') }}">分类管理</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                {% if category is not empty %}
+                    编辑分类
+                {% else %}
+                    新增分类
+                {% endif %}
+            </small>
+        </h1>
+    </div>
     <div class="col-lg-12">
         <form action="{{url(modulePathinfo~'/categorys/save')}}" method="post" class="form-horizontal" id="category-form">
             <div class="form-group has-feedback">
                 <label for="category-name" class="col-sm-2 control-label">分类名称</label>
                 <div class="col-sm-5">
-                    <input type="text" name="name" value="{% if category is not empty %}{{category['category_name']}}{% endif %}"
+                    <input type="text" name="name" {% if category is not empty %}value="{{category['category_name']}}"{% endif %}
                            class="form-control" id="category-name" placeholder="请填写分类名称">
                     <span class="form-tips">分类名称由中英文字符、数字、下划线和横杠组成</span>
                 </div>
@@ -26,7 +36,7 @@
             <div class="form-group ">
                 <label for="category-slug" class="col-sm-2 control-label">缩略名</label>
                 <div class="col-sm-5">
-                    <input type="text" name="slug" value="{% if category is not empty %}{{category['slug']}}{% endif %}"
+                    <input type="text" name="slug" {% if category is not empty %}value="{{category['slug']}}"{% endif %}
                            class="form-control" id="category-slug" placeholder="请填写缩略名">
                     <span class="form-tips">分类缩略名用于创建友好的链接形式，建议使用英文字母、数据、下划线和横杠。默认为空</span>
                 </div>
@@ -59,7 +69,7 @@
             <div class="form-group">
                 <label for="category-sort" class="col-sm-2 control-label">分类排序</label>
                 <div class="col-sm-5">
-                    <input type="text" name="sort" value="{% if category is not empty %}{{category['sort']}}{% endif %}"
+                    <input type="text" name="sort" {% if category is not empty %}value="{{category['sort']}}"{% endif %}
                            class="form-control" id="category-sort" placeholder="999" />
                     <span class="form-tips">数字越小，分类排序越靠前。排序区间为1-999</span>
                 </div>

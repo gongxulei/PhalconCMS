@@ -10,16 +10,21 @@
     </ul>
 </div>
 <div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url(modulePathinfo~'/categorys/index') }}">分类管理</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                分类列表
+            </small>
+        </h1>
+    </div>
     <div class="col-lg-12">
         <div class="btn-panel">
             <a href="{{ url(modulePathinfo~'/categorys/write') }}" class="btn btn-success btn-sm" role="button">新增分类</a>
             <a href="{{ url(modulePathinfo~'/categorys/refresh') }}" class="btn btn-pink btn-sm" role="button">清除分类缓存</a>
         </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">分类列表</h3>
-            </div>
-            <div class="panel-body" id="category-list-box">
+        <div class="table-responsive">
                 <table class="table tree-grid table-bordered table-condensed table-hover" id="test-table">
                     <thead>
                         <tr>
@@ -75,7 +80,6 @@
                         </tbody>
                     {% endif %}
                 </table>
-            </div>
         </div>
     </div>
 </div>

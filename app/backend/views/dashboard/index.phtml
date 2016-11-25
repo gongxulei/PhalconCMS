@@ -7,118 +7,123 @@
     </ul>
 </div>
 <div class="page-content">
-    <div class="quick-action-box">
-        <ul>
-            <li class="info">
-                <a href="{{ url(modulePathinfo~'/archives/index') }}">
-                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                    <span>文章数</span>
-                    <strong>{{articlesCount}}</strong>
-                </a>
-            </li>
-            <li class="success">
-                <a href="{{ url(modulePathinfo~'/categorys/index') }}">
-                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                    <span>分类数</span><strong>{{categorysCount}}</strong>
-                </a>
-            </li>
-            <li class="warning">
-                <a href="{{ url(modulePathinfo~'/tags/index') }}">
-                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                    <span>标签数</span><strong>{{tagsCount}}</strong>
-                </a>
-            </li>
-            <li class="danger">
-                <a href="">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <span>用户数</span><strong>1</strong>
-                </a>
-            </li>
-        </ul>
+    <div class="page-header">
+        <h1>
+            <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                查看
+            </small>
+        </h1>
     </div>
-    <div class="col-lg-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">系统信息</h3>
+    <div class="alert alert-block alert-success">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <i class="icon-ok green"></i>
+        欢迎使用
+        <strong class="green">
+            PhalconCMS博客管理系统
+            <small>(v1.2)</small>
+        </strong>
+        ,轻量级好用的后台管理系统模版.
+    </div>
+    <div class="col-sm-6 infobox-container">
+        <div class="infobox infobox-green  ">
+            <div class="infobox-icon">
+                <i class="icon-book"></i>
             </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-hover">
-                    <tbody>
-                    <tr>
-                        <td>域名/IP地址</td>
-                        <td>{{systemInfo['serverName']}}({{systemInfo['serverIp']}})</td>
-                    </tr>
-                    <tr>
-                        <td>服务器操作系统</td>
-                        <td>{{systemInfo['osName']}} 内核版本：{{systemInfo['osVersion']}}</td>
-                    </tr>
-                    <tr>
-                        <td>HTTP服务器</td>
-                        <td>{{systemInfo['serverSoftware']}}</td>
-                    </tr>
-                    <tr>
-                        <td>服务器语言</td>
-                        <td>{{systemInfo['serverLanguage']}}</td>
-                    </tr>
-                    <tr>
-                        <td>服务器端口</td>
-                        <td>{{systemInfo['serverPort']}}</td>
-                    </tr>
-                    <tr>
-                        <td>PhalconCMS版本</td>
-                        <td>{{appVersion}}</td>
-                    </tr>
-                    <tr>
-                        <td>PHP版本</td>
-                        <td>{{systemInfo['phpVersion']}}</td>
-                    </tr>
-                    <tr>
-                        <td>PHP运行方式</td>
-                        <td>{{systemInfo['phpSapi']}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{articlesCount}}</span>
+                <div class="infobox-content">文章总数</div>
+            </div>
+        </div>
+        <div class="infobox infobox-blue">
+            <div class="infobox-icon">
+                <i class="icon-folder-open"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{categorysCount}}</span>
+                <div class="infobox-content">分类总数</div>
+            </div>
+        </div>
+        <div class="infobox infobox-pink">
+            <div class="infobox-icon">
+                <i class="icon-bookmark"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">{{tagsCount}}</span>
+                <div class="infobox-content">标签总数</div>
+            </div>
+        </div>
+        <div class="infobox infobox-red">
+            <div class="infobox-icon">
+                <i class="icon-group"></i>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number">1</span>
+                <div class="infobox-content">用户总数</div>
             </div>
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">团队信息</h3>
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5>
+                    <i class="icon-home"></i>
+                    系统信息
+                </h5>
             </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-hover">
-                    <tbody>
-                    <tr>
-                        <td>团队成员</td>
-                        <td>
-                            <a href="http://www.marser.cn" target="_blank">Marser</a> 阿忠
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>PhalconCMS项目</td>
-                        <td>
-                            <a href="http://git.oschina.net/KevinJay/PhalconCMS" target="_blank">http://git.oschina.net/KevinJay/PhalconCMS</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Phalcon中文社区</td>
-                        <td>
-                            <a href="http://www.iphalcon.cn" target="_blank">
-                                www.iphalcon.cn
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>博客</td>
-                        <td>
-                            <a href="http://www.marser.cn" target="_blank">
-                                www.marser.cn
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <table class="table table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <td>团队成员</td>
+                                <td> <a href="http://www.marser.cn" target="_blank">Marser</a></td>
+                            </tr>
+                            <tr>
+                                <td>项目代码</td>
+                                <td>
+                                    <a href="http://git.oschina.net/KevinJay/PhalconCMS" target="_blank">http://git.oschina.net/KevinJay/PhalconCMS</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>域名/IP地址</td>
+                                <td>{{systemInfo['serverName']}}({{systemInfo['serverIp']}})</td>
+                            </tr>
+                            <tr>
+                                <td>服务器操作系统</td>
+                                <td>{{systemInfo['osName']}} 内核版本：{{systemInfo['osVersion']}}</td>
+                            </tr>
+                            <tr>
+                                <td>HTTP服务器</td>
+                                <td>{{systemInfo['serverSoftware']}}</td>
+                            </tr>
+                            <tr>
+                                <td>服务器语言</td>
+                                <td>{{systemInfo['serverLanguage']}}</td>
+                            </tr>
+                            <tr>
+                                <td>服务器端口</td>
+                                <td>{{systemInfo['serverPort']}}</td>
+                            </tr>
+                            <tr>
+                                <td>PhalconCMS版本</td>
+                                <td>{{appVersion}}</td>
+                            </tr>
+                            <tr>
+                                <td>PHP版本</td>
+                                <td>{{systemInfo['phpVersion']}}</td>
+                            </tr>
+                            <tr>
+                                <td>PHP运行方式</td>
+                                <td>{{systemInfo['phpSapi']}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
