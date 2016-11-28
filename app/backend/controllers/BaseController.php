@@ -64,4 +64,13 @@ class BaseController extends PhalBaseController{
     protected function get_repository($repositoryName){
         return RepositoryFactory::get_repository($repositoryName);
     }
+
+    /**
+     * 页面跳转
+     * @param null $url
+     */
+    protected function redirect($url=NULL){
+        empty($url) && $url = $this -> request -> getHeader('HTTP_REFERER');
+        $this -> response -> redirect($url);
+    }
 }

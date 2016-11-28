@@ -23,19 +23,12 @@ class OptionsModel extends BaseModel{
 
     /**
      * 获取配置项数据
-     * @param $opkey
      * @param array $ext
      * @return mixed
      * @throws \Exception
      */
-    public function get_list($opkey, array $ext=array()){
-        $builder = $this -> getModelsManager() -> createBuilder();
-        $builder -> from(__CLASS__);
-        if(isset($ext['columns']) && !empty($ext['columns'])){
-            $builder -> columns($ext['columns']);
-        }
-        $builder -> where("op_key IN ({$opkey})");
-        $result = $builder -> getQuery() -> execute();
+    public function get_list(array $ext=array()){
+        $result = $this -> find();
         if(!$result){
             throw new \Exception('获取配置数据失败');
         }

@@ -23,7 +23,7 @@ class OptionsController extends BaseController{
      */
     public function baseAction(){
         try {
-            $options = $this -> get_repository('Options') -> get_base_options();
+            $options = $this -> get_repository('Options') -> get_options_list();
 
             $this -> view -> setVars(array(
                 'options' => $options,
@@ -76,7 +76,62 @@ class OptionsController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('options/base');
-        return $this -> response -> redirect($url);
+        return $this -> redirect();
+    }
+
+    /**
+     * 阅读设置
+     */
+    public function readAction(){
+        try {
+            $options = $this -> get_repository('Options') -> get_options_list();
+
+            $this -> view -> setVars(array(
+                'options' => $options,
+            ));
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        $this -> view -> pick('options/read');
+    }
+
+    /**
+     * 保存阅读相关配置
+     */
+    public function savereadAction(){
+        try{
+            if($this -> request -> isAjax() || !$this -> request -> isPost()){
+                throw new \Exception('非法请求');
+            }
+            $pageNum = intval($this -> request -> getPost('pageNum', 'trim'));
+            $recommendNum = intval($this -> request -> getPost('recommendNum', 'trim'));
+            /** 添加验证规则 */
+            $this -> validator -> add_rule('pageNum', 'required', '请填写每页文章数量');
+            $this -> validator -> add_rule('recommendNum', 'required', '请填写推荐阅读显示的文章列表数目');
+            /** 截获验证异常 */
+            if ($error = $this -> validator -> run(array(
+                'pageNum' => $pageNum,
+                'recommendNum' => $recommendNum
+            ))) {
+                $error = array_values($error);
+                $error = $error[0];
+                throw new \Exception($error['message'], $error['code']);
+            }
+            /** 保存配置项 */
+            $data = array(
+                'page_article_number' => $pageNum,
+                'recommend_article_number' => $recommendNum,
+            );
+            $this -> get_repository('Options') -> update($data);
+
+            $this -> flashSession -> success('更新成功');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        return $this -> redirect();
     }
 }
