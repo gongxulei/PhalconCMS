@@ -59,11 +59,6 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     public function save(array $data, $aid = null){
-        empty($data['create_by']) && $data['create_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        empty($data['create_time']) && $data['create_time'] = date('Y-m-d H:i:s');
-        empty($data['modify_by']) && $data['modify_by'] = $this -> getDI() -> get('session') -> get('user')['uid'];
-        $data['modify_time'] = !empty($data['modify_time']) ? $data['modify_time'] : date('Y-m-d H:i:s');
-
         $aid = intval($aid);
         if(empty($aid)){
             /** 新增文章 */
@@ -187,7 +182,7 @@ class Articles extends BaseRepository{
     protected function update_article(array $data, $aid){
         $affectedRows = $this -> get_model('articlesModel') -> update_record(array(
             'title' => $data['title'],
-            'head_image' => $data['head_image'],
+            //'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
             'status' => $data['status'],
             'modify_by' => $data['modify_by'],

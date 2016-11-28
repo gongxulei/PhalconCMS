@@ -146,6 +146,7 @@ class CategorysModel extends BaseModel{
         if($newParentcid <= 0 || $oldParentcid <= 0){
             throw new \Exception('参数错误');
         }
+
         $result = $this -> db -> update(
             $this -> getSource(),
             array('parent_cid'),

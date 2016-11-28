@@ -29,19 +29,15 @@ class ArticlesTagsModel extends BaseModel{
      * @throws \Exception
      */
     public function insert_record(array $data){
-        $data = array_filter($data);
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $fields = array_keys($data);
-        $values = array_values($data);
-
-        $result = $this -> db -> insert($this -> getSource(), $values, $fields);
+        $result = $this -> create($data);
         if(!$result){
-            throw new \Exception('数据入库失败');
+            throw new \Exception(implode(',', $this -> getMessages()));
         }
-        $tid = $this -> db -> lastInsertId();
-        return $tid;
+        $id = $this -> id;
+        return $id;
     }
 
     /**
@@ -55,7 +51,13 @@ class ArticlesTagsModel extends BaseModel{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $result = $this -> db -> delete($this -> getSource(), "aid = ?", array($aid));
+        $phql = "DELETE FROM " . __CLASS__ . " WHERE aid = :aid: ";
+        $result = $this -> getModelsManager() -> executeQuery($phql, array(
+            'aid' => $aid
+        ));
+        if(!$result->success()){
+            throw new \Exception(implode(',', $result->getMessages()));
+        }
         return $result;
     }
 
