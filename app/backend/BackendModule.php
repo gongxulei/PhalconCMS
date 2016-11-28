@@ -50,7 +50,7 @@ class BackendModule implements ModuleDefinitionInterface{
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher -> setEventsManager($eventsManager);
             //默认设置为后台的调度器
-            $dispatcher -> setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Backend\\Controllers');
+            $dispatcher -> setDefaultNamespace($systemConfig -> app -> root_namespace . '\\App\\Backend\\Controllers');
             return $dispatcher;
         }, true);
 
@@ -59,14 +59,14 @@ class BackendModule implements ModuleDefinitionInterface{
          */
         $di -> set('view', function() use($systemConfig) {
             $view = new \Phalcon\Mvc\View();
-            $view -> setViewsDir($systemConfig -> get('app', 'backend', 'views'));
+            $view -> setViewsDir($systemConfig -> app -> backend -> views);
             $view -> registerEngines(array(
                 '.phtml' => function($view, $di) use($systemConfig) {
                     //$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
                     $volt = new \Marser\App\Core\PhalBaseVolt($view, $di);
                     $volt -> setOptions(array(
-                        'compileAlways' => $systemConfig -> get('app', 'backend', 'is_compiled'),
-                        'compiledPath'  =>  $systemConfig -> get('app', 'backend', 'compiled_path')
+                        'compileAlways' => $systemConfig -> app -> backend -> is_compiled,
+                        'compiledPath'  =>  $systemConfig -> app -> backend -> compiled_path
                     ));
                     $volt -> initFunction();
                     return $volt;

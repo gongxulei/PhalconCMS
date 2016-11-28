@@ -57,7 +57,7 @@
                                             {{ category['sort'] }}
                                         </a>
                                     </td>
-                                    <td>{{ date('Y-m-d H:i:s', category['modify_time']) }}</td>
+                                    <td>{{ category['modify_time'] }}</td>
                                     <td>
                                         <a class="btn btn-xs btn-success" href="{{ url(modulePathinfo~'/categorys/write?parentcid='~category['cid']) }}">
                                             <i class="icon-plus bigger-120"></i>

@@ -47,7 +47,7 @@ class DashboardController extends BaseController{
             'articlesCount' => $articlesCount,
             'categorysCount' => $categorysCount,
             'tagsCount' => $tagsCount,
-            'appVersion' => $this -> systemConfig -> get('app', 'version'),
+            'appVersion' => $this -> systemConfig -> app -> version,
             'systemInfo' => $systemInfo,
         ));
         $this -> view -> pick('dashboard/index');

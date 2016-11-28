@@ -26,11 +26,11 @@ class BaseController extends PhalBaseController{
      */
     public function set_common_vars(){
         $this -> view -> setVars(array(
-            'title' => $this -> systemConfig -> get('app', 'app_name'),
+            'title' => $this -> systemConfig -> app -> app_name,
             'userinfo' => $this -> session -> get('user'),
-            'assetsUrl' => $this -> systemConfig -> get('app', 'backend', 'assets_url'),
+            'assetsUrl' => $this -> systemConfig -> app -> backend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
-            'modulePathinfo' => $this -> systemConfig -> get('app', 'backend', 'module_pathinfo'),
+            'modulePathinfo' => $this -> systemConfig -> app -> backend -> module_pathinfo,
         ));
     }
 
@@ -40,7 +40,7 @@ class BaseController extends PhalBaseController{
      * @return mixed
      */
     public function get_module_uri($uri){
-        $modulePathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
+        $modulePathinfo = $this -> systemConfig -> app -> backend -> module_pathinfo;
         return $this -> url -> get_module_uri($modulePathinfo, $uri);
     }
 

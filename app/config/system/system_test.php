@@ -17,7 +17,7 @@ return array(
         'version' => '1.0',
 
         //根命名空间
-        'namespace' => 'Marser',
+        'root_namespace' => 'Marser',
 
         //前台配置
         'frontend' => array(

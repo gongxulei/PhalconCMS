@@ -33,7 +33,7 @@ class PhalBaseModel extends \Phalcon\Mvc\Model implements \Phalcon\Mvc\ModelInte
      * @author Marser
      */
     protected function set_table_source($tableName){
-        $prefix = $this -> getDI() -> get('systemConfig') -> get('database', 'prefix');
+        $prefix = $this -> getDI() -> get('systemConfig') -> database -> prefix;
         $this -> setSource($prefix.$tableName);
     }
 

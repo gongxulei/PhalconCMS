@@ -138,15 +138,14 @@ $di -> setShared('logger', function() use($di){
  * DI注册api配置
  */
 $di -> setShared('apiConfig', function() use($di){
-    $config = \Marser\App\Core\Config::getInstance('api');
+    $config = \Phalcon\Config\Adapter\Php(ROOT_PATH . '/app/config/api/api_' . RUNTIME . '.php');
     return $config;
 });
 
 /**
  * DI注册system配置
  */
-$di -> setShared('systemConfig', function() use($di){
-    $config = \Marser\App\Core\Config::getInstance('system');
+$di -> setShared('systemConfig', function() use($config){
     return $config;
 });
 
@@ -161,7 +160,7 @@ $di -> setShared('validator', function() use($di){
 /**
  * DI注册过滤器
  */
-$di -> set('filter', function() use($di){
+$di -> setShared('filter', function() use($di){
     $filter = new \Marser\App\Core\PhalBaseFilter($di);
     $filter -> init();
     return $filter;

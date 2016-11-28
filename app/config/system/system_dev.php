@@ -17,7 +17,7 @@ return array(
         'version' => '1.0',
 
         //根命名空间
-        'namespace' => 'Marser',
+        'root_namespace' => 'Marser',
 
         //前台配置
         'frontend' => array(
@@ -77,9 +77,9 @@ return array(
         'db' => array(
             'host' => '127.0.0.1',
             'port' => 3306,
-            'username' => 'root',
-            'password' => 'marser.cn',
-            'dbname' => 'PhalconCMS',
+            'username' => 'admin',
+            'password' => 'admin',
+            'dbname' => 'test',
             'charset' => 'utf8',
         ),
 

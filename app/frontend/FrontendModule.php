@@ -50,7 +50,7 @@ class FrontendModule implements ModuleDefinitionInterface{
             $dispatcher = new \Phalcon\Mvc\Dispatcher();
             $dispatcher->setEventsManager($eventsManager);
             //默认设置为前台的调度器
-            $dispatcher->setDefaultNamespace($systemConfig -> get('app', 'namespace') . '\\App\\Frontend\\Controllers');
+            $dispatcher->setDefaultNamespace($systemConfig -> app -> root_namespace . '\\App\\Frontend\\Controllers');
             return $dispatcher;
         }, true);
 
@@ -59,13 +59,13 @@ class FrontendModule implements ModuleDefinitionInterface{
          */
         $di -> set('view', function() use($systemConfig) {
             $view = new \Phalcon\Mvc\View();
-            $view -> setViewsDir($systemConfig -> get('app', 'frontend', 'views'));
+            $view -> setViewsDir($systemConfig -> app -> frontend -> views);
             $view -> registerEngines(array(
                 '.phtml' => function($view, $di) use($systemConfig) {
                     $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
                     $volt -> setOptions(array(
-                        'compileAlways' => $systemConfig -> get('app', 'frontend', 'is_compiled'),
-                        'compiledPath'  =>  $systemConfig -> get('app', 'frontend', 'compiled_path')
+                        'compileAlways' => $systemConfig -> app -> frontend -> is_compiled,
+                        'compiledPath'  =>  $systemConfig -> app -> frontend -> compiled_path
                     ));
                     return $volt;
                 },
