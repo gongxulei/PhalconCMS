@@ -20,8 +20,8 @@
         <span class="btn btn-danger"></span>
     </div>
 </div>
-<ul class="nav nav-list">
-    <li class="active">
+<ul class="nav nav-list" id="sidebar-box">
+    <li>
         <a href="{{ url(modulePathinfo~'/dashboard/index') }}">
             <i class="icon-dashboard"></i>
             <span class="menu-text"> 控制面板 </span>
@@ -77,3 +77,13 @@
 <div class="sidebar-collapse" id="sidebar-collapse">
     <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
 </div>
+<script type="text/javascript">
+    $('#sidebar-box a').each(function(){
+        var href = $.trim($(this).attr('href'));
+        if(href == window.location.pathname){
+            $(this).parent("li").parent("ul").parent("li").addClass("active").addClass("open");
+            $(this).parent("li").addClass("active");
+            return false;
+        }
+    });
+</script>

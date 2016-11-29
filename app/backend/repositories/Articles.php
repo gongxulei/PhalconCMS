@@ -164,10 +164,7 @@ class Articles extends BaseRepository{
             'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
             'status' => $data['status'],
-            'create_by' => $data['create_by'],
-            'create_time' => $data['create_time'],
-            'modify_by' => $data['modify_by'],
-            'modify_time' => $data['modify_time']
+            'modify_time' => $data['modify_time'],
         ));
         return $aid;
     }
@@ -185,7 +182,6 @@ class Articles extends BaseRepository{
             //'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
             'status' => $data['status'],
-            'modify_by' => $data['modify_by'],
             'modify_time' => $data['modify_time'],
         ), $aid);
         return $affectedRows;
@@ -266,7 +262,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function delete_article_categorys($aid){
-        $result = $this -> get_model('articlesCategorysModel') -> delete_record($aid);
+        $result = $this -> get_model('ArticlesCategorysModel') -> delete_record($aid);
         if(!$result){
             throw new \Exception('更新文章关联的分类数据失败');
         }

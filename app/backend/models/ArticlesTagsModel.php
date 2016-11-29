@@ -32,11 +32,12 @@ class ArticlesTagsModel extends BaseModel{
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $result = $this -> create($data);
+        $clone = clone $this;
+        $result = $clone -> create($data);
         if(!$result){
             throw new \Exception(implode(',', $this -> getMessages()));
         }
-        $id = $this -> id;
+        $id = $clone -> id;
         return $id;
     }
 
@@ -80,6 +81,7 @@ class ArticlesTagsModel extends BaseModel{
         $builder->addFrom(__NAMESPACE__ . '\\TagsModel', 't');
         $result = $builder->where("atags.aid = :aid:", array('aid' => $aid))
             ->andWhere("atags.tid = t.tid")
+            ->andWhere("t.status = 1")
             ->getQuery()
             ->execute();
         if(!$result){

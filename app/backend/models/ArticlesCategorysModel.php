@@ -31,11 +31,12 @@ class ArticlesCategorysModel extends BaseModel{
         if(!is_array($data) || count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $result = $this -> create($data);
+        $clone = clone $this;
+        $result = $clone -> create($data);
         if(!$result){
             throw new \Exception(implode(',', $this -> getMessages()));
         }
-        $id = $this -> id;
+        $id = $clone -> id;
         return $id;
     }
 
@@ -54,11 +55,6 @@ class ArticlesCategorysModel extends BaseModel{
         $result = $this -> getModelsManager() -> executeQuery($phql, array(
             'aid' => $aid
         ));
-
-        var_dump($result->success());
-        exit;
-
-
         if(!$result->success()){
             throw new \Exception(implode(',', $result->getMessages()));
         }

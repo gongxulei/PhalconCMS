@@ -35,7 +35,11 @@
             </div>
             <div class="infobox-data">
                 <span class="infobox-data-number">{{articlesCount}}</span>
-                <div class="infobox-content">文章总数</div>
+                <div class="infobox-content">
+                    <a href="{{ url(modulePathinfo~'/articles/index') }}">
+                        文章总数
+                    </a>
+                </div>
             </div>
         </div>
         <div class="infobox infobox-blue">
@@ -44,7 +48,11 @@
             </div>
             <div class="infobox-data">
                 <span class="infobox-data-number">{{categorysCount}}</span>
-                <div class="infobox-content">分类总数</div>
+                <div class="infobox-content">
+                    <a href="{{ url(modulePathinfo~'/categorys/index') }}">
+                        分类总数
+                    </a>
+                </div>
             </div>
         </div>
         <div class="infobox infobox-pink">
@@ -53,7 +61,11 @@
             </div>
             <div class="infobox-data">
                 <span class="infobox-data-number">{{tagsCount}}</span>
-                <div class="infobox-content">标签总数</div>
+                <div class="infobox-content">
+                    <a href="{{ url(modulePathinfo~'/tags/index') }}">
+                        标签总数
+                    </a>
+                </div>
             </div>
         </div>
         <div class="infobox infobox-red">

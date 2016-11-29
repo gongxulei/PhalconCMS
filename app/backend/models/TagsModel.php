@@ -28,7 +28,12 @@ class TagsModel extends BaseModel{
      * @throws \Exception
      */
     public function get_list(array $ext=array()){
-        $result = $this -> find();
+        $result = $this -> find(array(
+            'conditions' => 'status = :status:',
+            'bind' => array(
+                'status' => 1
+            )
+        ));
         if(!$result){
             throw new \Exception('查询数据失败');
         }
@@ -42,7 +47,12 @@ class TagsModel extends BaseModel{
      * @return mixed
      */
     public function get_count(){
-        $count = $this -> count();
+        $count = $this -> count(array(
+            'conditions' => 'status = :status:',
+            'bind' => array(
+                'status' => 1
+            )
+        ));
         return $count;
     }
 
@@ -59,9 +69,10 @@ class TagsModel extends BaseModel{
             throw new \Exception('参数错误');
         }
         $result = $this -> findFirst(array(
-            'conditions' => 'tid = :tid:',
+            'conditions' => 'tid = :tid: AND status = :status:',
             'bind' => array(
                 'tid' => $tid,
+                'status' => 1
             ),
         ));
         if($result){
@@ -91,11 +102,12 @@ class TagsModel extends BaseModel{
         if(count($data) == 0){
             throw new \Exception('参数错误');
         }
-        $result = $this -> create($data);
+        $clone = clone $this;
+        $result = $clone -> create($data);
         if(!$result){
             throw new \Exception(implode(',', $this -> getMessages()));
         }
-        $tid = $this -> tid;
+        $tid = $clone -> tid;
         return $tid;
     }
 
@@ -119,10 +131,11 @@ class TagsModel extends BaseModel{
      */
     public function update_record(array $data, $tid){
         $tid = intval($tid);
-        $data = $this -> before_update($data);
         if(count($data) == 0 || $tid <= 0){
             throw new \Exception('参数错误');
         }
+        $data = $this -> before_update($data);
+
         $this -> tid = $tid;
         $result = $this -> iupdate($data);
         if(!$result){
@@ -144,9 +157,10 @@ class TagsModel extends BaseModel{
         }
         $params = array(
             'columns' => 'tid',
-            'conditions' => 'tag_name = :tagname:',
+            'conditions' => 'tag_name = :tagname: AND status = :status:',
             'bind' => array(
                 'tagname' => "{$tagname}",
+                'status' => 1
             ),
         );
         $result = $this -> findFirst($params);
@@ -174,14 +188,14 @@ class TagsModel extends BaseModel{
         }
         $params = array();
         if(!empty($tagName) && !empty($slug)){
-            $params['conditions'] = " (tag_name = :tagName: OR slug = :slug:) ";
+            $params['conditions'] = " (tag_name = :tagName: OR slug = :slug:) AND status = 1 ";
             $params['bind']['tagName'] = $tagName;
             $params['bind']['slug'] = $slug;
         }else if(!empty($tagName)){
-            $params['conditions'] = " tag_name = :tagName: ";
+            $params['conditions'] = " tag_name = :tagName: AND status = 1 ";
             $params['bind']['tagName'] = $tagName;
         }else if(!empty($slug)){
-            $params['conditions'] = " slug = :slug: ";
+            $params['conditions'] = " slug = :slug: AND status = 1 ";
             $params['bind']['slug'] = $slug;
         }
         $tid = intval($tid);

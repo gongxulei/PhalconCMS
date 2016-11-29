@@ -12,7 +12,6 @@ namespace Marser\App\Backend\Controllers;
 
 use \Marser\App\Backend\Controllers\BaseController,
     \Marser\App\Libs\ServerNeedle;
-use Sabre\DAV\Server;
 
 class DashboardController extends BaseController{
 
