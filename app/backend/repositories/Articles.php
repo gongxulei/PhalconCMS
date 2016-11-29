@@ -159,7 +159,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function create_article(array $data){
-        $aid = $this -> get_model('articlesModel') -> insert_record(array(
+        $aid = $this -> get_model('ArticlesModel') -> insert_record(array(
             'title' => $data['title'],
             'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
@@ -177,7 +177,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function update_article(array $data, $aid){
-        $affectedRows = $this -> get_model('articlesModel') -> update_record(array(
+        $affectedRows = $this -> get_model('ArticlesModel') -> update_record(array(
             'title' => $data['title'],
             //'head_image' => $data['head_image'],
             'introduce' => $data['introduce'],
@@ -200,7 +200,7 @@ class Articles extends BaseRepository{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $cid = $this -> get_model('contentsModel') -> insert_record(array(
+        $cid = $this -> get_model('ContentsModel') -> insert_record(array(
             'relateid' => $aid,
             'markdown' => $markdown,
             'content' => $content,
@@ -220,7 +220,7 @@ class Articles extends BaseRepository{
         if($aid <= 0){
             throw new \Exception('参数错误');
         }
-        $affectedRows = $this -> get_model('contentsModel') -> update_record(array(
+        $affectedRows = $this -> get_model('ContentsModel') -> update_record(array(
             'markdown' => $markdown,
             'content' => $content,
         ), $aid);
@@ -245,7 +245,7 @@ class Articles extends BaseRepository{
         if(!is_array($cid) || count($cid) == 0){
             throw new \Exception('请选择文章所属分类');
         }
-        $articlesCategorysModel = $this -> get_model('articlesCategorysModel');
+        $articlesCategorysModel = $this -> get_model('ArticlesCategorysModel');
         foreach($cid as $ck=>$cv){
             $articlesCategorysModel -> insert_record(array(
                 'aid' => $aid,
@@ -283,7 +283,7 @@ class Articles extends BaseRepository{
         $tagNameArray = array_filter($tagNameArray);
         $tagNameArray = array_unique($tagNameArray);
         if(is_array($tagNameArray) && count($tagNameArray) > 0){
-            $tagsModel = $this -> get_model('tagsModel');
+            $tagsModel = $this -> get_model('TagsModel');
             foreach($tagNameArray as $tk=>$tv){
                 $tid = $tagsModel -> get_tid_by_tagname($tv);
                 if($tid){//标签存在
@@ -315,7 +315,7 @@ class Articles extends BaseRepository{
         if($aid <= 0 || !is_array($tagidArray) || count($tagidArray) == 0){
             return false;
         }
-        $articlesTagsModel = $this -> get_model('articlesTagsModel');
+        $articlesTagsModel = $this -> get_model('ArticlesTagsModel');
         foreach($tagidArray as $tk=>$tv){
             $articlesTagsModel -> insert_record(array(
                 'aid' => $aid,
@@ -332,7 +332,7 @@ class Articles extends BaseRepository{
      * @throws \Exception
      */
     protected function delete_article_tags($aid){
-        $result = $this -> get_model('articlesTagsModel') -> delete_record($aid);
+        $result = $this -> get_model('ArticlesTagsModel') -> delete_record($aid);
         if(!$result){
             throw new \Exception('更新文章关联的标签数据失败');
         }

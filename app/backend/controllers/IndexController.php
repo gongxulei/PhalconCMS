@@ -13,23 +13,9 @@ use \Marser\App\Backend\Controllers\BaseController;
 
 class IndexController extends BaseController{
 
-    public function testAction(){
-        $this -> view -> setVars(
-            array(
-                'menu' =>  array(
-                    'menu_1' => array(
-                        'title'     =>  'bb',
-                        'addLink'   =>  'www.baidu.com',
-                    ),
-                ),
-            )
-        );
-        $this -> view -> pick('index/test');
-    }
-
-    public function aAction(){
-        $this -> view -> title = 'aaaa';
-        $this -> view -> pick('index/a');
+    public function indexAction(){
+        $url = $this -> get_module_uri('dashboard/index');
+        return $this->redirect($url);
     }
 
     public function notfoundAction(){
