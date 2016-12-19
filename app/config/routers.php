@@ -19,4 +19,40 @@ return array(
         'action'=>2
     ),
 
+    //文章详情路由
+    '/article/:int' => array(
+        'module' => 'frontend',
+        'controller' => 'index',
+        'action' => 'detail',
+        'aid' => 1
+    ),
+
+    //搜索路由
+    '/search' => array(
+        'module' => 'frontend',
+        'controller' => 'index',
+        'action' => 'index',
+    ),
+
+    //分类下的文章路由
+    '/category/:int' => array(
+        'module' => 'frontend',
+        'controller' => 'index',
+        'action' => 'index',
+        'cid' => 1
+    ),
+
+    //标签下的文章路由
+    '/tag/:int' => array(
+        'module' => 'frontend',
+        'controller' => 'index',
+        'action' => 'index',
+        'tid' => 1
+    ),
+
+    '/404' => array(
+        'module' => 'frontend',
+        'controller' => 'index',
+        'action' => 'notfound',
+    )
 );

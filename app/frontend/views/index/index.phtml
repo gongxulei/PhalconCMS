@@ -1,15 +1,99 @@
-<?php $this->partial("layouts/header") ?>
-<div class="banner-bg" id="top">
-    <div class="banner-overlay"></div>
-    <div class="welcome-text"></div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="main-content">
-    <div class="fluid-container">
-        <div class="content-wrapper">fuck 骚骚</div>
-    </div>
-</div>
-<?php $this->partial("layouts/sidebar") ?>
-<?php $this->partial("layouts/footer") ?>
-
+{% if keyword is not empty %}
+    <h1 class="page-title">包含关键字 <span>{{keyword}}</span> 的文章</h1>
+{% elseif cid is not empty %}
+    <h1 class="page-title">分类 <span>{{categorysList[cid]['category_name']}}</span> 下的文章</h1>
+{% elseif tid is not empty %}
+    <h1 class="page-title">标签 <span>{{tagsList[tid]['tag_name']}}</span> 下的文章</h1>
+{% else %}
+    {% if topArticles is not empty %}
+        <div class="top_box">
+            {% for tav in topArticles %}
+                <div class="top_post">
+                    <div class="title">置 顶</div>
+                    <article class="ulist">
+                        <h2>
+                            <a href="{{url(modulePathinfo~'/articles/'~tav['aid'])}}" title="{{tav['title']}}" rel="bookmark">
+                                <i class="icon-eject icon-large"></i>{{tav['title']}}
+                            </a>
+                            <span>{{explode(' ', tav['modify_time'])[0]}}</span>
+                        </h2>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+{% if articles is not empty %}
+    {% for article in articles %}
+        <article class="post_box">
+            <div class="c-top" id="post-4503">
+                {% set modifyTime = explode('-', explode(' ', article['modify_time'])[0]) %}
+                <div class="datetime">{{modifyTime[0]}}<br/>{{modifyTime[1]}}-{{modifyTime[2]}}</div>
+                <header class="tit">
+                    <h2 class="h1">
+                        <a href="{{url(modulePathinfo~'/article/'~article['aid'])}}" title="{{article['title']}}" rel="bookmark">
+                            {{article['title']}}
+                        </a>
+                        {% if article['view_number'] > 10000 %}
+                            <span class='title_hot'>HOT</span>
+                        {% endif %}
+                    </h2>
+                    <aside class="iititle">
+                        <span>
+                            <i class="icon-user icon-large"></i>
+                            <a href="" title="Marser" rel="author">Marser</a>
+                        </span>
+                        <span>
+                            {% if article['categorys'] is not empty %}
+                                <i class="icon-folder-open icon-large"></i>
+                                {% for ck,cv in article['categorys'] %}
+                                    {% if ck==0 %}
+                                        <a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                    {% else %}
+                                        ,<a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                        <span>
+                            <i class="icon-eye-open icon-large"></i> 围观{{article['view_number']}}次
+                        </span>
+                        <span>
+                            <i class="icon-comment-alt icon-large"></i>
+                            <a href="#comments">评论</a>
+                        </span>
+                    </aside>
+                </header>
+            </div>
+            <div class="c-con">
+                <div>
+                    {% if article['head_image'] is not empty %}
+                        <img src="{{article['head_image']}}" alt="{{article['title']}}"/>
+                    {% endif %}
+                    {{article['introduce']}}
+                </div>
+                <a href="{{url(modulePathinfo~'/article/'~article['aid'])}}" class="more-link" rel="contents" title="链向 {{article['title']}}">
+                    查看全文 >
+                </a>
+                <div class="cls"></div>
+            </div>
+            <div class="c-bot">
+                <aside class="cb_bq">
+                    {% if article['tags'] is not empty %}
+                        <i class="icon-tag icon-large"></i>
+                        {% for tk,tv in article['tags'] %}
+                            {% if tk==0 %}
+                                <a href="" rel="tag">{{tv['tag_name']}}</a>
+                            {% else %}
+                                ，<a href="" rel="tag">{{tv['tag_name']}}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </aside>
+                <div class="cls"></div>
+            </div>
+        </article>
+    {% endfor %}
+    <div class="cls"></div>
+{% endif %}
+{{ partial('public/paginator') }}

@@ -45,16 +45,19 @@ class OptionsController extends BaseController{
                 throw new \Exception('非法请求');
             }
             $siteName = $this -> request -> getPost('siteName', 'trim');
+            $siteTitle = $this -> request -> getPost('siteTitle', 'remove_xss');
             $siteUrl = $this -> request -> getPost('siteUrl', 'trim');
             $keywords = $this -> request -> getPost('keywords', 'remove_xss');
             $description = $this -> request -> getPost('description', 'remove_xss');
             /** 添加验证规则 */
             $this -> validator -> add_rule('siteName', 'required', '请填写站点名称')
                 -> add_rule('siteName', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');
+            $this -> validator -> add_rule('siteTitle', 'required', '请填写站点标题');
             !empty($siteUrl) && $this -> validator -> add_rule('siteUrl', 'url', '请填写一个合法的URL地址');
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array(
                 'siteName' => $siteName,
+                'siteTitle' => $siteTitle,
                 'siteUrl' => $siteUrl
             ))) {
                 $error = array_values($error);
@@ -64,6 +67,7 @@ class OptionsController extends BaseController{
             /** 保存配置项 */
             $data = array(
                 'site_name' => $siteName,
+                'site_title' => $siteTitle,
                 'site_url' => $siteUrl,
                 'site_description' => $description,
                 'site_keywords' => $keywords,

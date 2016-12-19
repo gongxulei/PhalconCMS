@@ -119,13 +119,13 @@ class CategorysModel extends BaseModel{
         $sql = "UPDATE " . $this -> getSource() . " SET path=REPLACE(path, :oldPath, :newPath) ";
         $sql .= ' WHERE `path` like :path AND `status` = :status ';
         $stmt = $this -> db -> prepare($sql);
-        $bindArray = array(
+        $bind = array(
             'oldPath' => "{$oldPath}",
             'newPath' => "{$newPath}",
             'path' => "{$oldPath}%",
             'status' => 1
         );
-        $result = $stmt -> execute($bindArray);
+        $result = $stmt -> execute($bind);
         if(!$result){
             throw new \Exception('更新分类路径失败');
         }
@@ -143,7 +143,7 @@ class CategorysModel extends BaseModel{
     public function update_parentcid($newParentcid, $oldParentcid){
         $newParentcid = intval($newParentcid);
         $oldParentcid = intval($oldParentcid);
-        if($newParentcid <= 0 || $oldParentcid <= 0){
+        if($oldParentcid <= 0){
             throw new \Exception('参数错误');
         }
 
@@ -176,13 +176,12 @@ class CategorysModel extends BaseModel{
             throw new \Exception('参数错误');
         }
 
-        $params = array(
+        $result = $this -> findFirst(array(
             'conditions' => 'cid = :cid:',
             'bind' => array(
                 'cid' => $cid
             )
-        );
-        $result = $this -> findFirst($params);
+        ));
         if($result){
             $category = $result -> toArray();
         }

@@ -56,9 +56,10 @@
                                     <option value="{{value['cid']}}">
                                 {% endif %}
                                 {% if value['parent_cid'] > 0 %}
-                                    {{ str_repeat('&nbsp;&nbsp;', substr_count(value['path'], '/')) }}{{value['category_name']}}
-                                {% else %}
+                                    ├─{{ str_repeat('──', substr_count(value['path'], '/')) }}
                                     {{value['category_name']}}
+                                {% else %}
+                                    ├─{{value['category_name']}}
                                 {% endif %}
                                 </option>
                             {% endfor %}

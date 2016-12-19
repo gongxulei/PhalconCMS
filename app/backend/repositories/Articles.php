@@ -53,6 +53,18 @@ class Articles extends BaseRepository{
     }
 
     /**
+     * 更新文章数据
+     * @param array $data
+     * @param $aid
+     * @return int
+     */
+    public function update_record(array $data, $aid){
+        $affectedRows = $this -> get_model('ArticlesModel') -> update_record($data, $aid);
+        $affectedRows = intval($affectedRows);
+        return $affectedRows;
+    }
+
+    /**
      * 保存文章
      * @param array $data
      * @param null $aid

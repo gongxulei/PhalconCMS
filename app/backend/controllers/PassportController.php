@@ -23,7 +23,7 @@ class PassportController extends PhalBaseController{
 
     public function initialize(){
         parent::initialize();
-        $this -> _module_pathinfo = $this -> systemConfig -> get('app', 'backend', 'module_pathinfo');
+        $this -> _module_pathinfo = $this -> systemConfig -> app -> backend -> module_pathinfo;
     }
 
     /**
@@ -32,8 +32,8 @@ class PassportController extends PhalBaseController{
     public function indexAction(){
         $this -> login_check();
         $this -> view -> setVars(array(
-            'title' => $this -> systemConfig -> get('app', 'app_name'),
-            'assetsUrl' => $this -> systemConfig -> get('app', 'backend', 'assets_url'),
+            'title' => $this -> systemConfig -> app -> app_name,
+            'assetsUrl' => $this -> systemConfig -> app -> backend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
             'modulePathinfo' => $this -> _module_pathinfo,
         ));
@@ -98,7 +98,7 @@ class PassportController extends PhalBaseController{
      */
     protected function login_check(){
         if(RepositoryFactory::get_repository('Users') -> login_check()){
-            $url = $this -> url -> get("{$this -> _module_pathinfo}/index/test");
+            $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
             return $this -> response -> redirect($url);
         }
         return false;

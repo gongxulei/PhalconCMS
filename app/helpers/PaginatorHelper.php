@@ -59,6 +59,7 @@ class PaginatorHelper {
         $page = intval($page);
         $page <= 0 && $page = 1;
         empty($url) && $url = $_SERVER['REQUEST_URI'];
+        $url = rtrim($url, '/');
         /** 组装URL */
         $index = strpos($url, '?');
         if($index === false){
@@ -71,7 +72,7 @@ class PaginatorHelper {
         if(!empty($array['query'])){
             parse_str($array['query'], $queryArray);
             $query = http_build_query($queryArray);
-            $str = "{$str}?{$query}";
+            $str = "{$array['scheme']}://{$array['host']}{$str}?{$query}";
         }
         return $str;
     }

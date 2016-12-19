@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * 首页
  * @category PhalconCMS
  * @copyright Copyright (c) 2016 PhalconCMS team (http://www.marser.cn)
  * @license GNU General Public License 2.0
@@ -9,28 +10,232 @@
 
 namespace Marser\App\Frontend\Controllers;
 
-class IndexController extends \Phalcon\Mvc\Controller{
+use \Marser\App\Frontend\Controllers\BaseController,
+    \Marser\App\Helpers\PaginatorHelper;
 
+class IndexController extends BaseController{
+
+    /**
+     * 首页 / 搜索页 / 分类页 / 标签页
+     */
     public function indexAction(){
-        $this->view->setVars(
-            array(
-                'title'         =>  'fronted_title',
-                'content'       =>  'fronted_content',
-                'description'   =>  'description',
-                'my_team'       =>  'zwz,www.marser.cn',
-                'team_desc'     =>  'fuck fuck fuck',
-                'classfy'       =>  array(
-                    'one'   =>  123,
-                    'two'   =>  456,
-                    'three' =>  789
-                ),
-            )
-        );
+        /** 设置置顶文章 */
+        $this -> set_top_articles();
+        /** 设置文章列表 */
+        $this -> set_articles_list();
+        /**设置推荐文章*/
+        $this -> set_recommend_articles();
+        /**设置分类*/
+        $this -> set_categorys();
+        /**设置标签*/
+        $this -> set_tags();
+        /**设置站点统计*/
+        $this -> set_statistic();
+
+        $this -> view -> pick('index/index');
     }
 
-    public function testAction(){
-        $this -> view -> title = 'index/test';
-        $this -> view -> description = 'fuck fuck fuck ';
-        $this -> view -> pick('index/test');
+    /**
+     * 文章页
+     */
+    public function detailAction(){
+        try{
+            /** 设置文章数据 */
+            $this -> set_article();
+            /** 设置前一篇文章 */
+            $this -> set_prev_article();
+            /** 设置后一篇文章 */
+            $this -> set_next_article();
+            /**设置推荐文章*/
+            $this -> set_recommend_articles();
+            /**设置分类*/
+            $this -> set_categorys();
+            /**设置标签*/
+            $this -> set_tags();
+            /**设置站点统计*/
+            $this -> set_statistic();
+
+            $this -> view -> pick('index/detail');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            return $this -> response -> redirect('/404');
+        }
+    }
+
+    /**
+     * 404 not found
+     */
+    public function notfoundAction(){
+        $this -> view -> disableLevel(array(
+            /** 关闭分层渲染 */
+            \Phalcon\Mvc\View::LEVEL_MAIN_LAYOUT => false,
+        ));
+        $this -> view -> pick('index/404');
+    }
+
+    /**
+     * 设置置顶文章
+     */
+    protected function set_top_articles(){
+        $topArticles = $this -> get_repository('Articles') -> get_top_articles();
+        $topArticles = $topArticles -> toArray();
+
+        $this -> view -> setVar('topArticles', $topArticles);
+    }
+
+    /**
+     * 设置文章数据
+     */
+    protected function set_articles_list(){
+        $page = intval($this -> request -> get('page', 'trim'));
+        $keyword = $this -> request -> get('keyword', 'trim');
+        $cid = intval($this -> dispatcher -> getParam('cid', 'trim'));
+        $tid = intval($this -> dispatcher -> getParam('tid', 'trim'));
+        /** 分页获取文章列表 */
+        $pagesize = $this -> get_repository('Options') -> get_option('page_article_number');
+        $paginator = $this -> get_repository('Articles') -> get_list($page, $pagesize, array(
+            'keyword' => $keyword,
+            'cid' => $cid,
+            'tid' => $tid,
+        ));
+        /** 获取分页页码 */
+        $pageNum = PaginatorHelper::get_paginator($paginator->total_items, $page, $pagesize);
+        $articles = $paginator -> items -> toArray();
+        if(is_array($articles) && count($articles) > 0){
+            $aids = array_column($articles, 'aid');
+            /** 根据aids获取分类 */
+            $categorys = $this -> get_repository('Articles') -> get_categorys_by_aids($aids);
+            foreach($categorys as $ck=>$cv){
+                foreach($articles as $ak=>&$av){
+                    if($cv->aid == $av['aid']){
+                        $av['categorys'][] = array(
+                            'cid' => $cv->cid,
+                            'category_name' => $cv->category_name,
+                        );
+                        break;
+                    }
+                }
+            }
+            /** 根据aids获取标签 */
+            $tags = $this -> get_repository('Articles') -> get_tags_by_aids($aids);
+            foreach($tags as $tk=>$tv){
+                foreach($articles as $ak=>&$av){
+                    if($tv->aid == $av['aid']){
+                        $av['tags'][] = array(
+                            'tid' => $tv->tid,
+                            'tag_name' => $tv->tag_name,
+                        );
+                        break;
+                    }
+                }
+            }
+        }
+        $this -> view -> setVars(array(
+            'articles' => $articles,
+            'paginator' => $paginator,
+            'pageNum' => $pageNum,
+            'keyword' => $keyword,
+            'cid' => $cid,
+            'tid' => $tid,
+        ));
+    }
+
+    /**
+     * 设置推荐文章数据
+     */
+    protected function set_recommend_articles(){
+        $recommendPagesize = $this -> get_repository('Options') -> get_option('recommend_article_number');
+        $recommendArticles = $this -> get_repository('Articles') -> get_recommend_articles($recommendPagesize);
+        $recommendArticles = $recommendArticles -> toArray();
+
+        $this -> view -> setVar('recommendArticles', $recommendArticles);
+    }
+
+    /**
+     * 设置分类数据
+     */
+    protected function set_categorys(){
+        $categorysList = $this -> get_repository('Categorys') -> get_category_list();
+
+        $this -> view -> setVar('categorysList', $categorysList);
+    }
+
+    /**
+     * 设置标签数据
+     */
+    protected function set_tags(){
+        $tagsList = $this -> get_repository('Tags') -> get_tags_list();
+        shuffle($tagsList);
+        $tagidArray = array_column($tagsList, 'tid');
+        $tagsList = array_combine($tagidArray, $tagsList);
+
+        $this -> view -> setVar('tagsList', $tagsList);
+    }
+
+    /**
+     * 设置站点统计数据
+     */
+    protected function set_statistic(){
+        $totalArticle = $this -> get_repository('Articles') -> get_count();
+        $totalCategory = $this -> get_repository('Categorys') -> get_count();
+        $totalTag = $this -> get_repository('Tags') -> get_count();
+
+        $this -> view -> setVars(array(
+            'totalArticle' => $totalArticle,
+            'totalCategory' => $totalCategory,
+            'totalTag' => $totalTag,
+        ));
+    }
+
+    /**
+     * 设置文章数据
+     * @throws \Exception
+     */
+    public function set_article(){
+        /** 获取文章数据 */
+        $aid = intval($this->dispatcher->getParam('aid', 'trim'));
+        $article = $this -> get_repository('Articles') -> detail($aid);
+        if(!is_array($article) || count($article) == 0){
+            throw new \Exception('文章不存在', 404);
+        }
+        /** 根据aid获取分类 */
+        $categorys = $this -> get_repository('Articles') -> get_categorys_by_aids([$aid]);
+        foreach($categorys as $ck=>$cv){
+            $article['categorys'][] = array(
+                'cid' => $cv->cid,
+                'category_name' => $cv->category_name,
+            );
+        }
+        /** 根据aid获取标签 */
+        $tags = $this -> get_repository('Articles') -> get_tags_by_aids([$aid]);
+        foreach($tags as $tk=>$tv){
+            $article['tags'][] = array(
+                'tid' => $tv->tid,
+                'tag_name' => $tv->tag_name,
+            );
+        }
+
+        $this -> view -> setVar('article', $article);
+    }
+
+    /**
+     * 设置前一篇文章
+     */
+    protected function set_prev_article(){
+        $aid = intval($this->dispatcher->getParam('aid', 'trim'));
+        $prevArticle = $this -> get_repository('Articles') -> get_prev_article($aid);
+
+        $this -> view -> setVar('prevArticle', $prevArticle);
+    }
+
+    /**
+     * 设置后一篇文章
+     */
+    protected function set_next_article(){
+        $aid = intval($this->dispatcher->getParam('aid', 'trim'));
+        $nextArticle = $this -> get_repository('Articles') -> get_next_article($aid);
+
+        $this -> view -> setVar('nextArticle', $nextArticle);
     }
 }

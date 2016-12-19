@@ -72,7 +72,7 @@ class Options extends BaseRepository{
     public function get_option($key){
         $options = $this -> get_options_list();
         if(is_array($options) && isset($options[$key])){
-            return $options[$key];
+            return $options[$key]['op_value'];
         }
         return false;
     }

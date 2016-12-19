@@ -62,11 +62,13 @@ class FrontendModule implements ModuleDefinitionInterface{
             $view -> setViewsDir($systemConfig -> app -> frontend -> views);
             $view -> registerEngines(array(
                 '.phtml' => function($view, $di) use($systemConfig) {
-                    $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+                    //$volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+                    $volt = new \Marser\App\Core\PhalBaseVolt($view, $di);
                     $volt -> setOptions(array(
                         'compileAlways' => $systemConfig -> app -> frontend -> is_compiled,
                         'compiledPath'  =>  $systemConfig -> app -> frontend -> compiled_path
                     ));
+                    $volt -> initFunction();
                     return $volt;
                 },
             ));

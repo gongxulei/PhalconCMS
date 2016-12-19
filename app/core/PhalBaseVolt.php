@@ -30,6 +30,9 @@ class PhalBaseVolt extends Volt{
 
         /** 添加substr_count函数 */
         $compiler -> addFunction('substr_count', 'substr_count');
+
+        /** 添加explode函数 */
+        $compiler -> addFunction('explode', 'explode');
     }
 
 

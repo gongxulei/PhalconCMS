@@ -1,0 +1,72 @@
+<div id="colophon">
+    <div id="site-info">
+        <a href="javascript:void(0)" onClick="goRoll(0)" id="goTop">返回顶部</a> &nbsp;
+        <a href="http://www.miitbeian.gov.cn/" rel="external nofollow">粤ICP备13067234号</a>
+        <script>
+
+        </script>
+        ©2012-2016 <a href="{{siteUrl}}" rel="index" title="Marser">Marser</a> |
+        <a href="https://github.com/KevinJay/PhalconCMS" target="_blank" title="PhalconCMS">PhalconCMS</a>
+    </div>
+</div>
+<script type='text/javascript' src='{{ assetsUrl }}/assets/js/wp-embed.min.js?_v={{ assetsVersion }}'></script>
+<div id="float">
+    <a id="float_gotop" class="floatbtn" href="javascript:void()" onClick="goRoll(0)" title="返回顶部"></a>
+    <a id="float_goend" class="floatbtn" href="javascript:void()" onClick="goend()" title="转到底部"></a>
+</div>
+<script>
+    if (typeof(SyntaxHighlighter) !== undefined) {
+        var preList = document.getElementsByTagName('pre');
+        for (var i = 0; i < preList.length; i ++) {
+            var children = preList[i].getElementsByTagName('code');
+            if (children.length > 0) {
+                var language = 'plain';
+                var code = children[0], className = code.className;
+                if (!!className) {
+                    var match = XRegExp.exec(className, XRegExp('^lang-(?<language>.*)$'));
+                    if (match && match.language) {
+                        language = match.language;
+                    }
+                }
+                preList[i].className = 'brush: ' + language;
+                preList[i].innerHTML = code.innerHTML;
+            }
+        }
+        SyntaxHighlighter.autoloader(
+            'applescript           {{ assetsUrl }}/highlight/scripts/shBrushAppleScript.js',
+            'ahk autohotkey        {{ assetsUrl }}/highlight/scripts/shBrushAhk.js',
+            'actionscript3 as3     {{ assetsUrl }}/highlight/scripts/shBrushAS3.js',
+            'bash shell            {{ assetsUrl }}/highlight/scripts/shBrushBash.js',
+            'bat cmd batch         {{ assetsUrl }}/highlight/scripts/shBrushBat.js',
+            'coldfusion cf         {{ assetsUrl }}/highlight/scripts/shBrushColdFusion.js',
+            'cpp c                 {{ assetsUrl }}/highlight/scripts/shBrushCpp.js',
+            'c# c-sharp csharp     {{ assetsUrl }}/highlight/scripts/shBrushCSharp.js',
+            'css                   {{ assetsUrl }}/highlight/scripts/shBrushCss.js',
+            'delphi pascal pas     {{ assetsUrl }}/highlight/scripts/shBrushDelphi.js',
+            'diff patch            {{ assetsUrl }}/highlight/scripts/shBrushDiff.js',
+            'erl erlang            {{ assetsUrl }}/highlight/scripts/shBrushErlang.js',
+            'groovy                {{ assetsUrl }}/highlight/scripts/shBrushGroovy.js',
+            'java                  {{ assetsUrl }}/highlight/scripts/shBrushJava.js',
+            'jfx javafx            {{ assetsUrl }}/highlight/scripts/shBrushJavaFX.js',
+            'js jscript javascript {{ assetsUrl }}/highlight/scripts/shBrushJScript.js',
+            'perl pl               {{ assetsUrl }}/highlight/scripts/shBrushPerl.js',
+            'php                   {{ assetsUrl }}/highlight/scripts/shBrushPhp.js',
+            'text plain            {{ assetsUrl }}/highlight/scripts/shBrushPlain.js',
+            'powershell ps         {{ assetsUrl }}/highlight/scripts/shBrushPowerShell.js',
+            'py python             {{ assetsUrl }}/highlight/scripts/shBrushPython.js',
+            'ruby rails ror rb     {{ assetsUrl }}/highlight/scripts/shBrushRuby.js',
+            'sass scss             {{ assetsUrl }}/highlight/scripts/shBrushSass.js',
+            'scala                 {{ assetsUrl }}/highlight/scripts/shBrushScala.js',
+            'sql                   {{ assetsUrl }}/highlight/scripts/shBrushSql.js',
+            'vb vbnet              {{ assetsUrl }}/highlight/scripts/shBrushVb.js',
+            'xml xhtml xslt html   {{ assetsUrl }}/highlight/scripts/shBrushXml.js'
+        );
+        SyntaxHighlighter.defaults['auto-links'] = true;
+        SyntaxHighlighter.defaults['collapse'] = false;
+        SyntaxHighlighter.defaults['gutter'] = true;
+        SyntaxHighlighter.defaults['smart-tabs'] = false;
+        SyntaxHighlighter.defaults['tab-size'] = 4;
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+    }
+</script>

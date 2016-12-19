@@ -97,11 +97,11 @@ class ArticlesController extends BaseController{
             }
             $aid = intval($this -> request -> getPost('aid', 'trim'));
             $title = $this -> request -> getPost('title', 'trim');
-            $markdown = $this -> request -> getPost('content', 'trim');
+            $markdown = $this -> request -> getPost('markdown', 'trim');
             $time = $this -> request -> getPost('time', 'trim');
             $categorys = $this -> request -> getPost('category', 'trim');
             $tagName = $this -> request -> getPost('tags', 'trim');
-            $introduce = $this->request->getPost('introduce', 'trim');
+            $content = $this->request->getPost('content', 'trim');
             $status = intval($this->request->getPost('status', 'trim'));
             /** 添加验证规则 */
             $this -> validator -> add_rule('title', 'required', '请填写标题');
@@ -124,7 +124,6 @@ class ArticlesController extends BaseController{
                 throw new \Exception($error['message'], $error['code']);
             }
             /** 发布文章 */
-            $content = Markdown::defaultTransform($markdown);
             $this -> get_repository('Articles') -> save(array(
                 'title' => $title,
                 'markdown' => $markdown,
@@ -132,7 +131,7 @@ class ArticlesController extends BaseController{
                 'modify_time' => $time,
                 'cid' => $categorys,
                 'tag_name' => $tagName,
-                'introduce' => mb_substr($content, 0, 255),
+                'introduce' => explode('<!--more-->', $content)[0],
                 'status' => $status,
             ), $aid);
 
@@ -164,5 +163,53 @@ class ArticlesController extends BaseController{
         }
         $url = $this -> get_module_uri('articles/index');
         return $this -> response -> redirect($url);
+    }
+
+    /**
+     * 设为 / 取消置顶
+     */
+    public function topAction(){
+        try{
+            $aid = intval($this -> request -> get('aid', 'trim'));
+            $type = intval($this -> request -> get('type', 'trim'));
+
+            $affectedRows = $this -> get_repository('Articles') -> update_record(array(
+                'is_top' => $type,
+            ), $aid);
+            $message = $type == 1 ? '设为置顶' : '取消置顶';
+            if(!$affectedRows){
+                throw new \Exception("{$message}失败");
+            }
+            $this -> flashSession -> success("{$message}成功");
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        return $this -> redirect();
+    }
+
+    /**
+     * 设为 / 取消推荐阅读
+     */
+    public function recommendAction(){
+        try{
+            $aid = intval($this -> request -> get('aid', 'trim'));
+            $type = intval($this -> request -> get('type', 'trim'));
+
+            $affectedRows = $this -> get_repository('Articles') -> update_record(array(
+                'is_recommend' => $type,
+            ), $aid);
+            $message = $type == 1 ? '设为推荐' : '取消推荐';
+            if(!$affectedRows){
+                throw new \Exception("{$message}失败");
+            }
+            $this -> flashSession -> success("{$message}成功");
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            $this -> flashSession -> error($e -> getMessage());
+        }
+        return $this -> redirect();
     }
 }

@@ -33,9 +33,10 @@
                                     <option value="{{value['cid']}}">
                                 {% endif %}
                                 {% if value['parent_cid'] > 0 %}
-                                    {{ str_repeat('&nbsp;&nbsp;', substr_count(value['path'], '/')) }}{{value['category_name']}}
-                                {% else %}
+                                    ├─{{ str_repeat('──', substr_count(value['path'], '/')) }}
                                     {{value['category_name']}}
+                                {% else %}
+                                    ├─{{value['category_name']}}
                                 {% endif %}
                                 </option>
                             {% endfor %}
@@ -66,6 +67,7 @@
                             <th>文章标题</th>
                             <th>分类</th>
                             <th>发布时间</th>
+                            <th>阅读量</th>
                             <th>作者</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -98,11 +100,30 @@
                                         {% endfor %}
                                     </td>
                                     <td>{{article['modify_time']}}</td>
+                                    <td>{{article['view_number']}}次</td>
                                     <td>{{userinfo['realname']}}</td>
                                     <td>
                                         <a class="btn btn-xs btn-info" href="{{ url(modulePathinfo~'/articles/write?aid='~article['aid']) }}" title="编辑文章">
-                                            <i class="icon-pencil bigger-120"></i>
+                                            <i class="icon-edit bigger-120"></i>
                                         </a>
+                                        {% if article['is_top'] == 1 %}
+                                            <a class="btn btn-xs btn-success" href="{{ url(modulePathinfo~'/articles/top?type=0&aid='~article['aid']) }}" title="取消置顶">
+                                                <i class="icon-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-xs btn-success" href="{{ url(modulePathinfo~'/articles/top?type=1&aid='~article['aid']) }}" title="设为置顶">
+                                                <i class="icon-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if article['is_recommend'] == 1 %}
+                                            <a class="btn btn-xs btn-primary" href="{{ url(modulePathinfo~'/articles/recommend?type=0&aid='~article['aid']) }}" title="取消推荐">
+                                                <i class="icon-heart"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-xs btn-primary" href="{{ url(modulePathinfo~'/articles/recommend?type=1&aid='~article['aid']) }}" title="设为推荐">
+                                                <i class="icon-heart-empty"></i>
+                                            </a>
+                                        {% endif %}
                                         <button class="btn btn-xs btn-danger delete-articles" data-url="{{ url(modulePathinfo~'/articles/delete?aid='~article['aid']) }}" title="删除文章">
                                             <i class="icon-trash bigger-120"></i>
                                         </button>

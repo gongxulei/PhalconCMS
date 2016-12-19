@@ -65,44 +65,6 @@ $(document).ready(function(){
     //    event.stopPropagation();
     //});
 
-    $('.delete-category').on('click', function(){
-        var dataUrl = $.trim($(this).attr('data-url'));
-        if(!window.confirm('确定要删除选中分类吗？此操作不可挽回')){
-            return false;
-        }
-        window.location.href = dataUrl;
-    });
-
-    $.fn.editable.defaults.mode = 'popup';
-    $('.category-sort-block').editable({
-        params:function(params){
-            params.sort = params.value;
-            params.cid = params.pk;
-            if(params.sort <= 0 || params.sort > 999){
-                params.sort = 999;
-            }
-            return params;
-        },
-        success:function(response, value){
-            if (typeof response !== 'object') response = JSON.parse(response);
-            if(response.code == 1){
-                tips_message(response.message, 'success');
-            }else{
-                tips_message(response.message, 'error');
-            }
-            return true;
-        },
-        error:function(response){
-            tips_message('网络错误，请重试');
-        },
-        display:function(value){
-            if(value <= 0 || value > 999){
-                value = 999;
-            }
-            $(this).html(value);
-        }
-    });
-
     $('#tag-btn').on('click', function(){
         var tagName = $.trim($('#tag-name').val());
         var tagNamePattern = /^[\u4e00-\u9fa5\w-]+$/i;

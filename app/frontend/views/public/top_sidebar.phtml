@@ -1,0 +1,155 @@
+<header class="header marauto">
+    <span class="logo">
+        <a href="{{siteUrl}}" title="{{siteName}}">
+            <b class="bclass">{{siteName}}</b>
+        </a>
+        <i>{{siteTitle}}</i>
+    </span>
+    <form role="search" method="get" id="searchform" action="/search">
+        <span class="search">
+            <input name="keyword" id="s" type="text" class="input" value="请输入关键词开始搜索吧" onclick="this.value = '';"
+                   style="color:#999" onkeypress="javascript:if(event.keyCode == 13){query(this.value);}"
+                   x-webkit-speech=""/>
+            <button id="searchsubmit" class="btn">搜索</button>
+        </span>
+    </form>
+    <div class="cls"></div>
+</header>
+<div class="nav marauto">
+    <div class="tig">
+        <a href="" target="_self" rel="nofollow" title="为FRONTOPEN投稿">
+            <span class="sub">欢迎投稿</span>
+        </a>
+        <a href="https://github.com/KevinJay/PhalconCMS" target="_blank">
+            <span id="rss_open" class="rrs">GitHub</span>
+        </a>
+        <div class="rss_box">
+            <a class="close_rss" href="#"></a>
+            <span>邮件订阅</span> - 最后更新：
+            <time>2016-07-21</time>
+            <br><br>
+            <form class="subscribe-mail" action="http://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post">
+                <input type="hidden" name="t" value="qf_booked_feedback">
+                <input type="hidden" name="id" value="cf53846928e2bdd9141bf81f05aca64e0bddd28eb977d267">
+                <input class="rss_input" id="to" name="to" type="email" placeholder="Your E-mail">
+                <input class="rss_submit" type="submit" value="订阅">
+            </form>
+            <div class="ress_btn_box">
+                订阅源：<a target="_blank" href="//feed" rel="alternate" type="application/rss+xml" title="rss Feed">RSS</a>
+                <a target="_blank" rel="external nofollow" href="http://mail.qq.com/cgi-bin/feed?u=//feed">QQ邮箱</a>
+            </div>
+        </div>
+        <div class="gonggao">
+            <ul id="g_box">
+                <li>
+                        <span class="gg_tx">
+                            <i class="icon-volume-off icon-large"></i> frontopen主题V1.5.04.15版本已发布 推荐更新！
+                            <a href="//1378.html">点击查看</a>
+                        </span>
+                </li>
+                <li>
+                        <span class="gg_tx">
+                            <i class="icon-volume-off icon-large"></i> frontopen “讨论区” 2013-12-29正式上线
+                            <a href="//bbs">点击开始体验</a>
+                        </span>
+                </li>
+                <li>
+                        <span class="gg_tx">
+                            <i class="icon-volume-off icon-large"></i> 鸣谢主题捐赠者：感叹帝,Calon YE，孙玉龙，魂客，创想，孜夕寒
+                        </span>
+                </li>
+                <li>
+                        <span class="gg_tx">
+                            <i class="icon-volume-off icon-large"></i> 顾余笑，小菜，晨风，菠菜，*忠杰，浪子，99开发赞助，IT江湖，小熊
+                        </span>
+                </li>
+                <li>
+                        <span class="gg_tx">
+                            <i class="icon-volume-off icon-large"></i> 如果发现更新最新版出现缩略图无法显示，请先装回v1.4.03.02版本
+                        </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="navlist">
+        <dl>
+            <dt>
+                <a href="/dashiji" title="FRONTOPEN大事记" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
+                    <img src="{{ assetsUrl }}/assets/image/dsj.gif" width="45" height="45">
+                </a>
+            </dt>
+            <dd>EVENT</dd>
+        </dl>
+        <dl>
+            <dt>
+                <a href="/front-open" title="关于FrontOpen" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
+                    <img src="{{ assetsUrl }}/assets/image/nav_1.gif" width="45" height="45">
+                </a>
+            </dt>
+            <dd>ABOUT</dd>
+        </dl>
+        <dl>
+            <dt>
+                <a href="/contact" title="联系站长" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
+                    <img src="{{ assetsUrl }}/assets/image/conc.gif" width="45" height="45">
+                </a>
+            </dt>
+            <dd>CONTACT</dd>
+        </dl>
+        <dl>
+            <dt>
+                <a href="/webtools" title="web前端工具箱" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
+                    <img src="{{ assetsUrl }}/assets/image/tools.gif" width="45" height="45">
+                </a>
+            </dt>
+            <dd>TOOLS</dd>
+        </dl>
+        <dl>
+            <dt>
+                <a href="/front_tutorial" title="《前端开发从零学起》从基础到深入学习教程" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
+                    <img src="{{ assetsUrl }}/assets/image/tutorial.gif" width="45" height="45">
+                </a>
+            </dt>
+            <dd>TUTORIAL</dd>
+        </dl>
+        <div class="cls"></div>
+    </div>
+</div>
+
+<nav class="navcon marauto">
+    <div id="mobile_nav_btn">网站导航</div>
+    <div class="menu-header">
+        <ul id="menu-wplook-main-menu" class="menu">
+            {% if menuList is not empty %}
+                {% set prevMuneId = '' %}
+                {% for mk,menu in menuList %}
+                    {% if menu['parent_mid'] == 0 and menu['leaf_node'] == 1 %}
+                        {% if menuList[prevMuneId]['parent_mid'] != 0 %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                        <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-has-children menu-item-{{menu['mid']}}">
+                            <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                        </li>
+                    {% else %}
+                        {% if menu['parent_mid'] == 0 and menu['leaf_node'] == 0 %}
+                            {% if menuList[prevMuneId]['parent_mid'] != 0 %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-has-children menu-item-{{menu['mid']}}">
+                                <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                                <ul class="sub-menu">
+                        {% else %}
+                            <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-{{menu['mid']}}">
+                                <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% set prevMuneId = mk %}
+                {% endfor %}
+            {% endif %}
+            <div class="cls"></div>
+        </ul>
+    </div>
+</nav>
