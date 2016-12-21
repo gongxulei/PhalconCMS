@@ -84,4 +84,26 @@ class CategorysModel extends BaseModel{
         }
         return $categoryList;
     }
+
+    /**
+     * 根据缩略名获取分类数据
+     * @param $slug
+     * @return static
+     * @throws \Exception
+     */
+    public function get_category_by_slug($slug){
+        if(empty($slug)){
+            throw new \Exception('参数错误');
+        }
+        $result = $this -> findFirst(array(
+            'conditions' => 'slug = :slug:',
+            'bind' => array(
+                'slug' => $slug
+            )
+        ));
+        if(!$result){
+            throw new \Exception('获取分类数据失败');
+        }
+        return $result;
+    }
 }

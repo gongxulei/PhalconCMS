@@ -70,6 +70,15 @@ class Tags extends BaseRepository{
         return $tagsList;
     }
 
+    /**
+     * 根据缩略名获取标签数据
+     * @param $slug
+     * @return mixed
+     */
+    public function get_tag_by_slug($slug){
+        $tag = $this -> get_model('TagsModel') -> get_tag_by_slug($slug);
+        return $tag;
+    }
 
 
 }

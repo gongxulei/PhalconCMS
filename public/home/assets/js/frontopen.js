@@ -76,7 +76,7 @@ jQuery(function($) {
 
     if($('#g_box li')[0] && $('#g_box li').length > 1){
         $('.gonggao').show()
-        var tId = setInterval(gg_roll,6000)
+        var tId = setInterval(gg_roll,5000)
     }else if($('#g_box li')[0]){
         $('.gonggao').show()
     }

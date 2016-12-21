@@ -91,8 +91,20 @@ class IndexController extends BaseController{
     protected function set_articles_list(){
         $page = intval($this -> request -> get('page', 'trim'));
         $keyword = $this -> request -> get('keyword', 'trim');
-        $cid = intval($this -> dispatcher -> getParam('cid', 'trim'));
-        $tid = intval($this -> dispatcher -> getParam('tid', 'trim'));
+        $category = $this -> dispatcher -> getParam('category', 'trim');
+        $tag = $this -> dispatcher -> getParam('tag', 'trim');
+        if(is_string($category)){
+            $category = $this -> get_repository('Categorys') -> get_category_by_slug($category);
+            $cid = $category -> cid;
+        }else{
+            $cid = $category;
+        }
+        if(is_string($tag)){
+            $tag = $this -> get_repository('Tags') -> get_tag_by_slug($tag);
+            $tid = $tag -> tid;
+        }else{
+            $tid = $tag;
+        }
         /** 分页获取文章列表 */
         $pagesize = $this -> get_repository('Options') -> get_option('page_article_number');
         $paginator = $this -> get_repository('Articles') -> get_list($page, $pagesize, array(

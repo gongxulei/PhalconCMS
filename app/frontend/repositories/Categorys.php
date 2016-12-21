@@ -62,6 +62,16 @@ class Categorys extends BaseRepository{
     }
 
     /**
+     * 根据缩略名获取分类数据
+     * @param $slug
+     * @return mixed
+     */
+    public function get_category_by_slug($slug){
+        $category = $this -> get_model('CategorysModel') -> get_category_by_slug($slug);
+        return $category;
+    }
+
+    /**
      * 统计分类总数
      * @return int
      */

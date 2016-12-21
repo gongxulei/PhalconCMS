@@ -35,19 +35,19 @@ return array(
     ),
 
     //分类下的文章路由
-    '/category/:int' => array(
+    '/category/([a-zA-Z0-9\_\-]+)' => array(
         'module' => 'frontend',
         'controller' => 'index',
         'action' => 'index',
-        'cid' => 1
+        'category' => 1
     ),
 
     //标签下的文章路由
-    '/tag/:int' => array(
+    '/tag/([a-zA-Z0-9\_\-]+)' => array(
         'module' => 'frontend',
         'controller' => 'index',
         'action' => 'index',
-        'tid' => 1
+        'tag' => 1
     ),
 
     '/404' => array(
