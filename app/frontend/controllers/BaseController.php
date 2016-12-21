@@ -27,7 +27,7 @@ class BaseController extends PhalBaseController{
         $this -> view -> setVars(array(
             'siteName' => $this -> get_repository('Options') -> get_option('site_name'),
             'siteTitle' => $this -> get_repository('Options') -> get_option('site_title'),
-            'siteUrl' => rtrim($this -> get_repository('Options') -> get_option('site_url'), '/') . '/',
+            'siteUrl' => rtrim($this -> get_repository('Options') -> get_option('site_url'), '/'),
             'siteDescription' => $this -> get_repository('Options') -> get_option('site_description'),
             'siteKeywords' => $this -> get_repository('Options') -> get_option('site_keywords'),
             'menuList' => $this -> get_repository('Menu') -> get_menu_list(),

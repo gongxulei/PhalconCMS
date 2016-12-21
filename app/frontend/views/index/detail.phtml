@@ -8,16 +8,20 @@
                 <aside class="entry-meta iititle2">
                     <span>
                         <i class="icon-user icon-large"></i>
-                        <a href="" title="Marser" rel="author">Marser</a>
+                        <a href="javascript:void(0);" title="Marser" rel="author">Marser</a>
                     </span>
                     <span>
                         {% if article['categorys'] is not empty %}
                             <i class="icon-folder-open icon-large"></i>
                             {% for ck,cv in article['categorys'] %}
                                 {% if ck==0 %}
-                                    <a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                    <a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
+                                        {{cv['category_name']}}
+                                    </a>
                                 {% else %}
-                                    ,<a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                    ,<a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
+                                        {{cv['category_name']}}
+                                    </a>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -27,7 +31,7 @@
                     </span>
                     <span>
                         <i class="icon-comment-alt icon-large"></i>
-                        <a href="">评论</a>
+                        <a href="#comments">评论</a>
                     </span>
                     <span>
                         <i class="icon-zoom-in icon-large"></i> 字体：
@@ -47,9 +51,17 @@
                         标签：
                         {% for tk,tv in article['tags'] %}
                             {% if tk==0 %}
-                                <span><a href="#" rel="tag">{{tv['tag_name']}}</a></span>
+                                <span>
+                                    <a href={{url("tag/"~tv['tid']~".html")}} title="{{tv['tag_name']}}" rel="tag">
+                                        {{tv['tag_name']}}
+                                    </a>
+                                </span>
                             {% else %}
-                                ,<span><a href="#" rel="tag">{{tv['tag_name']}}</a></span>
+                                ,<span>
+                                    <a href={{url("tag/"~tv['tid']~".html")}} title="{{tv['tag_name']}}" rel="tag">
+                                        {{tv['tag_name']}}
+                                    </a>
+                                </span>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -60,11 +72,11 @@
                 <ul>
                     <li>本站文章除注明转载外，均为本站原创</li>
                     <li>欢迎任何形式的转载，但请务必注明出处，尊重他人劳动</li>
-                    <li>转载请注明：文章转载自：Marser [<a href="{{siteUrl}}" title="Marser" rel="bookmark">{{siteUrl}}</a>]</li>
-                    <li>本文标题：<a href="{{siteUrl}}" title="{{article['title']}}" rel="bookmark">{{article['title']}}</a></li>
+                    <li>转载请注明：文章转载自：Marser [<a href="{{siteUrl}}" title="Marser" rel="index">{{siteUrl}}</a>]</li>
+                    <li>本文标题：<a href={{url("article/"~article['aid']~".html")}} title="{{article['title']}}" rel="bookmark">{{article['title']}}</a></li>
                     <li>本文固定链接：
-                        <a href="{{article['aid']}}" rel="bookmark" title="{{article['title']}}">
-                            {{siteUrl}}/article/{{article['aid']}}
+                        <a href={{url("article/"~article['aid']~".html")}} rel="bookmark" title="{{article['title']}}">
+                            {{url(siteUrl~"article/"~article['aid']~".html")}}
                         </a>
                     </li>
                 </ul>
@@ -75,7 +87,7 @@
     <div id="nav-below" class="navigation">
         <div class="nav-previous">
             {% if prevAritcle is not empty %}
-                <a href="" rel="next">
+                <a href={{url("article/"~prevArticle['aid']~".html")}} title="{{prevArticle['title']}}" rel="next">
                     <i class="icon-arrow-left"></i>
                     {{prevArticle['title']}}
                 </a>
@@ -88,7 +100,7 @@
         </div>
         <div class="nav-next">
             {% if nextArticle is not empty %}
-                <a href="" rel="next">
+                <a href={{url("article/"~nextArticle['aid']~".html")}} title="nextArticle['title']" rel="next">
                     {{nextArticle['title']}}
                     <i class="icon-arrow-right"></i>
                 </a>
@@ -107,7 +119,7 @@
             <ul>
                 {% for gv in guessYouLike %}
                     <li>
-                        <a href="/article/{{gv['aid']}}" rel="bookmark" title="{{gv['title']}}">
+                        <a href={{url("article/"~gv['aid']~".html")}} rel="bookmark" title="{{gv['title']}}">
                             {{gv['title']}}
                         </a>
                     </li>

@@ -68,11 +68,11 @@ class PaginatorHelper {
             $url = "{$url}&page={$page}";
         }
         $array = parse_url($url);
-        $str = $array['path'];
+        $str = isset($array['path']) ? $array['path'] : '';
         if(!empty($array['query'])){
             parse_str($array['query'], $queryArray);
             $query = http_build_query($queryArray);
-            $str = "{$array['scheme']}://{$array['host']}{$str}?{$query}";
+            $str = "{$str}?{$query}";
         }
         return $str;
     }

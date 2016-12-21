@@ -19,20 +19,26 @@ class IndexController extends BaseController{
      * 首页 / 搜索页 / 分类页 / 标签页
      */
     public function indexAction(){
-        /** 设置置顶文章 */
-        $this -> set_top_articles();
-        /** 设置文章列表 */
-        $this -> set_articles_list();
-        /**设置推荐文章*/
-        $this -> set_recommend_articles();
-        /**设置分类*/
-        $this -> set_categorys();
-        /**设置标签*/
-        $this -> set_tags();
-        /**设置站点统计*/
-        $this -> set_statistic();
+        try {
+            /** 设置置顶文章 */
+            $this->set_top_articles();
+            /** 设置文章列表 */
+            $this->set_articles_list();
+            /**设置推荐文章*/
+            $this->set_recommend_articles();
+            /**设置分类*/
+            $this->set_categorys();
+            /**设置标签*/
+            $this->set_tags();
+            /**设置站点统计*/
+            $this->set_statistic();
 
-        $this -> view -> pick('index/index');
+            $this->view->pick('index/index');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            return $this -> response -> redirect('/404');
+        }
     }
 
     /**
@@ -91,27 +97,30 @@ class IndexController extends BaseController{
     protected function set_articles_list(){
         $page = intval($this -> request -> get('page', 'trim'));
         $keyword = $this -> request -> get('keyword', 'trim');
-        $category = $this -> dispatcher -> getParam('category', 'trim');
-        $tag = $this -> dispatcher -> getParam('tag', 'trim');
-        if(is_string($category)){
-            $category = $this -> get_repository('Categorys') -> get_category_by_slug($category);
-            $cid = $category -> cid;
-        }else{
-            $cid = $category;
+        $ext['keyword'] = $keyword;
+        if($this -> dispatcher -> hasParam('category')){
+            $category = $this -> dispatcher -> getParam('category', 'trim');
+            if(intval($category) <= 0){
+                $category = $this -> get_repository('Categorys') -> get_category_by_slug($category);
+                $cid = $category -> cid;
+            }else{
+                $cid = intval($category);
+            }
+            $ext['cid'] = $cid;
         }
-        if(is_string($tag)){
-            $tag = $this -> get_repository('Tags') -> get_tag_by_slug($tag);
-            $tid = $tag -> tid;
-        }else{
-            $tid = $tag;
+        if($this -> dispatcher -> hasParam('tag')){
+            $tag = $this -> dispatcher -> getParam('tag', 'trim');
+            if(intval($tag) <= 0){
+                $tag = $this -> get_repository('Tags') -> get_tag_by_slug($tag);
+                $tid = $tag -> tid;
+            }else{
+                $tid = intval($tag);
+            }
+            $ext['tid'] = $tid;
         }
         /** 分页获取文章列表 */
         $pagesize = $this -> get_repository('Options') -> get_option('page_article_number');
-        $paginator = $this -> get_repository('Articles') -> get_list($page, $pagesize, array(
-            'keyword' => $keyword,
-            'cid' => $cid,
-            'tid' => $tid,
-        ));
+        $paginator = $this -> get_repository('Articles') -> get_list($page, $pagesize, $ext);
         /** 获取分页页码 */
         $pageNum = PaginatorHelper::get_paginator($paginator->total_items, $page, $pagesize);
         $articles = $paginator -> items -> toArray();

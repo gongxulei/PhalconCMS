@@ -109,7 +109,7 @@
                         </li>
                         {% endif %}
                         <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-has-children menu-item-{{menu['mid']}}">
-                            <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                            <a href={{url(menu['menu_url']~".html")}} rel="bookmark" title="{{menu['menu_name']}}">{{menu['menu_name']}}</a>
                         </li>
                     {% else %}
                         {% if menu['parent_mid'] == 0 and menu['leaf_node'] == 0 %}
@@ -118,11 +118,11 @@
                                 </li>
                             {% endif %}
                             <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-has-children menu-item-{{menu['mid']}}">
-                                <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                                <a href={{url(menu['menu_url']~".html")}} rel="bookmark" title="{{menu['menu_name']}}">{{menu['menu_name']}}</a>
                                 <ul class="sub-menu">
                         {% else %}
                             <li id="menu-item-{{menu['mid']}}" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-{{menu['mid']}}">
-                                <a href="{{menu['menu_url']}}">{{menu['menu_name']}}</a>
+                                <a href={{url(menu['menu_url']~".html")}} rel="bookmark" title="{{menu['menu_name']}}">{{menu['menu_name']}}</a>
                             </li>
                         {% endif %}
                     {% endif %}

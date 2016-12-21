@@ -73,7 +73,7 @@
             <ul class="advanced-random-posts">
                 {% for rv in recommendArticles %}
                     <li>
-                        <a href="/article/{{rv['aid']}}" title="{{rv['title']}}" rel="bookmark">{{rv['title']}}</a>
+                        <a href={{url("article/"~rv['aid']~".html")}} title="{{rv['title']}}" rel="bookmark">{{rv['title']}}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -84,7 +84,7 @@
             <ul class='xoxo blogroll'>
                 {% for clk, clv in categorysList %}
                     <li>
-                        <a href="/category/{{clv['cid']}}" rel="bookmark">
+                        <a href={{url("category/"~clv['cid']~".html")}} rel="bookmark" title="{{clv['category_name']}}">
                             {{clv['category_name']}}
                         </a>
                     </li>
@@ -97,7 +97,7 @@
         <h3 class="widget-title">标签</h3>
         <div class="tagcloud">
             {% for tlk,tlv in tagsList %}
-                <a href="/tag/{{tlv['tid']}}" class='tag-link-{{tlk}}' title="{{tlv['tag_name']}}" rel="bookmark">{{tlv['tag_name']}}</a>
+                <a href={{url("tag/"~tlv['tid']~".html")}} class='tag-link-{{tlk}}' title="{{tlv['tag_name']}}" rel="bookmark">{{tlv['tag_name']}}</a>
             {% endfor %}
         </div>
     </li>

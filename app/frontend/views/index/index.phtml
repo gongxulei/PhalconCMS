@@ -12,7 +12,7 @@
                     <div class="title">置 顶</div>
                     <article class="ulist">
                         <h2>
-                            <a href="{{url(modulePathinfo~'/articles/'~tav['aid'])}}" title="{{tav['title']}}" rel="bookmark">
+                            <a href={{url("article/"~tav['aid']~".html")}} title="{{tav['title']}}" rel="bookmark">
                                 <i class="icon-eject icon-large"></i>{{tav['title']}}
                             </a>
                             <span>{{explode(' ', tav['modify_time'])[0]}}</span>
@@ -31,7 +31,7 @@
                 <div class="datetime">{{modifyTime[0]}}<br/>{{modifyTime[1]}}-{{modifyTime[2]}}</div>
                 <header class="tit">
                     <h2 class="h1">
-                        <a href="{{url(modulePathinfo~'/article/'~article['aid'])}}" title="{{article['title']}}" rel="bookmark">
+                        <a href={{url("article/"~article['aid']~".html")}} title="{{article['title']}}" rel="bookmark">
                             {{article['title']}}
                         </a>
                         {% if article['view_number'] > 10000 %}
@@ -41,16 +41,20 @@
                     <aside class="iititle">
                         <span>
                             <i class="icon-user icon-large"></i>
-                            <a href="" title="Marser" rel="author">Marser</a>
+                            <a href="javascript:void(0);" title="Marser" rel="author">Marser</a>
                         </span>
                         <span>
                             {% if article['categorys'] is not empty %}
                                 <i class="icon-folder-open icon-large"></i>
                                 {% for ck,cv in article['categorys'] %}
                                     {% if ck==0 %}
-                                        <a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                        <a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
+                                            {{cv['category_name']}}
+                                        </a>
                                     {% else %}
-                                        ,<a href="#" rel="category tag">{{cv['category_name']}}</a>
+                                        ,<a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
+                                            {{cv['category_name']}}
+                                        </a>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
@@ -72,7 +76,7 @@
                     {% endif %}
                     {{article['introduce']}}
                 </div>
-                <a href="{{url(modulePathinfo~'/article/'~article['aid'])}}" class="more-link" rel="contents" title="链向 {{article['title']}}">
+                <a href={{url("article/"~article['aid']~".html")}} class="more-link" rel="contents" title="{{article['title']}}">
                     查看全文 >
                 </a>
                 <div class="cls"></div>
@@ -83,9 +87,13 @@
                         <i class="icon-tag icon-large"></i>
                         {% for tk,tv in article['tags'] %}
                             {% if tk==0 %}
-                                <a href="" rel="tag">{{tv['tag_name']}}</a>
+                                <a href={{url("tag/"~tv['tid']~".html")}} title="{{tv['tag_name']}}" rel="tag">
+                                    {{tv['tag_name']}}
+                                </a>
                             {% else %}
-                                ，<a href="" rel="tag">{{tv['tag_name']}}</a>
+                                ，<a href={{url("tag/"~tv['tid']~".html")}} title="{{tv['tag_name']}}" rel="tag">
+                                    {{tv['tag_name']}}
+                                </a>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
