@@ -122,10 +122,10 @@ class Articles extends  BaseRepository{
      * @return array
      */
     public function guess_you_like(array $cids, array $tids, $aid, $pagesize=10){
-        $articles = $this -> get_model('ArticlesCategorysModel') -> guess_you_like($cids, $aid, $pagesize);
+        $articles = $this -> get_model('ArticlesTagsModel') -> guess_you_like($tids, $aid, $pagesize);
         $articles = $articles -> toArray();
         if(count($articles) < $pagesize){
-            $result = $this -> get_model('ArticlesTagsModel') -> guess_you_like($tids, $aid, $pagesize - count($articles));
+            $result = $this -> get_model('ArticlesCategorysModel') -> guess_you_like($cids, $aid, $pagesize - count($articles));
             $result = $result -> toArray();
             $articles = array_merge($articles, $result);
         }
