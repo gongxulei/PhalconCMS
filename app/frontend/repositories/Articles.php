@@ -113,4 +113,23 @@ class Articles extends  BaseRepository{
         return $count;
     }
 
+    /**
+     * 获取猜你喜欢的文章数据
+     * @param array $cids
+     * @param array $tids
+     * @param $aid
+     * @param int $pagesize
+     * @return array
+     */
+    public function guess_you_like(array $cids, array $tids, $aid, $pagesize=10){
+        $articles = $this -> get_model('ArticlesCategorysModel') -> guess_you_like($cids, $aid, $pagesize);
+        $articles = $articles -> toArray();
+        if(count($articles) < $pagesize){
+            $result = $this -> get_model('ArticlesTagsModel') -> guess_you_like($tids, $aid, $pagesize - count($articles));
+            $result = $result -> toArray();
+            $articles = array_merge($articles, $result);
+        }
+        return $articles;
+    }
+
 }

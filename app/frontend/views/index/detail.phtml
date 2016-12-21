@@ -101,18 +101,19 @@
         </div>
     </div>
     <div class="cls"></div>
-    <div class="relatedposts">
-        <h3 class="widget-title"><i class="icon-warning-sign"></i> 您可能还会对这些文章感兴趣！</h3>
-        <ul>
-            <li><a href="http://www.frontopen.com/2898.html" rel="bookmark" title="详细阅读 wordpress后台打开缓慢的临时解决方法">wordpress后台打开缓慢的临时解决方法</a></li>
-            <li><a href="http://www.frontopen.com/2501.html" rel="bookmark" title="详细阅读 frontopen主题v1.4.04.05更新升级日志">frontopen主题v1.4.04.05更新升级日志</a></li>
-            <li><a href="http://www.frontopen.com/2421.html" rel="bookmark" title="详细阅读 关于frontopen v140330更新后“提请审批”解决方案">关于frontopen v140330更新后“提请审批”解决方案</a></li>
-            <li><a href="http://www.frontopen.com/2357.html" rel="bookmark" title="详细阅读 调用wordpress自带jquery库的方法与注意事项">调用wordpress自带jquery库的方法与注意事项</a></li>
-            <li><a href="http://www.frontopen.com/2349.html" rel="bookmark" title="详细阅读 为wordpress数据库添加数据表的方法">为wordpress数据库添加数据表的方法</a></li>
-            <li><a href="http://www.frontopen.com/2222.html" rel="bookmark" title="详细阅读 关于frontopen主题中发布音乐的使用方法">关于frontopen主题中发布音乐的使用方法</a></li>
-            <li><a href="http://www.frontopen.com/2045.html" rel="bookmark" title="详细阅读 让文章标题链接添加动态载入效果">让文章标题链接添加动态载入效果</a></li>
-            <li><a href="http://www.frontopen.com/2025.html" rel="bookmark" title="详细阅读 frontopen主题v1.4.03.08更新升级日志">frontopen主题v1.4.03.08更新升级日志</a></li>
-        </ul>
-        <div class="cls"></div>
-    </div>
+    {% if guessYouLike is not empty %}
+        <div class="relatedposts">
+            <h3 class="widget-title"><i class="icon-warning-sign"></i> 您可能还会对这些文章感兴趣！</h3>
+            <ul>
+                {% for gv in guessYouLike %}
+                    <li>
+                        <a href="/article/{{gv['aid']}}" rel="bookmark" title="{{gv['title']}}">
+                            {{gv['title']}}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="cls"></div>
+        </div>
+    {% endif %}
 </div>

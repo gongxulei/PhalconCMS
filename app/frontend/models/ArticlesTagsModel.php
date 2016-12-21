@@ -48,4 +48,39 @@ class ArticlesTagsModel extends BaseModel{
         }
         return $result;
     }
+
+    /**
+     * 根据标签获取猜你喜欢的文章
+     * @param array $tids
+     * @param int $aid
+     * @param int $pagesize
+     * @return mixed
+     * @throws \Exception
+     */
+    public function guess_you_like(array $tids, $aid, $pagesize=10){
+        $pagesize = intval($pagesize);
+        $pagesize <= 0 && $pagesize = 10;
+        if(count($tids) == 0){
+            throw new \Exception('参数错误');
+        }
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->from(array('ats' => __CLASS__));
+        $builder->addFrom(__NAMESPACE__.'\\ArticlesModel', 'a');
+        $builder->columns(array(
+            'a.aid', 'a.title'
+        ));
+        $result = $builder->where('ats.tid IN ({tid:array})', array('tid'=>$tids))
+            ->andWhere('ats.aid != :aid:', array('aid' => $aid))
+            ->andWhere('ats.aid = a.aid')
+            ->andWhere('a.status = :status:', array('status' => 1))
+            ->orderBy("a.view_number ASC")
+            ->groupBy("a.aid")
+            ->limit($pagesize)
+            ->getQuery()
+            ->execute();
+        if(!$result){
+            throw new \Exception('获取数据失败');
+        }
+        return $result;
+    }
 }

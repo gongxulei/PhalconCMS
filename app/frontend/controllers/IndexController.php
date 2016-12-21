@@ -42,6 +42,7 @@ class IndexController extends BaseController{
         try{
             /** 设置文章数据 */
             $this -> set_article();
+            /***/
             /** 设置前一篇文章 */
             $this -> set_prev_article();
             /** 设置后一篇文章 */
@@ -215,8 +216,25 @@ class IndexController extends BaseController{
                 'tag_name' => $tv->tag_name,
             );
         }
+        /** 设置猜你喜欢文章数据 */
+        $cids = array_column($article['categorys'], 'cid');
+        $tids = array_column($article['tags'], 'tid');
+        $this -> set_guess_you_like($cids, $tids, $aid);
 
         $this -> view -> setVar('article', $article);
+    }
+
+    /**
+     * 设置猜你喜欢的文章数据
+     * @param array $cids
+     * @param array $tids
+     * @param $aid
+     */
+    protected function set_guess_you_like(array $cids, array $tids, $aid){
+        $pagesize = $this -> get_repository('Options') -> get_option('relate_article_number');
+        $articles = $this -> get_repository('Articles') -> guess_you_like($cids, $tids, $aid, $pagesize);
+
+        $this -> view ->setVar('guessYouLike', $articles);
     }
 
     /**

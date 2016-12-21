@@ -47,4 +47,39 @@ class ArticlesCategorysModel extends BaseModel{
         }
         return $result;
     }
+
+    /**
+     * 根据分类获取猜你喜欢的文章
+     * @param array $cids
+     * @param int $aid
+     * @param int $pagesize
+     * @return mixed
+     * @throws \Exception
+     */
+    public function guess_you_like(array $cids, $aid, $pagesize=10){
+        $pagesize = intval($pagesize);
+        $pagesize <= 0 && $pagesize = 10;
+        if(count($cids) == 0){
+            throw new \Exception('参数错误');
+        }
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->from(array('ac' => __CLASS__));
+        $builder->addFrom(__NAMESPACE__.'\\ArticlesModel', 'a');
+        $builder->columns(array(
+            'a.aid', 'a.title'
+        ));
+        $result = $builder->where('ac.cid IN ({cid:array})', array('cid'=>$cids))
+            ->andWhere('ac.aid != :aid:', array('aid' => $aid))
+            ->andWhere('ac.aid = a.aid')
+            ->andWhere('a.status = :status:', array('status' => 1))
+            ->orderBy("a.view_number ASC")
+            ->groupBy("a.aid")
+            ->limit($pagesize)
+            ->getQuery()
+            ->execute();
+        if(!$result){
+            throw new \Exception('获取数据失败');
+        }
+        return $result;
+    }
 }

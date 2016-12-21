@@ -76,7 +76,7 @@ jQuery(function($) {
 
     if($('#g_box li')[0] && $('#g_box li').length > 1){
         $('.gonggao').show()
-        var tId = setInterval(gg_roll,5000)
+        var tId = setInterval(gg_roll,6000)
     }else if($('#g_box li')[0]){
         $('.gonggao').show()
     }
@@ -517,7 +517,7 @@ jQuery(function($){
 
 //公告滚动函数
 function gg_roll(){
-    //jQuery('#g_box').animate({'top':'-20px'},600,function(){jQuery('#g_box').css('top','0');move_GG_li()});
+    jQuery('#g_box').animate({'top':'-20px'},600,function(){jQuery('#g_box').css('top','0');move_GG_li()});
 }
 function move_GG_li(){
     var first = jQuery('#g_box li').first();
