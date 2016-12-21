@@ -187,13 +187,13 @@ jQuery(function($) {
         $(this).children('.sub-menu').css('left', width);
     });
 
-    $('.tit .h1 a').each(function(){
-        $(this).click(function(){
-            var oldText = $(this).text();
-            $(this).text('页面正在加载，请稍候...');
-            var t = setTimeout(_show($(this),oldText),5000);
-        });
-    });
+    // $('.tit .h1 a').each(function(){
+    //     $(this).click(function(){
+    //         var oldText = $(this).text();
+    //         $(this).text('页面正在加载，请稍候...');
+    //         var t = setTimeout(_show($(this),oldText),5000);
+    //     });
+    // });
 
     function show(obj,text){obj.text(text);}
     function _show(obj,text){

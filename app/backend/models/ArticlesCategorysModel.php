@@ -62,26 +62,29 @@ class ArticlesCategorysModel extends BaseModel{
     }
 
     /**
-     * 根据aids获取cid
+     * 获取文章所属分类
      * @param array $aids
-     * @return array
+     * @return mixed
      * @throws \Exception
      */
-    public function get_cids_by_aids(array $aids){
+    public function get_categorys_by_aids(array $aids){
         if(!is_array($aids) || count($aids) == 0){
             throw new \Exception('参数错误');
         }
-        $result = $this -> find(array(
-            'conditions' => 'aid IN ({aid:array})',
-            'bind' => array(
-                'aid' => $aids
-            ),
-            'order' => 'aid DESC',
+        $builder = $this->getModelsManager()->createBuilder();
+        $builder->from(array('ac' => __CLASS__));
+        $builder->addFrom(__NAMESPACE__.'\CategorysModel', 'c');
+        $builder->columns(array(
+            'ac.aid', 'c.cid', 'c.category_name'
         ));
-        $cids = array();
-        if($result){
-            $cids = $result -> toArray();
+        $result = $builder->where('ac.aid IN ({aid:array})', array('aid'=>$aids))
+            ->andWhere('ac.cid = c.cid')
+            ->andWhere('c.status = :status:', array('status' => 1))
+            ->getQuery()
+            ->execute();
+        if(!$result){
+            throw new \Exception('获取文章所属分类失败');
         }
-        return $cids;
+        return $result;
     }
 }

@@ -53,6 +53,16 @@ class Articles extends BaseRepository{
     }
 
     /**
+     * 获取文章所属分类
+     * @param array $aids
+     * @return mixed
+     */
+    public function get_categorys_by_aids(array $aids){
+        $categorys = $this -> get_model('ArticlesCategorysModel') -> get_categorys_by_aids($aids);
+        return $categorys;
+    }
+
+    /**
      * 更新文章数据
      * @param array $data
      * @param $aid

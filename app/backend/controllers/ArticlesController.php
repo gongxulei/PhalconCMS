@@ -37,13 +37,21 @@ class ArticlesController extends BaseController{
         $pageNum = PaginatorHelper::get_paginator($paginator->total_items, $page, $pagesize);
         /**获取文章所属的分类ID*/
         $articles = $paginator->items->toArray();
-        $cidsArray = array();
         if(is_array($articles) && count($articles) > 0){
             $aids = array_column($articles, 'aid');
-            $cidsArray = $this -> get_repository('Categorys') -> get_cids_by_aids($aids);
+            $categorys = $this -> get_repository('Articles') -> get_categorys_by_aids($aids);
+            foreach($categorys as $ck=>$cv){
+                foreach($articles as $ak=>&$av){
+                    if($cv->aid == $av['aid']){
+                        $av['categorys'][] = array(
+                            'cid' => $cv->cid,
+                            'category_name' => $cv->category_name,
+                        );
+                        break;
+                    }
+                }
+            }
         }
-        /**获取分类*/
-        $categoryList = $this -> get_repository('Categorys') -> get_category_list();
 
         $this -> view -> setVars(array(
             'paginator' => $paginator,
@@ -51,8 +59,6 @@ class ArticlesController extends BaseController{
             'cid' => $cid,
             'keyword' => $keyword,
             'articles' => $articles,
-            'cidsArray' => $cidsArray,
-            'categoryList' => $categoryList,
         ));
         $this -> view -> pick('articles/index');
     }

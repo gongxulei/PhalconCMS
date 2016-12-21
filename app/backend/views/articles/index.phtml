@@ -87,14 +87,14 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% for ck, cid in cidsArray[article['aid']] %}
+                                        {% for ck, cv in article['categorys'] %}
                                             {% if ck == 0 %}
                                                 <a href="{{ url(modulePathinfo~'/articles/index?cid='~cid) }}" title="查看分类下的文章">
-                                                    {{categoryList[cid]['category_name']}}
+                                                    {{cv['category_name']}}
                                                 </a>
                                             {% else %}
                                                 ,<a href="{{ url(modulePathinfo~'/articles/index?cid='~cid) }}" title="查看分类下的文章">
-                                                    {{categoryList[cid]['category_name']}}
+                                                    {{cv['category_name']}}
                                                 </a>
                                             {% endif %}
                                         {% endfor %}

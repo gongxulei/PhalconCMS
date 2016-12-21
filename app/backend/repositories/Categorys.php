@@ -172,22 +172,6 @@ class Categorys extends BaseRepository{
     }
 
     /**
-     * 根据aid批量获取cid
-     * @param array $aids
-     * @return array
-     */
-    public function get_cids_by_aids(array $aids){
-        $result = array();
-        $cids = $this -> get_model('ArticlesCategorysModel') -> get_cids_by_aids($aids);
-        if(is_array($cids) && count($cids) > 0){
-            foreach($cids as $k=>$v){
-                $result[$v['aid']][] = $v['cid'];
-            }
-        }
-        return $result;
-    }
-
-    /**
      * 获取分类列表
      * @return array
      */
