@@ -30,7 +30,6 @@ class BaseController extends PhalBaseController{
             'userinfo' => $this -> session -> get('user'),
             'assetsUrl' => $this -> systemConfig -> app -> backend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
-            'modulePathinfo' => $this -> systemConfig -> app -> backend -> module_pathinfo,
         ));
     }
 

@@ -28,7 +28,7 @@ return array(
     ),
 
     //搜索路由
-    '/search' => array(
+    '/search.html' => array(
         'module' => 'frontend',
         'controller' => 'index',
         'action' => 'index',

@@ -2,17 +2,17 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
+            <a href="{{ url('dashboard/index') }}">控制面板</a>
         </li>
         <li>
-            <a href="{{ url(modulePathinfo~'/account/profile') }}">个人资料</a>
+            <a href="{{ url('account/profile') }}">个人资料</a>
         </li>
     </ul>
 </div>
 <div class="page-content">
     <div class="page-header">
         <h1>
-            <a href="{{ url(modulePathinfo~'/categorys/index') }}">个人资料</a>
+            <a href="{{ url('categorys/index') }}">个人资料</a>
             <small>
                 <i class="icon-double-angle-right"></i>
                 信息变更
@@ -30,7 +30,7 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade in active" id="profile">
-                <form action="{{url(modulePathinfo~'/account/saveprofile')}}" method="post" class="form-horizontal" id="save-profile-form">
+                <form action="{{url('account/saveprofile')}}" method="post" class="form-horizontal" id="save-profile-form">
                     <div class="form-group">
                         <label for="username" class="col-sm-2 control-label">用户名</label>
                         <div class="col-sm-5">
@@ -61,7 +61,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="password">
-                <form action="{{url(modulePathinfo~'/account/savepwd')}}" method="post" class="form-horizontal" id="save-password-form">
+                <form action="{{url('account/savepwd')}}" method="post" class="form-horizontal" id="save-password-form">
                     <div class="form-group ">
                         <label for="old-password" class="col-sm-2 control-label">原始密码</label>
                         <div class="col-sm-5">

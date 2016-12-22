@@ -1,6 +1,6 @@
 <div class="navbar-container" id="navbar-container">
     <div class="navbar-header pull-left">
-        <a href="{{ url(modulePathinfo~'/dashboard/index') }}" class="navbar-brand">
+        <a href="{{ url('dashboard/index') }}" class="navbar-brand">
             <small>
                 <i class="icon-leaf"></i>
                 PhalconCMS后台管理系统
@@ -20,14 +20,14 @@
                 </a>
                 <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                     <li>
-                        <a href="{{ url(modulePathinfo~'/account/profile') }}">
+                        <a href="{{ url('account/profile') }}">
                             <i class="icon-user"></i>
                             个人设置
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="{{url(modulePathinfo~'/passport/logout')}}">
+                        <a href="{{url('passport/logout')}}">
                             <i class="icon-off"></i>
                             退出
                         </a>

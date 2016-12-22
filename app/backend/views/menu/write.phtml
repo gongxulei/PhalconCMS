@@ -2,17 +2,17 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="{{ url(modulePathinfo~'/dashboard/index') }}">控制面板</a>
+            <a href="{{ url('dashboard/index') }}">控制面板</a>
         </li>
         <li>
-            <a href="{{ url(modulePathinfo~'/menu/index') }}">菜单管理</a>
+            <a href="{{ url('menu/index') }}">菜单管理</a>
         </li>
     </ul>
 </div>
 <div class="page-content">
     <div class="page-header">
         <h1>
-            <a href="{{ url(modulePathinfo~'/menu/index') }}">菜单管理</a>
+            <a href="{{ url('menu/index') }}">菜单管理</a>
             <small>
                 <i class="icon-double-angle-right"></i>
                 {% if menu is not empty %}
@@ -24,7 +24,7 @@
         </h1>
     </div>
     <div class="col-lg-12">
-        <form action="{{url(modulePathinfo~'/menu/save')}}" method="post" class="form-horizontal" id="menu-form">
+        <form action="{{url('menu/save')}}" method="post" class="form-horizontal" id="menu-form">
             <div class="form-group has-feedback">
                 <label for="menu-name" class="col-sm-2 control-label">菜单名称</label>
                 <div class="col-sm-5">

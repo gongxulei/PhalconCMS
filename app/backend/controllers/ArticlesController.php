@@ -42,16 +42,18 @@ class ArticlesController extends BaseController{
             $categorys = $this -> get_repository('Articles') -> get_categorys_by_aids($aids);
             foreach($categorys as $ck=>$cv){
                 foreach($articles as $ak=>&$av){
-                    if($cv->aid == $av['aid']){
+                    if($cv['aid'] == $av['aid']){
                         $av['categorys'][] = array(
-                            'cid' => $cv->cid,
-                            'category_name' => $cv->category_name,
+                            'cid' => $cv['cid'],
+                            'category_name' => $cv['category_name'],
                         );
                         break;
                     }
                 }
             }
         }
+        /**获取分类*/
+        $categoryList = $this -> get_repository('Categorys') -> get_category_list();
 
         $this -> view -> setVars(array(
             'paginator' => $paginator,
@@ -59,6 +61,7 @@ class ArticlesController extends BaseController{
             'cid' => $cid,
             'keyword' => $keyword,
             'articles' => $articles,
+            'categoryList' => $categoryList,
         ));
         $this -> view -> pick('articles/index');
     }

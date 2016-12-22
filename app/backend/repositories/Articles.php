@@ -59,6 +59,7 @@ class Articles extends BaseRepository{
      */
     public function get_categorys_by_aids(array $aids){
         $categorys = $this -> get_model('ArticlesCategorysModel') -> get_categorys_by_aids($aids);
+        $categorys = $categorys -> toArray();
         return $categorys;
     }
 

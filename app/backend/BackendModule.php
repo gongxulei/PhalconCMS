@@ -55,9 +55,18 @@ class BackendModule implements ModuleDefinitionInterface{
         }, true);
 
         /**
+         * DI注册url服务
+         */
+        $di -> setShared('url', function() use($systemConfig){
+            $url = new \Marser\App\Core\PhalBaseUrl();
+            $url -> setBaseUri($systemConfig -> app -> backend -> module_pathinfo);
+            return $url;
+        });
+
+        /**
          * DI注册后台view
          */
-        $di -> set('view', function() use($systemConfig) {
+        $di -> setShared('view', function() use($systemConfig) {
             $view = new \Phalcon\Mvc\View();
             $view -> setViewsDir($systemConfig -> app -> backend -> views);
             $view -> registerEngines(array(
