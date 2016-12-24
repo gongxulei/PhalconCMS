@@ -12,15 +12,4 @@ namespace Marser\App\Core;
 
 class PhalBaseUrl extends \Phalcon\Mvc\Url{
 
-    /**
-     * 分模块生成URL
-     * @param $modulePathinfo
-     * @param $uri
-     * @return string
-     */
-    public function get_module_uri($modulePathinfo, $uri){
-        $uri = "{$modulePathinfo}/{$uri}";
-        $url = $this -> get($uri);
-        return $url;
-    }
 }

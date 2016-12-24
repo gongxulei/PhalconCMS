@@ -3,22 +3,22 @@
 <title>{{siteName}}-{{siteTitle}}</title>
 <meta name="description" content="">
 <link rel="shortcut icon" href="/favicon.ico"/>
-<script type='text/javascript' src='{{ assetsUrl }}/assets/js/jquery.js?_v={{ assetsVersion }}'></script>
-<script type='text/javascript' src='{{ assetsUrl }}/assets/js/jquery-migrate.min.js?_v={{ assetsVersion }}'></script>
-<script type="text/javascript" src="{{ assetsUrl }}/highlight/scripts/shCore.js?_v={{ assetsVersion }}"></script>
-<script type="text/javascript" src="{{ assetsUrl }}/highlight/scripts/shAutoloader.js?_v={{ assetsVersion }}"></script>
+<script type='text/javascript' src="{{ static_url('assets/js/jquery.js?_v=')~assetsVersion }}"></script>
+<script type='text/javascript' src="{{ static_url('assets/js/jquery-migrate.min.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('highlight/scripts/shCore.js?_v=')~assetsVersion }}"></script>
+<script type="text/javascript" src="{{ static_url('highlight/scripts/shAutoloader.js?_v=')~assetsVersion }}"></script>
 <script type="text/javascript">(function () {
         mod_txt = '#';
         adminBar = "" || 0
     })();</script>
-<script type="text/javascript" src="{{ assetsUrl }}/assets/js/frontopen.js?_v={{ assetsVersion }}"></script>
-<link rel="stylesheet" type="text/css" media="all" href="{{ assetsUrl }}/assets/css/style.css?_v={{ assetsVersion }}"/>
-<link rel="stylesheet" type="text/css" media="all" href="{{ assetsUrl }}/assets/css/mobile.css?_v={{ assetsVersion }}"/>
-<link rel="stylesheet" type="text/css" media="all" href="{{ assetsUrl }}/highlight/styles/shCoreDjango.css?_v={{ assetsVersion }}"/>
+<script type="text/javascript" src='{{ static_url("assets/js/frontopen.js?_v=")~assetsVersion }}'></script>
+<link rel="stylesheet" type="text/css" media="all" href='{{ static_url("assets/css/style.css?_v=")~assetsVersion }}'/>
+<link rel="stylesheet" type="text/css" media="all" href='{{ static_url("assets/css/mobile.css?_v=")~assetsVersion }}'/>
+<link rel="stylesheet" type="text/css" media="all" href='{{ static_url("highlight/styles/shCoreDjango.css?_v=")~assetsVersion }}'/>
 
 <!--[if lt IE 9]>
 <script src="./home/html5.js"></script><![endif]-->
-<link rel="stylesheet" href="{{ assetsUrl }}/assets/css/font-awesome.min.css?_v={{ assetsVersion }}">
+<link rel="stylesheet" href='{{ static_url("assets/css/font-awesome.min.css?_v=")~assetsVersion }}'>
 <!--[if IE 7]>
-<link rel="stylesheet" href="{{ assetsUrl }}/assets/css/font-awesome-ie7.min.css?_v={{ assetsVersion }}">
+<link rel="stylesheet" href='{{ static_url("assets/css/font-awesome-ie7.min.css?_v=")~assetsVersion }}'>
 <![endif]-->

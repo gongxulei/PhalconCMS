@@ -47,6 +47,7 @@ class OptionsController extends BaseController{
             $siteName = $this -> request -> getPost('siteName', 'trim');
             $siteTitle = $this -> request -> getPost('siteTitle', 'remove_xss');
             $siteUrl = $this -> request -> getPost('siteUrl', 'trim');
+            $cdnUrl = $this -> request -> getPost('cdnUrl', 'trim');
             $keywords = $this -> request -> getPost('keywords', 'remove_xss');
             $description = $this -> request -> getPost('description', 'remove_xss');
             /** 添加验证规则 */
@@ -54,11 +55,13 @@ class OptionsController extends BaseController{
                 -> add_rule('siteName', 'chinese_alpha_numeric_dash', '站点名称由中英文字符、数字和中下划线组成');
             $this -> validator -> add_rule('siteTitle', 'required', '请填写站点标题');
             !empty($siteUrl) && $this -> validator -> add_rule('siteUrl', 'url', '请填写一个合法的URL地址');
+            !empty($cdnUrl) && $this -> validator -> add_rule('cdnUrl', 'url', '请填写一个合法的URL地址');
             /** 截获验证异常 */
             if ($error = $this -> validator -> run(array(
                 'siteName' => $siteName,
                 'siteTitle' => $siteTitle,
-                'siteUrl' => $siteUrl
+                'siteUrl' => $siteUrl,
+                'cdnUrl' => $cdnUrl,
             ))) {
                 $error = array_values($error);
                 $error = $error[0];
@@ -69,6 +72,7 @@ class OptionsController extends BaseController{
                 'site_name' => $siteName,
                 'site_title' => $siteTitle,
                 'site_url' => $siteUrl,
+                'cdn_url' => $cdnUrl,
                 'site_description' => $description,
                 'site_keywords' => $keywords,
             );

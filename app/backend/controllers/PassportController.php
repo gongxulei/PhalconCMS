@@ -77,8 +77,7 @@ class PassportController extends PhalBaseController{
 
             $this -> flashSession -> error($e -> getMessage());
 
-            $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
-            return $this -> response -> redirect($url);
+            return $this -> response -> redirect('passport/index');
         }
     }
 
@@ -98,8 +97,7 @@ class PassportController extends PhalBaseController{
      */
     protected function login_check(){
         if(RepositoryFactory::get_repository('Users') -> login_check()){
-            $url = $this -> url -> get("{$this -> _module_pathinfo}/passport/index");
-            return $this -> response -> redirect($url);
+            return $this -> response -> redirect("passport/index");
         }
         return false;
     }

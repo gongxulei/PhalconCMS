@@ -34,22 +34,12 @@ class BaseController extends PhalBaseController{
     }
 
     /**
-     * 生成后台模块URL
-     * @param $uri
-     * @return mixed
-     */
-    public function get_module_uri($uri){
-        $modulePathinfo = $this -> systemConfig -> app -> backend -> module_pathinfo;
-        return $this -> url -> get_module_uri($modulePathinfo, $uri);
-    }
-
-    /**
      * 登录检测处理
      * @return bool
      */
     public function login_check(){
         if(!$this -> get_repository('Users') -> login_check()){
-            return $this -> response -> redirect($this -> get_module_uri('passport/index'));
+            return $this -> response -> redirect("passport/index");
         }
         return true;
     }

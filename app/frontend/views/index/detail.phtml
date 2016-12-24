@@ -44,7 +44,14 @@
             <div class="cls"></div>
         </div>
         <article class="entry-content">
-            {{article['content']}}
+            <div>
+                {{article['content']}}
+            </div>
+            <div class="article-reward">
+                <button class="reward-btn" id="reward-btn">打&nbsp;赏</button>
+                <div class="article-reward-desc">如果觉得我的文章对您有用，请随意打赏。</div>
+                <div class="article-reward-desc">您的支持将鼓励我继续创作！</div>
+            </div>
             <div class="content-tags iititle2">
                 <aside class="cb_bq">
                     {% if article['tags'] is not empty %}

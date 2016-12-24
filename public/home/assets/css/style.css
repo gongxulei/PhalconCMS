@@ -448,4 +448,10 @@ div.bbp-template-notice.info{background:#f0f8ff}
 .page_num>a.disabled{cursor: not-allowed;}
 .content-tags{margin:15px 0px 10px 0px; font-size:14px; border-top:1px dotted #DFDFDF;}
 .content-tags a{text-decoration:none;}
+.article-reward {text-align:center;}
+.article-reward .reward-btn{border:1px solid #D9534F;text-align: center;background: #D9534F;color: #FFF;cursor: pointer;padding:5px 15px;font-size:15px;}
+.reward-qrcode-box{padding:15px 10px; text-align:left;}
+.reward-qrcode{text-align:center;}
+.article-reward-desc{text-align:center; text-align:center;}
+.reward-qrcode-desc{text-align:center;}
 /*前台登录窗体结束*/
