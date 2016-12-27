@@ -55,42 +55,34 @@
         <dl>
             <dt>
                 <a href="/event" title="Marser大事记" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
-                    <img src="{{ assetsUrl }}/assets/image/dsj.gif">
+                    <img src="{{ static_url('assets/image/dsj.gif') }}">
                 </a>
             </dt>
-            <dd>事记</dd>
+            <dd>EVENT</dd>
         </dl>
         <dl>
             <dt>
                 <a href="/about" title="关于Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
-                    <img src="{{ assetsUrl }}/assets/image/nav_1.gif" width="45" height="45">
+                    <img src="{{ static_url('assets/image/nav_1.gif') }}" width="45" height="45">
                 </a>
             </dt>
-            <dd>关于</dd>
+            <dd>ABOUT</dd>
         </dl>
         <dl>
             <dt>
-                <a href="/contact" title="联系站长" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
-                    <img src="{{ assetsUrl }}/assets/image/conc.gif" width="45" height="45">
+                <a href="/contact" title="联系Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
+                    <img src="{{ static_url('assets/image/conc.gif') }}" width="45" height="45">
                 </a>
             </dt>
-            <dd>联系我</dd>
+            <dd>CONTACT</dd>
         </dl>
         <dl>
             <dt>
-                <a href="/webtools" title="web前端工具箱" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
-                    <img src="{{ assetsUrl }}/assets/image/tools.gif" width="45" height="45">
+                <a href="/tools" title="Marser工具箱" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
+                    <img src="{{ static_url('assets/image/tools.gif') }}" width="45" height="45">
                 </a>
             </dt>
             <dd>TOOLS</dd>
-        </dl>
-        <dl>
-            <dt>
-                <a href="/front_tutorial" title="《前端开发从零学起》从基础到深入学习教程" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
-                    <img src="{{ assetsUrl }}/assets/image/tutorial.gif" width="45" height="45">
-                </a>
-            </dt>
-            <dd>TUTORIAL</dd>
         </dl>
         <div class="cls"></div>
     </div>
@@ -101,10 +93,10 @@
     <div class="menu-header">
         <ul id="menu-wplook-main-menu" class="menu">
             {% if menuList is not empty %}
-                {% set prevMuneId = '' %}
+                {% set prevMenuId = '' %}
                 {% for mk,menu in menuList %}
                     {% if menu['parent_mid'] == 0 and menu['leaf_node'] == 1 %}
-                        {% if menuList[prevMuneId]['parent_mid'] != 0 %}
+                        {% if prevMenuId != '' and menuList[prevMenuId]['parent_mid'] != 0 %}
                             </ul>
                         </li>
                         {% endif %}
@@ -113,7 +105,7 @@
                         </li>
                     {% else %}
                         {% if menu['parent_mid'] == 0 and menu['leaf_node'] == 0 %}
-                            {% if menuList[prevMuneId]['parent_mid'] != 0 %}
+                            {% if menuList[prevMenuId]['parent_mid'] != 0 %}
                                     </ul>
                                 </li>
                             {% endif %}
@@ -126,7 +118,7 @@
                             </li>
                         {% endif %}
                     {% endif %}
-                    {% set prevMuneId = mk %}
+                    {% set prevMenuId = mk %}
                 {% endfor %}
             {% endif %}
             <div class="cls"></div>

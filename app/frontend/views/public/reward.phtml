@@ -4,7 +4,7 @@
     </div>
     <div class="reward-qrcode-desc">微信扫一扫</div>
 </div>
-<script type='text/javascript' src='{{ assetsUrl }}/layer/layer.js?_v={{ assetsVersion }}'></script>
+<script type='text/javascript' src='{{ static_url("layer/layer.js?_v=")~assetsVersion }}'></script>
 <script type="text/javascript">
     jQuery(function($) {
         $('#reward-btn').on('click', function () {

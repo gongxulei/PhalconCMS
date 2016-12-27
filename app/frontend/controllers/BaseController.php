@@ -32,21 +32,10 @@ class BaseController extends PhalBaseController{
             'siteKeywords' => $this -> get_repository('Options') -> get_option('site_keywords'),
             'menuList' => $this -> get_repository('Menu') -> get_menu_list(),
 
-            'assetsUrl' => $this -> systemConfig -> app -> frontend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
         ));
 
         $this -> url -> setStaticBaseUri($this -> get_repository('Options') -> get_option('cdn_url'));
-    }
-
-    /**
-     * 生成前台模块URL
-     * @param $uri
-     * @return mixed
-     */
-    public function get_module_uri($uri){
-        $modulePathinfo = $this -> systemConfig -> app -> frontend -> module_pathinfo;
-        return $this -> url -> get_module_uri($modulePathinfo, $uri);
     }
 
     /**
