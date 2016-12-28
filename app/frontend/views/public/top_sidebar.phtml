@@ -18,24 +18,15 @@
 <div class="nav marauto">
     <div class="tig">
         <a href="https://github.com/KevinJay/PhalconCMS" target="_blank">
-            <span class="sub">GitHub</span>
+            <span class="sub">
+                <i class="fa fa-github icon-large" aria-hidden="true"></i>&nbsp;&nbsp;GitHub
+            </span>
         </a>
-        <div class="rss_box">
-            <a class="close_rss" href="#"></a>
-            <span>邮件订阅</span> - 最后更新：
-            <time>2016-07-21</time>
-            <br><br>
-            <form class="subscribe-mail" action="http://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post">
-                <input type="hidden" name="t" value="qf_booked_feedback">
-                <input type="hidden" name="id" value="cf53846928e2bdd9141bf81f05aca64e0bddd28eb977d267">
-                <input class="rss_input" id="to" name="to" type="email" placeholder="Your E-mail">
-                <input class="rss_submit" type="submit" value="订阅">
-            </form>
-            <div class="ress_btn_box">
-                订阅源：<a target="_blank" href="//feed" rel="alternate" type="application/rss+xml" title="rss Feed">RSS</a>
-                <a target="_blank" rel="external nofollow" href="http://mail.qq.com/cgi-bin/feed?u=//feed">QQ邮箱</a>
-            </div>
-        </div>
+        <a href="javascript:void(0);" id="add-weixin" rel="nofollow">
+            <span class="sub">
+                <i class="fa fa-weixin icon-large" aria-hidden="true"></i>&nbsp;&nbsp;加我微信
+            </span>
+        </a>
         <div class="gonggao">
             <ul id="g_box">
                 <li>
@@ -54,7 +45,7 @@
     <div class="navlist">
         <dl>
             <dt>
-                <a href="/event" title="Marser大事记" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
+                <a href="{{url('event.html')}}" title="Marser大事记" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
                     <img src="{{ static_url('assets/image/dsj.gif') }}">
                 </a>
             </dt>
@@ -62,7 +53,7 @@
         </dl>
         <dl>
             <dt>
-                <a href="/about" title="关于Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
+                <a href="{{url('about.html')}}" title="关于Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="bookmark">
                     <img src="{{ static_url('assets/image/nav_1.gif') }}" width="45" height="45">
                 </a>
             </dt>
@@ -70,7 +61,7 @@
         </dl>
         <dl>
             <dt>
-                <a href="/contact" title="联系Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
+                <a href="{{url('contact.html')}}" title="联系Marser" target="_self" class="nav_button" style="opacity: 0.7;" rel="nofollow">
                     <img src="{{ static_url('assets/image/conc.gif') }}" width="45" height="45">
                 </a>
             </dt>
@@ -78,7 +69,7 @@
         </dl>
         <dl>
             <dt>
-                <a href="/tools" title="Marser工具箱" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
+                <a href="{{url('tools.html')}}" title="Marser工具箱" target="_self" class="nav_button" style="opacity: 0.7;" rel="">
                     <img src="{{ static_url('assets/image/tools.gif') }}" width="45" height="45">
                 </a>
             </dt>
@@ -121,7 +112,7 @@
                     {% set prevMenuId = mk %}
                 {% endfor %}
             {% endif %}
-            <div class="cls"></div>
+            <div class="cls" style="clear:both;margin:0px;padding:0px;"></div>
         </ul>
     </div>
 </nav>

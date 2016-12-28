@@ -9,7 +9,7 @@
     .header .logo i{display:block;}
     #s{width:50%}
     .loc_link,.j_zeng,.nav,#text-3,.side{display:none}
-    .relatedposts li{float:none;width:auto; white-space:normal;}
+    .main .relatedposts li{float:none;width:auto; white-space:normal;}
     #goTop{float:none;height:40px;line-height:40px;text-align:center;margin-bottom:20px; display:none;}
     .page_php , .page-title{width:auto !important}
     #content{width:100% !important}
@@ -34,9 +34,9 @@
     #container{float:left; width:100%}
     #article-index{display:none !important;}
     .archive-meta{width: 96%; padding: 10px 2%;}
-    .navcon{height:auto}
+    .navcon{height:auto;width:94%;padding:0px;}
     .navcon ul li {float:none; border-top:1px solid #666;}
-    #mobile_nav_btn{display:block; color:#fff; background:url(images/mobile_nav.gif) no-repeat right center; cursor:pointer; margin:0 20px;}
+    #mobile_nav_btn{display:block; color:#fff; background:url(../image/mobile_nav.gif) no-repeat right center; cursor:pointer; margin:0 20px;}
     .menu-header{display:none;}
     .menu-item-has-children li{}
     .sub-menu {position:static;}
@@ -59,5 +59,8 @@
     /*duoshuoStart*/
     #ds-thread #ds-reset .ds-replybox .ds-avatar{display:none}
     #ds-thread #ds-reset .ds-replybox{padding: 0px !important;}
+    .marauto{width:94%;}
+    .header{width:94%;overflow:hidden;}
+    #footer{width:94%;}
     /*duoshuoEnd*/
 }

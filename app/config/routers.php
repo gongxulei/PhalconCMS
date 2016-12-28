@@ -22,7 +22,7 @@ return array(
     //文章详情路由
     '/article/:int.html' => array(
         'module' => 'frontend',
-        'controller' => 'index',
+        'controller' => 'article',
         'action' => 'detail',
         'aid' => 1
     ),
@@ -30,24 +30,36 @@ return array(
     //搜索路由
     '/search.html' => array(
         'module' => 'frontend',
-        'controller' => 'index',
-        'action' => 'index',
+        'controller' => 'article',
+        'action' => 'list',
     ),
 
     //分类下的文章路由
     '/category/([a-zA-Z0-9\_\-]+).html' => array(
         'module' => 'frontend',
-        'controller' => 'index',
-        'action' => 'index',
+        'controller' => 'article',
+        'action' => 'list',
         'category' => 1
     ),
 
     //标签下的文章路由
     '/tag/([a-zA-Z0-9\_\-]+).html' => array(
         'module' => 'frontend',
-        'controller' => 'index',
-        'action' => 'index',
+        'controller' => 'article',
+        'action' => 'list',
         'tag' => 1
+    ),
+
+    '/event.html' => array(
+        'module' => 'frontend',
+        'controller' => 'article',
+        'action' => 'event',
+    ),
+
+    '/about.html' => array(
+        'module' => 'frontend',
+        'controller' => 'article',
+        'action' => 'about',
     ),
 
     //404页面路由

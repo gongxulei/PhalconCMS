@@ -25,7 +25,7 @@ class ArticleController extends  BaseController{
             /**设置站点统计*/
             $this->set_statistic();
 
-            $this->view->pick('index/index');
+            $this->view->pick('article/list');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
@@ -54,12 +54,48 @@ class ArticleController extends  BaseController{
             /**设置站点统计*/
             $this -> set_statistic();
 
-            $this -> view -> pick('index/detail');
+            $this -> view -> pick('article/detail');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
-            return $this -> response -> redirect('/404');
+            return $this -> redirect('/404');
         }
+    }
+
+    /**
+     * 事记页
+     */
+    public function eventAction(){
+
+    }
+
+    /**
+     * 关于页
+     */
+    public function aboutAction(){
+        try{
+            /**设置推荐文章*/
+            $this->set_recommend_articles();
+            /**设置分类*/
+            $this->set_categorys();
+            /**设置标签*/
+            $this->set_tags();
+            /**设置站点统计*/
+            $this->set_statistic();
+
+            $this -> view -> pick('article/about');
+        }catch(\Exception $e){
+            $this -> write_exception_log($e);
+
+            return $this -> redirect('/404');
+        }
+    }
+
+    /**
+     * 工具页
+     */
+    public function toolsAction(){
+
     }
 
     /**

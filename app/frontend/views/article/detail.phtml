@@ -7,12 +7,12 @@
                 <h1 class="entry-title">{{article['title']}}</h1>
                 <aside class="entry-meta iititle2">
                     <span>
-                        <i class="icon-user icon-large"></i>
+                        <i class="fa fa-user icon-large" aria-hidden="true"></i>
                         <a href="javascript:void(0);" title="Marser" rel="author">Marser</a>
                     </span>
                     <span>
                         {% if article['categorys'] is not empty %}
-                            <i class="icon-folder-open icon-large"></i>
+                            <i class="fa fa-folder-open icon-large" aria-hidden="true"></i>
                             {% for ck,cv in article['categorys'] %}
                                 {% if ck==0 %}
                                     <a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
@@ -27,14 +27,14 @@
                         {% endif %}
                     </span>
                     <span>
-                        <i class="icon-eye-open icon-large"></i> 围观<i id="number">{{article['view_number']}}</i>次
+                        <i class="fa fa-eye icon-large" aria-hidden="true"></i> 围观<i id="number">{{article['view_number']}}</i>次
                     </span>
                     <span>
-                        <i class="icon-comment-alt icon-large"></i>
+                        <i class="fa fa-comment-o icon-large" aria-hidden="true"></i>
                         <a href="#comments">评论</a>
                     </span>
                     <span>
-                        <i class="icon-zoom-in icon-large"></i> 字体：
+                        <i class="fa fa-search-plus icon-large" aria-hidden="true"></i> 字体：
                         <a href="javascript:;" onclick="checkFontSize(18)">大</a>
                         <a href="javascript:;" onclick="checkFontSize(16)">中</a>
                         <a href="javascript:;" onclick="checkFontSize(14)">小</a>
@@ -50,8 +50,7 @@
             <div class="article-reward">
                 <div class="article-reward-desc">「真诚赞赏，手留余香」</div>
                 <button class="reward-btn" id="reward-btn">￥ 赞&nbsp;赏</button>
-<!--                <div class="article-reward-desc">如果觉得我的文章对您有用，请随意打赏。</div>-->
-<!--                <div class="article-reward-desc">您的支持将鼓励我继续创作！</div>-->
+                <div class="article-reward-desc">您的支持将鼓励我继续创作 :)</div>
             </div>
             <div class="content-tags iititle2">
                 <aside class="cb_bq">
@@ -96,12 +95,12 @@
         <div class="nav-previous">
             {% if prevAritcle is not empty %}
                 <a href={{url("article/"~prevArticle['aid']~".html")}} title="{{prevArticle['title']}}" rel="next">
-                    <i class="icon-arrow-left"></i>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
                     {{prevArticle['title']}}
                 </a>
             {% else %}
                 <a href="javascript:void(0);" rel="prev">
-                    <i class="icon-arrow-left"></i>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
                     已经是第一篇啦
                 </a>
             {% endif %}
@@ -110,15 +109,16 @@
             {% if nextArticle is not empty %}
                 <a href={{url("article/"~nextArticle['aid']~".html")}} title="nextArticle['title']" rel="next">
                     {{nextArticle['title']}}
-                    <i class="icon-arrow-right"></i>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </a>
             {% else %}
                 <a href="javascript:void(0);" rel="next">
                     已经是最后一篇啦
-                    <i class="icon-arrow-right"></i>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </a>
             {% endif %}
         </div>
+        <div class="cls"></div>
     </div>
     <div class="cls"></div>
     {% if guessYouLike is not empty %}

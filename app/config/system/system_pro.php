@@ -35,9 +35,6 @@ return array(
 
             //模板路径
             'compiled_path' => ROOT_PATH . '/app/cache/compiled/frontend/',
-
-            //前台静态资源URL
-            'assets_url' => '/home',
         ),
 
         //后台配置

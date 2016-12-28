@@ -13,7 +13,7 @@
                     <article class="ulist">
                         <h2>
                             <a href={{url("article/"~tav['aid']~".html")}} title="{{tav['title']}}" rel="bookmark">
-                                <i class="icon-eject icon-large"></i>{{tav['title']}}
+                                <i class="fa fa-eject icon-large" aria-hidden="true"></i>{{tav['title']}}
                             </a>
                             <span>{{explode(' ', tav['modify_time'])[0]}}</span>
                         </h2>
@@ -40,12 +40,12 @@
                     </h2>
                     <aside class="iititle">
                         <span>
-                            <i class="icon-user icon-large"></i>
+                            <i class="fa fa-user icon-large" aria-hidden="true"></i>
                             <a href="javascript:void(0);" title="Marser" rel="author">Marser</a>
                         </span>
                         <span>
                             {% if article['categorys'] is not empty %}
-                                <i class="icon-folder-open icon-large"></i>
+                                <i class="fa fa-folder-open icon-large" aria-hidden="true"></i>
                                 {% for ck,cv in article['categorys'] %}
                                     {% if ck==0 %}
                                         <a href={{url("category/"~cv['cid']~".html")}} title="{{cv['category_name']}}" rel="category tag">
@@ -60,10 +60,10 @@
                             {% endif %}
                         </span>
                         <span>
-                            <i class="icon-eye-open icon-large"></i> 围观{{article['view_number']}}次
+                            <i class="fa fa-eye icon-large" aria-hidden="true"></i> 围观{{article['view_number']}}次
                         </span>
                         <span>
-                            <i class="icon-comment-alt icon-large"></i>
+                            <i class="fa fa-comment-o icon-large" aria-hidden="true"></i>
                             <a href="#comments">评论</a>
                         </span>
                     </aside>
@@ -84,7 +84,7 @@
             <div class="c-bot">
                 <aside class="cb_bq">
                     {% if article['tags'] is not empty %}
-                        <i class="icon-tag icon-large"></i>
+                        <i class="fa fa-tags icon-large"  aria-hidden="true"></i>
                         {% for tk,tv in article['tags'] %}
                             {% if tk==0 %}
                                 <a href={{url("tag/"~tv['tid']~".html")}} title="{{tv['tag_name']}}" rel="tag">

@@ -73,7 +73,9 @@
             <ul class="advanced-random-posts">
                 {% for rv in recommendArticles %}
                     <li>
-                        <a href={{url("article/"~rv['aid']~".html")}} title="{{rv['title']}}" rel="bookmark">{{rv['title']}}</a>
+                        <a href={{url("article/"~rv['aid']~".html")}} title="{{rv['title']}}" rel="bookmark">
+                            {{rv['title']}}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
@@ -84,9 +86,15 @@
             <ul class='xoxo blogroll'>
                 {% for clk, clv in categorysList %}
                     <li>
-                        <a href={{url("category/"~clv['cid']~".html")}} rel="bookmark" title="{{clv['category_name']}}">
-                            {{clv['category_name']}}
-                        </a>
+                        {% if clv['slug'] is not empty %}
+                            <a href={{url("category/"~clv['slug']~".html")}} rel="bookmark" title="{{clv['category_name']}}">
+                                {{clv['category_name']}}
+                            </a>
+                        {% else %}
+                            <a href={{url("category/"~clv['cid']~".html")}} rel="bookmark" title="{{clv['category_name']}}">
+                                {{clv['category_name']}}
+                            </a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
@@ -97,7 +105,11 @@
         <h3 class="widget-title">标签</h3>
         <div class="tagcloud">
             {% for tlk,tlv in tagsList %}
-                <a href={{url("tag/"~tlv['tid']~".html")}} class='tag-link-{{tlk}}' title="{{tlv['tag_name']}}" rel="bookmark">{{tlv['tag_name']}}</a>
+                {% if tlv['slug'] is not empty %}
+                    <a href={{url("tag/"~tlv['slug']~".html")}} class='tag-link-{{tlk}}' title="{{tlv['tag_name']}}" rel="bookmark">{{tlv['tag_name']}}</a>
+                {% else %}
+                    <a href={{url("tag/"~tlv['tid']~".html")}} class='tag-link-{{tlk}}' title="{{tlv['tag_name']}}" rel="bookmark">{{tlv['tag_name']}}</a>
+                {% endif %}
             {% endfor %}
         </div>
     </li>
@@ -137,7 +149,6 @@
         <div class="textwidget">
             <script type="text/javascript">
                 /*300*250，创建于2013-9-11*/
-                var cpro_id = "u1366678";
             </script>
         </div>
     </li>
