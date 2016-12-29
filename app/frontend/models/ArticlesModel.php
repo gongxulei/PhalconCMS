@@ -86,7 +86,7 @@ class ArticlesModel extends BaseModel{
                 'top' => 1,
                 'status' => 1,
             ),
-            'order' => 'modify_time DESC',
+            'order' => 'create_time DESC',
             'limit' => $pagesize
         ));
         if(!$result){
@@ -110,7 +110,7 @@ class ArticlesModel extends BaseModel{
                 'recommend' => 1,
                 'status' => 1,
             ),
-            'order' => 'modify_time DESC',
+            'order' => 'create_time DESC',
             'limit' => $pagesize
         ));
         if(!$result){
