@@ -23,6 +23,7 @@ class TagsController extends BaseController{
      */
     public function indexAction(){
         $tid = intval($this -> request -> get('tid', 'trim'));
+        $taginfo = null;
         if($tid > 0){
             $taginfo = $this -> get_repository('Tags') -> detail($tid);
         }
@@ -73,8 +74,7 @@ class TagsController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('tags/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect('tags/index');
     }
 
     /**
@@ -92,8 +92,7 @@ class TagsController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('tags/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect();
     }
 
 }

@@ -28,9 +28,10 @@
                 <div class="tags-box">
                     {% if tagsList is not empty %}
                         <ul>
-                            {% for tag in tagsList %}
+                            {% set tagclound=['label-success', 'label-warning', 'label-danger', 'label-info', 'label-inverse', 'label-pink', 'label-yellow', 'label-purple'] %}
+                            {% for tagk,tag in tagsList %}
                                 <li>
-                                    <span class="label label-lg arrowed">
+                                    <span class="label {{tagclound[array_rand(tagclound)]}} arrowed-in-right arrowed">
                                         <a href="{{ url('tags/index?tid='~tag['tid']) }}" title="编辑标签">
                                             {{tag['tag_name']}}
                                         </a>

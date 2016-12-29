@@ -46,8 +46,8 @@ class Articles extends BaseRepository{
      * @param $aid
      * @return mixed
      */
-    public function get_tag_name_by_aid($aid){
-        $tags = $this -> get_model('ArticlesTagsModel') -> get_tag_name_by_aid($aid);
+    public function get_tags_by_aids($aid){
+        $tags = $this -> get_model('ArticlesTagsModel') -> get_tags_by_aids($aid);
         $tags = $tags -> toArray();
         return $tags;
     }

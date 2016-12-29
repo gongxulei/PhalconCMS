@@ -40,7 +40,6 @@ class ArticleController extends  BaseController{
         try{
             /** 设置文章数据 */
             $this -> set_article();
-            /***/
             /** 设置前一篇文章 */
             $this -> set_prev_article();
             /** 设置后一篇文章 */
@@ -60,42 +59,6 @@ class ArticleController extends  BaseController{
 
             return $this -> redirect('/404');
         }
-    }
-
-    /**
-     * 事记页
-     */
-    public function eventAction(){
-
-    }
-
-    /**
-     * 关于页
-     */
-    public function aboutAction(){
-        try{
-            /**设置推荐文章*/
-            $this->set_recommend_articles();
-            /**设置分类*/
-            $this->set_categorys();
-            /**设置标签*/
-            $this->set_tags();
-            /**设置站点统计*/
-            $this->set_statistic();
-
-            $this -> view -> pick('article/about');
-        }catch(\Exception $e){
-            $this -> write_exception_log($e);
-
-            return $this -> redirect('/404');
-        }
-    }
-
-    /**
-     * 工具页
-     */
-    public function toolsAction(){
-
     }
 
     /**

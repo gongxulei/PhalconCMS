@@ -103,7 +103,7 @@ class MenuController extends BaseController{
             ), $mid);
             $this -> flashSession -> success('保存菜单成功');
 
-            $url = $this -> get_module_uri('menu/index');
+            return $this -> redirect('menu/index');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
@@ -111,9 +111,8 @@ class MenuController extends BaseController{
 
             $url = 'menu/write';
             !empty($mid) && $url .= "?mid={$mid}";
-            $url = $this -> get_module_uri($url);
+            return $this -> redirect($url);
         }
-        return $this -> redirect($url);
     }
 
     /**

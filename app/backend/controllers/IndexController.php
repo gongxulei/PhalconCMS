@@ -13,12 +13,17 @@ use \Marser\App\Backend\Controllers\BaseController;
 
 class IndexController extends BaseController{
 
+    /**
+     * 控制面板
+     */
     public function indexAction(){
-        $url = $this -> get_module_uri('dashboard/index');
-        return $this->redirect($url);
+        return $this -> redirect('dashboard/index');
     }
 
+    /**
+     * 404页面
+     */
     public function notfoundAction(){
-        echo 'backend 404';exit;
+        return $this -> response -> setHeader('status', '404 Not Found');
     }
 }

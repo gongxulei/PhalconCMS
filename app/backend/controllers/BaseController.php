@@ -28,7 +28,6 @@ class BaseController extends PhalBaseController{
         $this -> view -> setVars(array(
             'title' => $this -> systemConfig -> app -> app_name,
             'userinfo' => $this -> session -> get('user'),
-            'assetsUrl' => $this -> systemConfig -> app -> backend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
         ));
     }
@@ -39,7 +38,7 @@ class BaseController extends PhalBaseController{
      */
     public function login_check(){
         if(!$this -> get_repository('Users') -> login_check()){
-            return $this -> response -> redirect("passport/index");
+            return $this -> redirect("passport/index");
         }
         return true;
     }

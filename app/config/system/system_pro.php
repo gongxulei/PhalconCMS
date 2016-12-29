@@ -55,7 +55,7 @@ return array(
             'compiled_path' => ROOT_PATH . '/app/cache/compiled/backend/',
 
             //后台静态资源URL
-            'assets_url' => '/admin',
+            'assets_url' => '/admin/',
         ),
 
         //类库路径

@@ -68,9 +68,8 @@ class ArticlesTagsModel extends BaseModel{
      * @return mixed
      * @throws \Exception
      */
-    public function get_tag_name_by_aid($aid){
-        $aid = intval($aid);
-        if($aid <= 0){
+    public function get_tags_by_aids(array $aids){
+        if(!is_array($aids) || count($aids) == 0){
             throw new \Exception('参数错误');
         }
         $builder = $this->getModelsManager()->createBuilder();
@@ -79,13 +78,13 @@ class ArticlesTagsModel extends BaseModel{
         ));
         $builder->from(array('atags' => __CLASS__));
         $builder->addFrom(__NAMESPACE__ . '\\TagsModel', 't');
-        $result = $builder->where("atags.aid = :aid:", array('aid' => $aid))
+        $result = $builder->where("atags.aid IN ({aid:array})", array('aid' => $aids))
             ->andWhere("atags.tid = t.tid")
             ->andWhere("t.status = 1")
             ->getQuery()
             ->execute();
         if(!$result){
-            throw new \Exception('获取标签数据失败');
+            throw new \Exception('获取文章关联的标签数据失败');
         }
         return $result;
     }

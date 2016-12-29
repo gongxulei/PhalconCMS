@@ -71,27 +71,35 @@ class ArticlesController extends BaseController{
      */
     public function writeAction(){
         $aid = intval($this -> request -> get('aid', 'trim'));
-        //获取分类数据
+        /**获取分类数据*/
         $categoryList = $this -> get_repository('Categorys') -> get_category_list();
-        //获取文章数据
+        /**获取文章数据*/
         $article = array();
-        $cids = array();
-        $tags = array();
         if($aid > 0){
             $article = $this -> get_repository('Articles') -> detail($aid);
-            //获取文章关联的分类ID
-            $cids = $this -> get_repository('Categorys') -> get_cids_by_aids(array(
-                $aid
-            ));
-            //获取文章关联的标签数据
-            $tags = $this -> get_repository('Articles') -> get_tag_name_by_aid($aid);
+            if(is_array($article) && count($article) > 0){
+                /**获取文章关联的分类数据*/
+                $categorys = $this -> get_repository('Articles') -> get_categorys_by_aids([$aid]);
+                foreach($categorys as $ck=>$cv){
+                    $article['categorys'][] = array(
+                        'cid' => $cv['cid'],
+                        'category_name' => $cv['category_name'],
+                    );
+                }
+                /**获取文章关联的标签数据*/
+                $tags = $this -> get_repository('Articles') -> get_tags_by_aids([$aid]);
+                foreach($tags as $tk=>$tv){
+                    $article['tags'][] = array(
+                        'tid' => $tv['tid'],
+                        'tag_name' => $tv['tag_name'],
+                    );
+                }
+            }
         }
 
         $this -> view -> setVars(array(
             'categoryList' => $categoryList,
             'article' => $article,
-            'cids' => $cids,
-            'tags' => $tags,
         ));
         $this -> view -> pick('articles/write');
     }
@@ -150,8 +158,7 @@ class ArticlesController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('articles/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect('articles/index');
     }
 
     /**
@@ -170,8 +177,7 @@ class ArticlesController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('articles/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect();
     }
 
     /**

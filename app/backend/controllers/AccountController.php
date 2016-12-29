@@ -35,8 +35,7 @@ class AccountController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
 
-            $url = $this -> get_module_uri('/dashboard/index');
-            return $this -> response -> redirect($url);
+            return $this -> redirect('dashboard/index');
         }
     }
 
@@ -79,8 +78,7 @@ class AccountController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('account/profile');
-        return $this -> response -> redirect($url);
+        return $this -> redirect('account/profile');
     }
 
     /**
@@ -121,8 +119,7 @@ class AccountController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('/account/profile');
-        return $this -> response -> redirect($url);
+        return $this -> redirect('account/profile');
     }
 
 }

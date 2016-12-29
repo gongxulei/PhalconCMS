@@ -50,18 +50,6 @@ return array(
         'tag' => 1
     ),
 
-    '/event.html' => array(
-        'module' => 'frontend',
-        'controller' => 'article',
-        'action' => 'event',
-    ),
-
-    '/about.html' => array(
-        'module' => 'frontend',
-        'controller' => 'article',
-        'action' => 'about',
-    ),
-
     //404页面路由
     '/404' => array(
         'module' => 'frontend',

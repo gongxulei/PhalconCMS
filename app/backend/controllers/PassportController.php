@@ -15,15 +15,8 @@ use \Marser\App\Core\PhalBaseController,
 
 class PassportController extends PhalBaseController{
 
-    /**
-     * 模块在URL中的pathinfo路径名
-     * @var
-     */
-    private $_module_pathinfo;
-
     public function initialize(){
         parent::initialize();
-        $this -> _module_pathinfo = $this -> systemConfig -> app -> backend -> module_pathinfo;
     }
 
     /**
@@ -33,9 +26,7 @@ class PassportController extends PhalBaseController{
         $this -> login_check();
         $this -> view -> setVars(array(
             'title' => $this -> systemConfig -> app -> app_name,
-            'assetsUrl' => $this -> systemConfig -> app -> backend -> assets_url,
             'assetsVersion' => strtotime(date('Y-m-d H', time()) . ":00:00"),
-            'modulePathinfo' => $this -> _module_pathinfo,
         ));
         $this -> view -> setMainView('passport/login');
     }

@@ -83,8 +83,8 @@
         </div>
     </div>
 </div>
-<link href="{{ assetsUrl }}/bootstrap-editable/css/bootstrap-editable.css?_v={{ assetsVersion }}" rel="stylesheet"/>
-<script src="{{ assetsUrl }}/bootstrap-editable/js/bootstrap-editable.min.js?_v={{ assetsVersion }}"></script>
+<link href="{{ static_url('bootstrap-editable/css/bootstrap-editable.css?_v=')~assetsVersion }}" rel="stylesheet"/>
+<script src="{{ static_url('bootstrap-editable/js/bootstrap-editable.min.js?_v=')~assetsVersion }}"></script>
 <script>
     $.fn.editable.defaults.mode = 'popup';
     $('.category-sort-block').editable({

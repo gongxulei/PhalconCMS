@@ -93,7 +93,7 @@ class CategorysController extends BaseController{
             ), $cid);
 
             $this -> flashSession -> success('保存分类成功');
-            $url = $this -> get_module_uri('categorys/index');
+            return $this -> redirect('categorys/index');
         }catch(\Exception $e){
             $this -> write_exception_log($e);
 
@@ -101,9 +101,8 @@ class CategorysController extends BaseController{
 
             $url = 'categorys/write';
             !empty($cid) && $url .= "?cid={$cid}";
-            $url = $this -> get_module_uri($url);
+            return $this -> redirect($url);
         }
-        return $this -> response -> redirect($url);
     }
 
     /**
@@ -138,8 +137,7 @@ class CategorysController extends BaseController{
 
             $this -> flashSession -> error($e -> getMessage());
         }
-        $url = $this -> get_module_uri('categorys/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect();
     }
 
     /**
@@ -152,7 +150,6 @@ class CategorysController extends BaseController{
             $this -> flashSession -> error('清除分类缓存失败');
         }
 
-        $url = $this -> get_module_uri('categorys/index');
-        return $this -> response -> redirect($url);
+        return $this -> redirect();
     }
 }

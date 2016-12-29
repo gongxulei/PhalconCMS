@@ -3,11 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <title>{{title}}</title>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="{{ assetsUrl }}/bootstrap/css/bootstrap.min.css?_v={{ assetsVersion }}" rel="stylesheet" />
-    <link href="{{ assetsUrl }}/assets/css/style.css?_v={{ assetsVersion }}" rel="stylesheet" />
+    <link href="{{ static_url('bootstrap/css/bootstrap.min.css?_v=')~assetsVersion }}" rel="stylesheet" />
+    <link href="{{ static_url('assets/css/style.css?_v=')~assetsVersion }}" rel="stylesheet" />
 </head>
 <body>
     <style type="text/css">
@@ -32,9 +30,9 @@
         </div>
     </div>
 
-    <script src="{{ assetsUrl }}/ace/js/jquery-2.0.3.min.js?_v={{ assetsVersion }}"></script>
-    <script src="{{ assetsUrl }}/bootstrap/js/bootstrap.min.js?_v={{ assetsVersion }}"></script>
-    <script src="{{ assetsUrl }}/assets/js/public.js?_v={{ assetsVersion }}"></script>
+    <script src="{{ static_url('ace/js/jquery-2.0.3.min.js?_v=')~assetsVersion }}"></script>
+    <script src="{{ static_url('bootstrap/js/bootstrap.min.js?_v=')~assetsVersion }}"></script>
+    <script src="{{ static_url('assets/js/public.js?_v=')~assetsVersion }}"></script>
 
     {{ partial('public/alert') }}
 </body>

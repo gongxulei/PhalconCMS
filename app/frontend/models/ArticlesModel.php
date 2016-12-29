@@ -60,7 +60,7 @@ class ArticlesModel extends BaseModel{
             ));
             $builder->andWhere("a.aid = c.relateid");
         }
-        $builder->orderBy('a.modify_time DESC');
+        $builder->orderBy('a.create_time DESC');
 
         $paginator = new PaginatorQueryBuilder(array(
             'builder' => $builder,

@@ -77,6 +77,7 @@ class BackendModule implements ModuleDefinitionInterface{
         $di -> setShared('url', function() use($systemConfig){
             $url = new \Phalcon\Mvc\Url();
             $url -> setBaseUri($systemConfig -> app -> backend -> module_pathinfo);
+            $url -> setStaticBaseUri($systemConfig -> app -> backend -> assets_url);
             return $url;
         });
     }

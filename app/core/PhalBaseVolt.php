@@ -33,6 +33,9 @@ class PhalBaseVolt extends Volt{
 
         /** 添加explode函数 */
         $compiler -> addFunction('explode', 'explode');
+
+        /** 添加array_rand函数 */
+        $compiler -> addFunction('array_rand', 'array_rand');
     }
 
 

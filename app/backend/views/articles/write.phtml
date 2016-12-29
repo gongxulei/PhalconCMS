@@ -66,9 +66,9 @@
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox" name="category[]" value="{{value['cid']}}"
-                                                {% if article is not empty and cids[article['aid']] is not empty %}
-                                                   {% for cv in cids[article['aid']] %}
-                                                        {% if cv == value['cid'] %}
+                                                {% if article['categorys'] is not empty %}
+                                                   {% for cv in article['categorys'] %}
+                                                        {% if cv['cid'] == value['cid'] %}
                                                             checked="checked"
                                                             {% break %}
                                                         {% endif %}
@@ -92,12 +92,12 @@
         </div>
     </form>
 </div>
-<link rel="stylesheet" href="{{ assetsUrl }}/simplemde/css/simplemde.min.css?_v={{ assetsVersion }}" />
-<link rel="stylesheet" href="{{ assetsUrl }}/simplemde/css/font-awesome.min.css?_v={{ assetsVersion }}" />
-<script src="{{ assetsUrl }}/simplemde/js/simplemde.min.js?_v={{ assetsVersion }}"></script>
-<link rel="stylesheet" href="{{ assetsUrl }}/tagsinput/jquery.tagsinput.css?_v={{ assetsVersion }}" />
-<script src="{{ assetsUrl }}/tagsinput/jquery.tagsinput.js"></script>
-<script src="{{ assetsUrl }}/my97datepicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="{{ static_url('simplemde/css/simplemde.min.css?_v=')~assetsVersion }}" />
+<link rel="stylesheet" href="{{ static_url('simplemde/css/font-awesome.min.css?_v=')~assetsVersion }}" />
+<script src="{{ static_url('simplemde/js/simplemde.min.js?_v=')~assetsVersion }}"></script>
+<link rel="stylesheet" href="{{ static_url('tagsinput/jquery.tagsinput.css?_v=')~assetsVersion }}" />
+<script src="{{ static_url('tagsinput/jquery.tagsinput.js?_v=')~assetsVersion }}"></script>
+<script src="{{ static_url('my97datepicker/WdatePicker.js?_v=')~assetsVersion }}"></script>
 <script>
     var simplemde = new SimpleMDE({
         element:document.getElementById('article-markdown'),
@@ -156,9 +156,9 @@
 
         $('#save-archive-form').submit();
     });
-    {% if article is not empty and tags is not empty %}
-        {% for tv in tags %}
-            $("#archive-tags").addTag('{{tv['tag_name']}}');
+    {% if article['tags'] is not empty %}
+        {% for tv in article['tags'] %}
+            $("#archive-tags").addTag("{{tv['tag_name']}}");
         {% endfor %}
     {% endif %}
 </script>
